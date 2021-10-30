@@ -21,12 +21,19 @@ public class Main extends Application {
         MenuBar menu = new MenuBar();
         //Build menu items
         Menu fileMenu = new Menu("File");
-        Menu creditsMenu = new Menu("Credits");
+        Menu creditsMenu = new Menu("View");
+
+        //File Menu items
+        MenuItem createNew = new MenuItem("Create New...");
+        MenuItem updateTour = new MenuItem("Update Tournament");
+        MenuItem deleteTour = new MenuItem("Delete Tournament");
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(e->{
             System.exit(0);
         });
-        fileMenu.getItems().add(exit);
+
+
+        fileMenu.getItems().addAll(createNew,updateTour,deleteTour,exit);
         //Add menu items to the bar
         menu.getMenus().addAll(fileMenu, creditsMenu);
         root.setTop(menu);
