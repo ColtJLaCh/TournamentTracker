@@ -1,5 +1,9 @@
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -13,6 +17,22 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane root = new BorderPane();
+        //Build a menubar
+        MenuBar menu = new MenuBar();
+        //Build menu items
+        Menu fileMenu = new Menu("File");
+        Menu creditsMenu = new Menu("Credits");
+        MenuItem exit = new MenuItem("Exit");
+        exit.setOnAction(e->{
+            System.exit(0);
+        });
+        fileMenu.getItems().add(exit);
+        //Add menu items to the bar
+        menu.getMenus().addAll(fileMenu, creditsMenu);
+        root.setTop(menu);
+        //Create TabPane
+        TabPane tabPane = new TabPane();
+
         Scene scene = new Scene(root,1024,768);
         stage.setTitle("Tournament Tracker");
         stage.setScene(scene);
