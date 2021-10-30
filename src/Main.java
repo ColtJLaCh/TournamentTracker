@@ -1,13 +1,26 @@
+import Pages.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
+    Scene currentScene;
+
+    BorderPane page;
+    Home home = new Home();
+    Create create;
+    Delete delete;
+    Update update;
+    Stats stats;
+    View view;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -17,11 +30,13 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane root = new BorderPane();
+        VBox rootVBox = new VBox();
+
         //Build a menubar
         MenuBar menu = new MenuBar();
         //Build menu items
         Menu fileMenu = new Menu("File");
-        Menu creditsMenu = new Menu("View");
+        Menu viewMenu = new Menu("View");
 
         //File Menu items
         MenuItem createNew = new MenuItem("Create New...");
@@ -32,14 +47,29 @@ public class Main extends Application {
             System.exit(0);
         });
 
+        //View menu items
+        MenuItem viewTour = new MenuItem("View Tournament");
+        MenuItem viewStats = new MenuItem("View Statistics");
 
         fileMenu.getItems().addAll(createNew,updateTour,deleteTour,exit);
+        viewMenu.getItems().addAll(viewTour,viewStats);
+
         //Add menu items to the bar
-        menu.getMenus().addAll(fileMenu, creditsMenu);
-        root.setTop(menu);
+        menu.getMenus().addAll(fileMenu, viewMenu);
+
         //Create TabPane
         TabPane tabPane = new TabPane();
 
+        //Set current page
+        page = home.getPane();
+
+        //Add all elements together
+        rootVBox.getChildren().addAll(menu,tabPane,page);
+
+        //Set root Vbox to maintian top-bottom layout
+        root.setTop(rootVBox);
+
+        //Show scene!
         Scene scene = new Scene(root,1024,768);
         stage.setTitle("Tournament Tracker");
         stage.setScene(scene);

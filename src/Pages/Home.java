@@ -1,28 +1,28 @@
 package Pages;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.SceneAntialiasing;
+import HelpfulClasses.UsefulConstants;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
+import javafx.scene.layout.VBox;
 
 public class Home {
+    private BorderPane classPane = new BorderPane();
 
-    BorderPane parentPane = new BorderPane();
-    Scene scene = new Scene(parentPane,1024,768);
+    public Home() {
 
-    BorderPane classPane = new BorderPane();
+        ImageView titleHomePage = new ImageView(new Image("/images/hometitletext.png"));
 
-    public Home(BorderPane parentPane) {
-        this.parentPane = parentPane;
+        VBox classVBox = new VBox(titleHomePage);
+        classVBox.setAlignment(Pos.TOP_CENTER);
+        classVBox.setPadding(new Insets(10,10,10,10));
+        classPane.setTop(classVBox);
+
     }
 
-    public Scene getScene() {
-        return this.scene;
-    }
-
-    private static void createScene() {
+    public BorderPane getPane() {
+        return this.classPane;
     }
 }

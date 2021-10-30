@@ -1,24 +1,27 @@
 package Pages;
 
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class View {
+    private BorderPane classPane = new BorderPane();
 
-    BorderPane parentPane = new BorderPane();
-    Scene scene = new Scene(parentPane,1024,768);
+    public View() {
+        //Initialize layout assets here, ImageViews, Panes, Text etc...
+        Text exampleText = new Text("Some example text!");
 
-    BorderPane classPane = new BorderPane();
+        VBox classVBox = new VBox(exampleText); //Vbox needed for Top to Bottom layout, add assets here
+        //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
+        classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox
 
-    public View(BorderPane parentPane) {
-        this.parentPane = parentPane;
+        classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
-    public Scene getScene() {
-        return this.scene;
-    }
-
-    private static void createScene() {
+    public BorderPane getPane() {
+        return this.classPane;
     }
 }
 
