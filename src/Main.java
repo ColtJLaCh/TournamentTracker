@@ -69,8 +69,11 @@ public class Main extends Application {
         //Set root Vbox to maintian top-bottom layout
         root.setTop(rootVBox);
 
+        //root styles
+        root.setStyle("-fx-background-color: #E2E2E2"); //Very light gray
+
         //Show scene!
-        Scene scene = new Scene(root,1024,768);
+        Scene scene = new Scene(root,1240,780);
         stage.setTitle("Tournament Tracker");
         stage.setScene(scene);
         stage.show();
