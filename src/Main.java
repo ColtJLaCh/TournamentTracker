@@ -62,6 +62,8 @@ public class Main extends Application {
 
         //Set current page
         page = create.getPane();
+        //Start page behavior
+
 
         //Add all elements together
         rootVBox.getChildren().addAll(menu,tabPane,page);

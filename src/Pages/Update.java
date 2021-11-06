@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
-public class Update {
+public class Update extends Page {
     private BorderPane classPane = new BorderPane();
 
     public Update() {
@@ -27,4 +27,6 @@ public class Update {
     public BorderPane getPane() {
         return this.classPane;
     }
+
+    public void pageBehavior() {}
 }

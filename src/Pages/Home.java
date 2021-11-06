@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
-public class Home {
+public class Home extends Page {
     private BorderPane classPane = new BorderPane();
 
     public Home() {
@@ -40,4 +40,6 @@ public class Home {
     public BorderPane getPane() {
         return this.classPane;
     }
+
+    public void pageBehavior() {}
 }
