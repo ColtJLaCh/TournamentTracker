@@ -25,11 +25,12 @@ import java.util.ArrayList;
 public class Create extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    TextField tourNameTextField = new TextField();
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
-        TextField tourNameTextField = new TextField();
+
         tourNameTextField.setPromptText("Enter tournament name here...");
         tourNameTextField.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/4);
 
@@ -42,11 +43,10 @@ public class Create extends Page {
         tourNameVbox.getChildren().addAll(tourNameLabel,tourNameTextField);
 
 
-        VBox classVBox = new VBox(tourNameVbox); //Vbox needed for Top to Bottom layout, add assets here
+        classVBox = new VBox(tourNameVbox); //Vbox needed for Top to Bottom layout, add assets here
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(30,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(10); //Set spacing here
-
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
