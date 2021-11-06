@@ -14,7 +14,8 @@ public class Main extends Application {
 
     Scene currentScene;
 
-    BorderPane page;
+    Page page;
+    BorderPane pageLayout;
     Home home = new Home();
     Create create = new Create();
     Delete delete;
@@ -61,12 +62,13 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        page = create.getPane();
+        page = create;
+        pageLayout = page.getPane();
         //Start page behavior
-
+        page.pageBehavior();
 
         //Add all elements together
-        rootVBox.getChildren().addAll(menu,tabPane,page);
+        rootVBox.getChildren().addAll(menu,tabPane,pageLayout);
 
         //Set root Vbox to maintian top-bottom layout
         root.setTop(rootVBox);

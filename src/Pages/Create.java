@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -24,12 +25,17 @@ import java.util.ArrayList;
  */
 public class Create extends Page {
 
-    //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    //Initialize everything as needed here
     TextField tourNameTextField = new TextField();
+    VBox tourNameVbox = new VBox(2);
+
+    ArrayList<HBox> stats = new ArrayList<HBox>();
+    Button addStatButton = new Button("+ADD NEW (max 20 chars)");
+    Button[] statDeleteButton = new Button[1];
+    VBox statVBox = new VBox();
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
-
 
         tourNameTextField.setPromptText("Enter tournament name here...");
         tourNameTextField.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/4);
@@ -39,21 +45,61 @@ public class Create extends Page {
         tourNameLabel.setAlignment(Pos.TOP_LEFT);
         tourNameLabel.setLabelFor(tourNameTextField);
 
-        VBox tourNameVbox = new VBox(2);
         tourNameVbox.getChildren().addAll(tourNameLabel,tourNameTextField);
 
+        stats.add(new HBox(new TextField("Wins")));
+        stats.get(0).getChildren().get(0).setDisable(true);
+        stats.add(new HBox(new TextField("Losses")));
+        stats.get(1).getChildren().get(0).setDisable(true);
 
-        classVBox = new VBox(tourNameVbox); //Vbox needed for Top to Bottom layout, add assets here
+        statVBox.getChildren().addAll(stats.get(0),stats.get(1),addStatButton);
+
+        classVBox = new VBox(tourNameVbox,statVBox); //Vbox needed for Top to Bottom layout, add assets here
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(30,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(10); //Set spacing here
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
+    private void reconstructClassVBox() {
+        classVBox.getChildren().clear();
+        classVBox.getChildren().addAll(tourNameVbox,statVBox);
+    }
+
+    private void reconstructStatVBox() {
+        statVBox.getChildren().clear();
+        for (var i = 0; i < stats.size(); i++) {
+            statVBox.getChildren().add(stats.get(i));
+        }
+        statVBox.getChildren().add(addStatButton);
+
+        reconstructClassVBox();
+    }
+
+    public void addStats() {
+        addStatButton.setOnMouseClicked(e->{
+            HBox statHBox = new HBox();
+            TextField statNew = new TextField("NEW STAT");
+            Button deleteStat = new Button("X");
+            deleteStat.setOnMouseClicked(de -> {
+                deleteStats();
+            });
+            statHBox.getChildren().addAll(statNew,deleteStat);
+            stats.add(statHBox);
+
+            reconstructStatVBox();
+        });
+    }
+
+    private void deleteStats() {
+        stats.remove(stats.size()-1);
+        reconstructStatVBox();
+    }
+
 
     //Use this inherited method to call all methods related to class
     @Override
     public void pageBehavior() {
-
+        addStats();
     }
 }
