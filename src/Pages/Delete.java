@@ -2,7 +2,10 @@ package Pages;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -25,7 +28,13 @@ public class Delete extends Page {
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
-    //Use this inherited method to call all methods related to class
+    //Local methods
+
+
+    //Methods to add to pageBehavior
+
+
+    //Use this inherited method to call all methods related to class needed for functionality
     @Override
     public void pageBehavior() {
 

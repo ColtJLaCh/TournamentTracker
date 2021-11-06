@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class Create extends Page {
 
-    //Initialize everything as needed here
+    //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     TextField tourNameTextField = new TextField();
     VBox tourNameVbox = new VBox(2);
 
@@ -61,6 +61,7 @@ public class Create extends Page {
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
+    //Local methods
     private void reconstructClassVBox() {
         classVBox.getChildren().clear();
         classVBox.getChildren().addAll(tourNameVbox,statVBox);
@@ -76,7 +77,13 @@ public class Create extends Page {
         reconstructClassVBox();
     }
 
-    public void addStats() {
+    private void deleteStats() {
+        stats.remove(stats.size()-1);
+        reconstructStatVBox();
+    }
+
+    //Methods to add to pageBehavior
+    private void addStats() {
         addStatButton.setOnMouseClicked(e->{
             HBox statHBox = new HBox();
             TextField statNew = new TextField("NEW STAT");
@@ -91,13 +98,8 @@ public class Create extends Page {
         });
     }
 
-    private void deleteStats() {
-        stats.remove(stats.size()-1);
-        reconstructStatVBox();
-    }
 
-
-    //Use this inherited method to call all methods related to class
+    //Use this inherited method to call all methods related to class needed for functionality
     @Override
     public void pageBehavior() {
         addStats();

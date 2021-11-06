@@ -25,7 +25,13 @@ public class View extends Page {
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
-    //Use this inherited method to call all methods related to class
+    //Local methods
+
+
+    //Methods to add to pageBehavior
+
+
+    //Use this inherited method to call all methods related to class needed for functionality
     @Override
     public void pageBehavior() {
 
