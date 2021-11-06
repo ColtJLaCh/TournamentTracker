@@ -16,7 +16,7 @@ public class Main extends Application {
 
     BorderPane page;
     Home home = new Home();
-    Create create;
+    Create create = new Create();
     Delete delete;
     Update update;
     Stats stats;
@@ -61,7 +61,7 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        page = home.getPane();
+        page = create.getPane();
 
         //Add all elements together
         rootVBox.getChildren().addAll(menu,tabPane,page);
