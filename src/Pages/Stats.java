@@ -10,7 +10,8 @@ import javafx.scene.text.Text;
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
 public class Stats extends Page {
-    private BorderPane classPane = new BorderPane();
+
+    //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
 
     public Stats() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
@@ -24,9 +25,9 @@ public class Stats extends Page {
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
-    public BorderPane getPane() {
-        return this.classPane;
-    }
+    //Use this inherited method to call all methods related to class
+    @Override
+    public void pageBehavior() {
 
-    public void pageBehavior() {}
+    }
 }

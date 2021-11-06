@@ -23,10 +23,12 @@ import java.util.ArrayList;
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
 public class Create extends Page {
-    private BorderPane classPane = new BorderPane();
+
+    //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
+
         TextField tourNameTextField = new TextField();
         tourNameTextField.setPromptText("Enter tournament name here...");
         tourNameTextField.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/4);
@@ -48,7 +50,10 @@ public class Create extends Page {
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
-    public BorderPane getPane() {
-        return this.classPane;
+
+    //Use this inherited method to call all methods related to class
+    @Override
+    public void pageBehavior() {
+
     }
 }
