@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.Database;
 import HelpfulClasses.UsefulConstants;
 import com.sun.javafx.css.StyleCache;
 import javafx.geometry.Insets;
@@ -36,6 +37,8 @@ public class Create extends Page {
 
     Button[] statDeleteButton = new Button[1];
     VBox statVBox = new VBox();
+
+    //Database dbc = Database.getInstance();
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
