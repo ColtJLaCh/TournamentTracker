@@ -38,7 +38,7 @@ public class Create extends Page {
     Button[] statDeleteButton = new Button[1];
     VBox statVBox = new VBox();
 
-    //Database dbc = Database.getInstance();
+    Database dbc = Database.getInstance();
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...

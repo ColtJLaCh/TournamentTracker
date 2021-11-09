@@ -17,12 +17,13 @@ public class Database {
                                 DBConst.DB_PASS);
                 System.out.println("Created Connection");
                 //Create a basic table
-                String sqlCreate = "CREATE TABLE " + "BasicTourney" + " (" +
+                String basicTable = "BasicTable";
+                String sqlCreate = "CREATE TABLE " + basicTable + " (" +
                         "ID" + " int NOT NULL AUTO_INCREMENT, " +
                         "Player" + " VARCHAR(50), " +
                         "PRIMARY KEY(" + "ID" + ")" +
                         ");";
-                createTable("BasicTourney",sqlCreate, connection);
+                createTable(basicTable,sqlCreate, connection);
             }catch (Exception e){
                 e.printStackTrace();
             }
