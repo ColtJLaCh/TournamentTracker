@@ -86,7 +86,7 @@ public class Database {
         //Get database information
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
+        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -110,7 +110,7 @@ public class Database {
         //System.out.println(sqlInsert);
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
+        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -133,7 +133,7 @@ public class Database {
 
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
+        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -148,7 +148,7 @@ public class Database {
     private ResultSet getTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
+        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -168,7 +168,7 @@ public class Database {
     private ResultSet curateTable(String tableName, String condition, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
+        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -189,7 +189,7 @@ public class Database {
     private void dropTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
+        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
