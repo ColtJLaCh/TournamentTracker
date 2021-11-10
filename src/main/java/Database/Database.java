@@ -16,15 +16,15 @@ public class Database {
                                 DBConst.DB_USER,
                                 DBConst.DB_PASS);
                 System.out.println("Created Connection");
+
                 //Create a basic table
                 String basicTable = "BasicTable";
-                String sqlCreate = "CREATE TABLE " + basicTable + " (" +
-                        "ID" + " int NOT NULL AUTO_INCREMENT, " +
-                        "Player" + " VARCHAR(50), " +
-                        "PRIMARY KEY(" + "ID" + ")" +
-                        ");";
-                createTable(basicTable,sqlCreate, connection);
-                dropTable(basicTable, connection);
+                String[] extras = {"Wins", "Losses"};
+
+                createTable(basicTable, extras, connection);
+
+                //Drop the basic table
+                //dropTable(basicTable, connection);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -53,8 +53,16 @@ public class Database {
         }
     }
 
-    private void createTable(String tableName, String tableQuery,
+    private void createTable(String tableName, String[] extraColumns,
                              Connection connection) throws SQLException {
+        String sqlCreate = "CREATE TABLE " + tableName + " (" +
+                "ID" + " int NOT NULL AUTO_INCREMENT, " +
+                "Player" + " VARCHAR(50), ";
+        for (int i = 0; i < extraColumns.length; i++) {
+            sqlCreate = sqlCreate + extraColumns[i] + " VARCHAR(50), ";
+        }
+        sqlCreate = sqlCreate + "PRIMARY KEY(" + "ID" + ")" + ");";
+
         Statement createTable;
         //Get database information
         DatabaseMetaData md = connection.getMetaData();
@@ -67,8 +75,8 @@ public class Database {
         }
         else{
             createTable = connection.createStatement();
-            createTable.execute(tableQuery);
-            System.out.println("The " + tableName + " table has been inserted");
+            createTable.execute(sqlCreate);
+            System.out.println("The " + tableName + " tournament has been created.");
         }
     }
 
