@@ -1,6 +1,5 @@
 package Database;
 import java.sql.*;
-import java.util.ArrayList;
 
 public class Database {
     private static Database instance;
@@ -38,7 +37,9 @@ public class Database {
                 //Rertrieve table rows
                 ResultSet basicTourney = getTable(basicTable, connection);
 
-                
+
+                //Retrieve specific table rows
+                ResultSet tourneyWinners = curateTable(basicTable, "Wins > 6", connection);
 
 
                 //Drop the basic table
@@ -95,21 +96,6 @@ public class Database {
             createTable = connection.createStatement();
             createTable.execute(sqlCreate);
             System.out.println("The " + tableName + " tournament has been created.");
-        }
-    }
-
-    private void dropTable(String tableName, Connection connection) throws SQLException {
-        DatabaseMetaData md = connection.getMetaData();
-        //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsjava",
-                null, tableName, null);
-        //If the table is present
-        if(resultSet.next()){
-            Statement dropTable = connection.createStatement();
-            dropTable.execute("DROP TABLE `" + tableName + "`");
-            System.out.println("Successfully deleted tournament " + tableName);
-        } else {
-            System.out.println("Error: Tournament doesn't exist.");
         }
     }
 
@@ -176,6 +162,42 @@ public class Database {
         } else {
             System.out.println("Error: Tournament doesn't exist.");
             return null;
+        }
+    }
+
+    private ResultSet curateTable(String tableName, String condition, Connection connection) throws SQLException {
+        DatabaseMetaData md = connection.getMetaData();
+        //Looking for the table with tableName
+        ResultSet resultSet = md.getTables("nburrowsjava",
+                null, tableName, null);
+        //If the table is present
+        if(resultSet.next()){
+            Statement dataTable = connection.createStatement();
+            ResultSet tournament = dataTable.executeQuery("SELECT * FROM `" + tableName + "` WHERE " + condition);
+
+            while (tournament.next()){
+                System.out.println(tournament.getInt("ID") + ", " +tournament.getString("Player"));
+            }
+            return tournament;
+        } else {
+            System.out.println("Error: Tournament doesn't exist.");
+            return null;
+        }
+    }
+
+
+    private void dropTable(String tableName, Connection connection) throws SQLException {
+        DatabaseMetaData md = connection.getMetaData();
+        //Looking for the table with tableName
+        ResultSet resultSet = md.getTables("nburrowsjava",
+                null, tableName, null);
+        //If the table is present
+        if(resultSet.next()){
+            Statement dropTable = connection.createStatement();
+            dropTable.execute("DROP TABLE `" + tableName + "`");
+            System.out.println("Successfully deleted tournament " + tableName);
+        } else {
+            System.out.println("Error: Tournament doesn't exist.");
         }
     }
 }
