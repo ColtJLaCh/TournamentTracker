@@ -24,6 +24,7 @@ public class Database {
                         "PRIMARY KEY(" + "ID" + ")" +
                         ");";
                 createTable(basicTable,sqlCreate, connection);
+                dropTable(basicTable, connection);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -58,16 +59,32 @@ public class Database {
         //Get database information
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables("nburrowsfinal",
+        ResultSet resultSet = md.getTables("nburrowsjava",
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
-            System.out.println(tableName + " table already exists!");
+            System.out.println("A tournament with the name " + tableName + " already exists!");
         }
         else{
             createTable = connection.createStatement();
             createTable.execute(tableQuery);
             System.out.println("The " + tableName + " table has been inserted");
+        }
+    }
+
+    private void dropTable(String tableName, Connection connection) throws SQLException {
+        DatabaseMetaData md = connection.getMetaData();
+        //Looking for the table with tableName
+        ResultSet resultSet = md.getTables("nburrowsjava",
+                null, tableName, null);
+        //If the table is present
+        if(resultSet.next()){
+            //System.out.println("A tournament with the name " + tableName + " already exists!");
+            Statement dropTable = connection.createStatement();
+            dropTable.execute("DROP TABLE " + tableName);
+            System.out.println("Successfully deleted tournament " + tableName);
+        } else {
+            System.out.println("Error: Tournament doesn't exist.");
         }
     }
 }
