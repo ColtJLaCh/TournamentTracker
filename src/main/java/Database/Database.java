@@ -1,5 +1,6 @@
 package Database;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
     private static Database instance;
@@ -35,7 +36,9 @@ public class Database {
                 //updatePlayer(basicTable, 3, changes,newValues, connection);
 
                 //Rertrieve table rows
-                getTable(basicTable, connection);
+                ResultSet basicTourney = getTable(basicTable, connection);
+
+                
 
 
                 //Drop the basic table
@@ -148,26 +151,31 @@ public class Database {
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
-            Statement dropTable = connection.createStatement();
-            dropTable.execute(sqlUpdate);
+            Statement updateTable = connection.createStatement();
+            updateTable.execute(sqlUpdate);
             System.out.println("Updated player info");
         } else {
             System.out.println("Error: Tournament doesn't exist.");
         }
     }
 
-    private void getTable(String tableName, Connection connection) throws SQLException {
+    private ResultSet getTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
         ResultSet resultSet = md.getTables("nburrowsjava",
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
-            Statement dropTable = connection.createStatement();
-            dropTable.execute("SELECT * FROM `" + tableName + "`");
+            Statement dataTable = connection.createStatement();
+            ResultSet tournament = dataTable.executeQuery("SELECT * FROM `" + tableName + "`");
 
+            while (tournament.next()){
+                System.out.println(tournament.getInt("ID") + ", " +tournament.getString("Player"));
+            }
+            return tournament;
         } else {
             System.out.println("Error: Tournament doesn't exist.");
+            return null;
         }
     }
 }
