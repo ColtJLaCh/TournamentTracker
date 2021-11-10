@@ -28,10 +28,16 @@ public class Database {
 
                 //addToTable(basicTable, player, connection);
 
+                //Update an existing player's values
+                String[] changes = {"Wins"};
+                String[] newValues = {"7"};
+
+                //updatePlayer(basicTable, 3, changes,newValues, connection);
+
                 //Rertrieve table rows
                 getTable(basicTable, connection);
 
-                
+
                 //Drop the basic table
                 //dropTable(basicTable, connection);
             }catch (Exception e){
@@ -112,7 +118,30 @@ public class Database {
         }
         sqlInsert = sqlInsert + ");";
 
-        System.out.println(sqlInsert);
+        //System.out.println(sqlInsert);
+        DatabaseMetaData md = connection.getMetaData();
+        //Looking for the table with tableName
+        ResultSet resultSet = md.getTables("nburrowsjava",
+                null, tableName, null);
+        //If the table is present
+        if(resultSet.next()){
+            Statement add2Table = connection.createStatement();
+            add2Table.execute(sqlInsert);
+            System.out.println("Added player to tournament " + tableName);
+        } else {
+            System.out.println("Error: Tournament doesn't exist.");
+        }
+    }
+
+    private void updatePlayer(String tableName, int playerID, String[] changingValues,
+                              String[] newValues, Connection connection ) throws SQLException {
+        String sqlUpdate = "UPDATE `" + tableName + "` SET " + changingValues[0] + " = '" + newValues[0] + "'";
+
+        for (int i = 1; i < changingValues.length; i++) {
+            sqlUpdate = sqlUpdate + ", " + changingValues[i] + " = '" + newValues[i] + "'";
+        }
+        sqlUpdate = sqlUpdate + " WHERE ID = " + playerID + ";";
+
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
         ResultSet resultSet = md.getTables("nburrowsjava",
@@ -120,8 +149,8 @@ public class Database {
         //If the table is present
         if(resultSet.next()){
             Statement dropTable = connection.createStatement();
-            dropTable.execute(sqlInsert);
-            System.out.println("Added player to tournament " + tableName);
+            dropTable.execute(sqlUpdate);
+            System.out.println("Updated player info");
         } else {
             System.out.println("Error: Tournament doesn't exist.");
         }
