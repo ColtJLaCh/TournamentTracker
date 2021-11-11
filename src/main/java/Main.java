@@ -62,7 +62,7 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        page = create;
+        page = home;
         pageLayout = page.getPane();
         //Start page behavior
         page.pageBehavior();
