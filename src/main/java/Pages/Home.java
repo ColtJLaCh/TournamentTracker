@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 public class Home extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
-
     public Home() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
         ImageView titleHomePage = new ImageView();
