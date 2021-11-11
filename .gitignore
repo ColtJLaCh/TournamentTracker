@@ -159,9 +159,12 @@ Icon
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
-# Directories potentially created on remote AFP share
+# Directories potentially createdg on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# DBConst class, so that we can have our seperate login info
+src/main/java/Database/DBConst.java
