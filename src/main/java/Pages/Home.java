@@ -1,5 +1,6 @@
 package Pages;
 import HelpfulClasses.UsefulConstants;
+import LoginCredentials.Login;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ public class Home extends Page {
     private Button loginButton = new Button();
     private VBox loginVBox = new VBox();
     private Text loginErrorMessage = new Text();
+    Login login = new Login();
 
     public Home() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
@@ -44,6 +46,9 @@ public class Home extends Page {
         password.setPromptText("Password...");
         loginButton.setText("Login");
         loginButton.setMinWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/15);
+        loginButton.setOnAction(e->{
+            onLogin(username.getText(), password.getText());
+        });
 
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         loginErrorMessage.setFont(franklinGothicMedium12);
@@ -70,8 +75,15 @@ public class Home extends Page {
     //Local methods
 
     //Methods to add to pageBehavior
-    private void onLogin() {
-
+    private void onLogin(String username, String password) {
+        //System.out.println("Loggin in as " + username + " with password " +password);
+        if(login.getUsers().contains(username)){
+            System.out.println("User " + username + " exists");
+            
+        } else {
+            loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+            loginErrorMessage.setText("Invalid username");
+        }
     }
 
     //Use this inherited method to call all methods related to class needed for functionality
