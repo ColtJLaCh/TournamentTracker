@@ -6,9 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -26,21 +24,30 @@ import java.util.ArrayList;
 public class Create extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+
+    //TOUR NAME
     TextField tourNameTextField = new TextField();
     VBox tourNameVbox = new VBox(2);
 
+    //STATS
     Label statsLabel = new Label("STATS (wins/losses/time/ect)");
     ArrayList<HBox> stats = new ArrayList<HBox>();
     Button addStatButton = new Button("+ ADD NEW");
     double statPrefWidth = UsefulConstants.DEFAULT_SCREEN_WIDTH/10;
+    VBox statsAddVBox = new VBox();
 
-    Button[] statDeleteButton = new Button[1];
-    VBox statVBox = new VBox();
+    //TEAMS AND PLAYERS
+    ToggleGroup tourStyleRadToggleGroup = new ToggleGroup();
+    RadioButton[] tourStyleRadButton = new RadioButton[2];
+
+    //For the two column layout next to stats
+    HBox doubleColumnHBox = new HBox(48);
+
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
-        //TOURNAMENT NAME
+        //---------------------------TOURNAMENT NAME---------------------------
         tourNameTextField.setPromptText("Enter tournament name here...");
         tourNameTextField.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/4);
 
@@ -51,8 +58,8 @@ public class Create extends Page {
 
         tourNameVbox.getChildren().addAll(tourNameLabel,tourNameTextField);
 
-
-        //STATS
+        //---------------------------STATS---------------------------
+        VBox statVBox = new VBox(2);
         statsLabel.setUnderline(true);
         statsLabel.setAlignment(Pos.TOP_LEFT);
         statsLabel.setLabelFor(statVBox);
@@ -60,19 +67,49 @@ public class Create extends Page {
         TextField statWins = new TextField("Wins");
         statWins.setDisable(true);
         statWins.setPrefWidth(statPrefWidth);
-        stats.add(new HBox(statWins));
+        Button deleteWins = new Button("X");
+        deleteWins.setDisable(true);
+        stats.add(new HBox(statWins,deleteWins));
 
         TextField statLosses = new TextField("Losses");
         statLosses.setDisable(true);
         statLosses.setPrefWidth(statPrefWidth);
-        stats.add(new HBox(statLosses));
+        Button deleteLosses = new Button("X");
+        deleteLosses.setDisable(true);
+        stats.add(new HBox(statLosses,deleteLosses));
 
         addStatButton.setPrefWidth(statPrefWidth);
-        statVBox.getChildren().addAll(stats.get(0),stats.get(1),addStatButton);
+        statsAddVBox.getChildren().addAll(stats.get(0),stats.get(1),addStatButton);
+        statVBox.getChildren().addAll(statsLabel,statsAddVBox);
+
+        //---------------------------STYLE, TEAMS AND PLAYERS---------------------------
+
+        //TOUR STYLE---------------------------
+        VBox tourStyleVBox = new VBox(2);
+        Label tourStyleLabel = new Label("Tournament Style");
+        HBox tourStyleRadButtonsHBox = new HBox(10);
+        tourStyleLabel.setUnderline(true);
+        tourNameLabel.setAlignment(Pos.TOP_LEFT);
+        tourNameLabel.setLabelFor(tourStyleRadButtonsHBox);
+        tourStyleRadButton[0] = new RadioButton("Singles");
+        tourStyleRadButton[0].setToggleGroup(tourStyleRadToggleGroup);
+        tourStyleRadButton[1] = new RadioButton("Teams");
+        tourStyleRadButton[1].setToggleGroup(tourStyleRadToggleGroup);
+        tourStyleRadButtonsHBox.getChildren().addAll(tourStyleRadButton[0],tourStyleRadButton[1]);
+        tourStyleVBox.getChildren().addAll(tourStyleLabel,tourStyleRadButtonsHBox);
 
 
-        //CLASS STUFF
-        classVBox = new VBox(tourNameVbox,statVBox); //Vbox needed for Top to Bottom layout, add assets here
+
+        //---------------------------FINAL LAYOUT---------------------------
+        //This is to set up the two columns next to the stats
+        VBox column1VBox = new VBox(48);
+        VBox column2VBox = new VBox(48);
+        column1VBox.getChildren().addAll(tourStyleVBox);
+        //column2VBox.getChildren().addAll();
+        doubleColumnHBox.getChildren().addAll(statVBox,column1VBox,column2VBox);
+
+        //---------------------------CLASS STUFF---------------------------
+        classVBox = new VBox(tourNameVbox,doubleColumnHBox); //Vbox needed for Top to Bottom layout, add assets here
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(50); //Set spacing here
@@ -82,15 +119,15 @@ public class Create extends Page {
     //Local methods
     private void reconstructClassVBox() {
         classVBox.getChildren().clear();
-        classVBox.getChildren().addAll(tourNameVbox,statVBox);
+        classVBox.getChildren().addAll(tourNameVbox,doubleColumnHBox);
     }
 
     private void reconstructStatVBox() {
-        statVBox.getChildren().clear();
+        statsAddVBox.getChildren().clear();
         for (var i = 0; i < stats.size(); i++) {
-            statVBox.getChildren().add(stats.get(i));
+            statsAddVBox.getChildren().add(stats.get(i));
         }
-        statVBox.getChildren().add(addStatButton);
+        statsAddVBox.getChildren().add(addStatButton);
 
         reconstructClassVBox();
     }
