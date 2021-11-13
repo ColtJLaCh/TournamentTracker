@@ -79,7 +79,11 @@ public class Home extends Page {
         //System.out.println("Loggin in as " + username + " with password " +password);
         if(login.getUsers().contains(username)){
             if(login.checkPassword(username, password)){
+                System.out.println("Logging in...");
+                /*
+                Insert code to switch scenes here!
 
+                 */
             } else {
                 loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
                 loginErrorMessage.setText("Incorrect password");

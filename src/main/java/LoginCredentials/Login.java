@@ -53,7 +53,7 @@ public class Login {
     }
 
     public boolean checkPassword(String username, String password){
-        if(passwords.get(username) == password) {
+        if(passwords.get(username).equals(password)) {
             return true;
         } else {
             return false;
