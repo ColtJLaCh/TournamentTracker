@@ -29,6 +29,7 @@ public class Home extends Page {
     private Button loginButton = new Button();
     private VBox loginVBox = new VBox();
     private Text loginErrorMessage = new Text();
+    //Create a Login so we can use its functionality on the home page.
     Login login = new Login();
 
     public Home() {
@@ -52,8 +53,7 @@ public class Home extends Page {
 
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         loginErrorMessage.setFont(franklinGothicMedium12);
-        loginErrorMessage.setFill(new Color(1,0,0,0)); // <---- You can set the fill opacity to make the error message visable/invisible
-        loginErrorMessage.setText("Invalid username or password");
+        loginErrorMessage.setFill(new Color(1,0,0,0));
         loginVBox.setSpacing(4);
         loginVBox.getChildren().addAll(loginLabel,username,password,loginButton,loginErrorMessage);
         loginVBox.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
@@ -74,7 +74,7 @@ public class Home extends Page {
 
     //Local methods
 
-    //Methods to add to pageBehavior
+    //Called whenever the user presses the login button. If successful it should take you to the next screen.
     private void onLogin(String username, String password) {
         //System.out.println("Loggin in as " + username + " with password " +password);
         if(login.getUsers().contains(username)){
