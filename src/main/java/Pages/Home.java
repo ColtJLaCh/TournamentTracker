@@ -80,6 +80,7 @@ public class Home extends Page {
         if(login.getUsers().contains(username)){
             if(login.checkPassword(username, password)){
                 System.out.println("Logging in...");
+                login.loginUser(username);
                 /*
                 Insert code to switch scenes here!
 
