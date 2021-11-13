@@ -78,8 +78,12 @@ public class Home extends Page {
     private void onLogin(String username, String password) {
         //System.out.println("Loggin in as " + username + " with password " +password);
         if(login.getUsers().contains(username)){
-            System.out.println("User " + username + " exists");
-            
+            if(login.checkPassword(username, password)){
+
+            } else {
+                loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+                loginErrorMessage.setText("Incorrect password");
+            }
         } else {
             loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
             loginErrorMessage.setText("Invalid username");

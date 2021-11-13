@@ -51,4 +51,12 @@ public class Login {
     public ArrayList<String> getUsers() {
         return users;
     }
+
+    public boolean checkPassword(String username, String password){
+        if(passwords.get(username) == password) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
