@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +24,7 @@ public class Home extends Page {
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     private Label loginLabel = new Label("Sign in to Database");
     private TextField username = new TextField();
-    private TextField password = new TextField();
+    private PasswordField password = new PasswordField();
     private Button loginButton = new Button();
     private VBox loginVBox = new VBox();
     private Text loginErrorMessage = new Text();
@@ -43,9 +44,10 @@ public class Home extends Page {
         password.setPromptText("Password...");
         loginButton.setText("Login");
         loginButton.setMinWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/15);
+
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         loginErrorMessage.setFont(franklinGothicMedium12);
-        loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+        loginErrorMessage.setFill(new Color(1,0,0,0)); // <---- You can set the fill opacity to make the error message visable/invisible
         loginErrorMessage.setText("Invalid username or password");
         loginVBox.setSpacing(4);
         loginVBox.getChildren().addAll(loginLabel,username,password,loginButton,loginErrorMessage);
