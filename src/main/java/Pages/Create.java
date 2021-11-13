@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.Database;
 import HelpfulClasses.UsefulConstants;
 import com.sun.javafx.css.StyleCache;
 import javafx.geometry.Insets;
@@ -43,6 +44,8 @@ public class Create extends Page {
     //For the two column layout next to stats
     HBox doubleColumnHBox = new HBox(48);
 
+
+    //Database dbc = Database.getInstance();
 
     public Create() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...

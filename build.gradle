@@ -1,23 +1,49 @@
+buildscript{
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "mysql:mysql-connector-java:8.0.26"
+    }
+}
 plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
-group 'org.example'
+group 'com.example'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
-
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation "mysql:mysql-connector-java:8.0.26"
+}
+ext {
+    junitVersion = '5.7.1'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 javafx {
-    modules = [ 'javafx.controls']
-    version = "15.0.1"
+    version = '15.0.1'
+    modules = ['javafx.controls', 'javafx.fxml']
 }
 
-mainClassName = "Main"
+dependencies {
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClassName = "Main"
+}
