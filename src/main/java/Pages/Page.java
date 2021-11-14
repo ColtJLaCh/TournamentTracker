@@ -15,6 +15,8 @@ public class Page {
         for (Node node : nodes) {
             this.classVBox.getChildren().add(node);
         }
+        classVBox.setStyle("-fx-focus-color: black;" +
+                "-fx-background-insets: 1, 1, 1, 1;");
         return classVBox;
     }
 

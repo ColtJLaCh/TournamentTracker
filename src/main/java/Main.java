@@ -74,7 +74,7 @@ public class Main extends Application {
         root.setTop(rootVBox);
 
         //root styles
-        root.setStyle("-fx-background-color: #E2E2E2"); //Very light gray
+        root.setStyle("-fx-background-color: #E2E2E2;");
 
         //Show scene!
         Scene scene = new Scene(root,1240,780);

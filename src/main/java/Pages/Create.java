@@ -26,27 +26,25 @@ import java.util.ArrayList;
 public class Create extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    ScrollPane classScrollPane = new ScrollPane();
 
     //TOUR NAME
     TextField tourNameTextField = new TextField();
     VBox tourNameVbox = new VBox(2);
 
     //STATS
-    TournamentList statList = new TournamentList("STATS (wins/losses/time/ect)",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10,false);
+    TournamentList statList = new TournamentList("STATS (wins/losses/time/ect)",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
 
     //TEAMS AND PLAYERS
     ToggleGroup tourStyleRadToggleGroup = new ToggleGroup();
     RadioButton[] tourStyleRadButton = new RadioButton[2];
 
-    TournamentList playerList = new TournamentList("Players",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10,false);
-    TournamentList teamList = new TournamentList("Teams",10,UsefulConstants.DEFAULT_SCREEN_WIDTH/10,true);
-    /*
+    TournamentList playerList = new TournamentList("Players",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
+
     Label teamsLabel = new Label("Teams (First cell is Team name)");
     VBox teamsVBox = new VBox(10);
-    ArrayList<TournamentList> teamList = new ArrayList<TournamentList>();
-
     Button addTeam = new Button("+ ADD TEAM");
-    */
+
 
 
     //For the two column layout next to stats
@@ -98,22 +96,17 @@ public class Create extends Page {
         playerList.addToList("NEW PLAYER",false,true);
 
         //Teams---
-        teamList.addToList("NEW TEAM",false,true);
-        /*
         teamsLabel.setAlignment(Pos.TOP_LEFT);
         teamsLabel.setLabelFor(teamsVBox);
-        teamsVBox.getChildren().add(teamsLabel);
-        for (TournamentList team : teamList) {
-            teamsVBox.getChildren().add(team);
-        }
-        teamsVBox.getChildren().add(addTeam);
-        */
+        teamsLabel.setUnderline(true);
+        teamsVBox.getChildren().addAll(teamsLabel,addTeam);
+
 
         //---------------------------FINAL LAYOUT---------------------------
         //This is to set up the two columns next to the stats
         VBox column1VBox = new VBox(48);
         VBox column2VBox = new VBox(48);
-        column1VBox.getChildren().addAll(tourStyleVBox,teamList);
+        column1VBox.getChildren().addAll(tourStyleVBox,teamsVBox);
         //column2VBox.getChildren().addAll();
         doubleColumnHBox.getChildren().addAll(statList,column1VBox,column2VBox);
 
@@ -122,29 +115,54 @@ public class Create extends Page {
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(50); //Set spacing here
-        classPane.setTop(classVBox);//Set it to top to place all content directly under menu
+        classScrollPane.setContent(classVBox);
+        classScrollPane.setStyle("-fx-background: #E2E2E2;" + //Very light gray
+                "-fx-focus-color: transparent;" +
+                "-fx-background-insets: 0, 0, 0, 0;");
+        classScrollPane.setMinSize(UsefulConstants.DEFAULT_SCREEN_WIDTH,UsefulConstants.DEFAULT_SCREEN_HEIGHT-100);
+        classScrollPane.setMaxSize(UsefulConstants.DEFAULT_SCREEN_WIDTH,UsefulConstants.DEFAULT_SCREEN_HEIGHT-100);
+
+        classPane.setTop(classScrollPane);//Set it to top to place all content directly under menu
     }
 
     //Local methods
-    /*
+
     private void createTeam() {
         addTeam.setOnMouseClicked(e-> {
-            TournamentList newTourList = new TournamentList("",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10,true,false);
-            newTourList.addToList("NEW TEAM",false,true);
-            teamList.add(newTourList);
+            TournamentList newTourList = new TournamentList("",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
+            TextField teamName = new TextField("NEW TEAM");
+            Button removeTeam = new Button("REMOVE");
+            HBox teamHBox = new HBox();
+            teamHBox.getChildren().addAll(teamName,removeTeam);
+
+            newTourList.addToList("NEW PLAYER",false,true);
+
+            VBox teamVBox = new VBox(2);
+            teamVBox.getChildren().addAll(teamHBox,newTourList);
+
             teamsVBox.getChildren().remove(teamsVBox.getChildren().size()-1);
-            teamsVBox.getChildren().add(newTourList);
-            teamsVBox.getChildren().add(addTeam);
-           // System.out.println(teamsVBox.getChildren().size());
+            teamsVBox.getChildren().addAll(teamVBox,addTeam);
 
             classVBox = reconstructClassVBox(tourNameVbox,doubleColumnHBox);
-        });
 
-        for (TournamentList team : teamList) {
-            addToTourList(team,team.getArrList().isEmpty() ? "NEW TEAM" : "NEW PLAYER");
+            removeTeam.setOnMouseClicked(r->{
+                teamsVBox.getChildren().remove(teamVBox);
+                classVBox = reconstructClassVBox(tourNameVbox,doubleColumnHBox);
+                reloadTeams();
+            });
+            reloadTeams();
+        });
+        reloadTeams();
+    }
+
+    public void reloadTeams() {
+        for (int i = 1; i < teamsVBox.getChildren().size()-1; i++) {
+            VBox teamTourList = (VBox) teamsVBox.getChildren().get(i);
+            TournamentList team = (TournamentList) teamTourList.getChildren().get(1);
+            addToTourList(team,"NEW PLAYER");
         }
     }
-    */
+
 
     //Methods to add to pageBehavior
 
@@ -163,13 +181,6 @@ public class Create extends Page {
     public void pageBehavior() {
         addToTourList(statList,"NEW STAT");
         addToTourList(playerList,"NEW PLAYER");
-        addToTourList(teamList,"NEW TEAM");
-        for (var i = 0; i < teamList.getArrList().size(); i++) {
-            VBox teamVBox = (VBox) teamList.getArrList().get(i);
-            TournamentList team = (TournamentList) teamVBox.getChildren().get(1);
-            addToTourList(team,"NEW PLAYER");
-        }
-
-        //createTeam();
+        createTeam();
     }
 }

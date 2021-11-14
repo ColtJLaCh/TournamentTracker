@@ -1,68 +1,61 @@
 package Nodes;
 
+import HelpfulClasses.UsefulConstants;
 import Pages.Page;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Transform;
+import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
 
-public class TournamentList extends VBox {
+public class TournamentList extends ScrollPane {
     private ArrayList<Node> arrList = new ArrayList<Node>();
     private Label label;
-    private VBox vBox;
+    private VBox vBox = new VBox();
     private Button addButton = new Button("+ ADD NEW");
     private double cellPrefWidth;
 
-    private Boolean listOfList = false;
-    private Button listOfListDeleteButton = new Button("DELETE");
-
-    public TournamentList(String labelStr,double spacing, double cellPrefWidth, boolean listOfList) {
+    public TournamentList(String labelStr,double spacing, double cellPrefWidth) {
         this.label = new Label(labelStr);
         label.setUnderline(true);
         label.setAlignment(Pos.TOP_LEFT);
         label.setLabelFor(vBox);
-        vBox = this;
         vBox.setSpacing(spacing);
         if (labelStr != "") vBox.getChildren().add(label);
         this.cellPrefWidth = cellPrefWidth;
-        this.listOfList = listOfList;
+        this.setContent(vBox);
+        this.setMinWidth(cellPrefWidth+60);
+        this.setPannable(false);
     }
 
     public void reconstructVBox() {
-        if (!listOfList) {
-            vBox.getChildren().clear();
-            if (label.getText() != "") vBox.getChildren().add(label);
-            for (var i = 0; i < arrList.size(); i++) {
-                HBox curHBox = (HBox) arrList.get(i);
-                DeleteButton curDelButton = (DeleteButton) curHBox.getChildren().get(1);
-                curDelButton.index = i;
-                curHBox.getChildren().remove(1);
-                curHBox.getChildren().add(curDelButton);
-                arrList.set(i, curHBox);
-                vBox.getChildren().add(arrList.get(i));
-            }
-            vBox.getChildren().add(addButton);
-        }else{
-            vBox.getChildren().clear();
-            vBox.getChildren().add(label);
-            for (var i = 0; i < arrList.size(); i++) {
-                VBox curVBox = (VBox) arrList.get(i);
-                HBox curHBox = (HBox) curVBox.getChildren().get(0);
-                DeleteButton curDelButton = (DeleteButton) curHBox.getChildren().get(1);
-                curDelButton.index = i;
-                curHBox.getChildren().remove(1);
-                curHBox.getChildren().add(curDelButton);
-                curVBox.getChildren().set(0,curHBox);
-                arrList.set(i,curVBox);
-                vBox.getChildren().add(arrList.get(i));
-            }
-            vBox.getChildren().add(addButton);
+        vBox.getChildren().clear();
+        if (label.getText() != "") vBox.getChildren().add(label);
+        for (var i = 0; i < arrList.size(); i++) {
+            HBox curHBox = (HBox) arrList.get(i);
+            DeleteButton curDelButton = (DeleteButton) curHBox.getChildren().get(1);
+            curDelButton.index = i;
+            curHBox.getChildren().remove(1);
+            curHBox.getChildren().add(curDelButton);
+            arrList.set(i, curHBox);
+            vBox.getChildren().add(arrList.get(i));
         }
+        vBox.getChildren().add(addButton);
+        vBox.setPadding(new Insets(10,10,100,10));
+        this.setContent(vBox);
+        this.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT/3);
+        this.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT/3);
+        this.setStyle("-fx-background: #EEEEEE;");
     }
 
     public void deleteFromList(int index) {
@@ -72,25 +65,8 @@ public class TournamentList extends VBox {
 
     //Methods to add to pageBehavior
     public void addToList(String initialString, boolean cellDisabled, boolean forceAdd) {
-        if (!listOfList) {
-            if (!forceAdd) {
-                addButton.setOnMouseClicked(e -> {
-                    HBox hBox = new HBox();
-                    TextField newVal = new TextField(initialString);
-                    newVal.setPrefWidth(cellPrefWidth);
-                    newVal.setDisable(cellDisabled);
-                    DeleteButton deleteAt = new DeleteButton(arrList.size(), "X");
-                    deleteAt.setOnMouseClicked(de -> {
-                        deleteFromList(deleteAt.index);
-                    });
-                    deleteAt.setDisable(cellDisabled);
-                    hBox.getChildren().addAll(newVal, deleteAt);
-
-                    arrList.add(hBox);
-
-                    reconstructVBox();
-                });
-            } else {
+        if (!forceAdd) {
+            addButton.setOnMouseClicked(e -> {
                 HBox hBox = new HBox();
                 TextField newVal = new TextField(initialString);
                 newVal.setPrefWidth(cellPrefWidth);
@@ -101,55 +77,30 @@ public class TournamentList extends VBox {
                 });
                 deleteAt.setDisable(cellDisabled);
                 hBox.getChildren().addAll(newVal, deleteAt);
+
                 arrList.add(hBox);
 
                 reconstructVBox();
-            }
-        }else{
-            if (!forceAdd) {
-                addButton.setOnMouseClicked(e -> {
-                    VBox vBox = new VBox();
-                    HBox hBox = new HBox();
-                    TextField newVal = new TextField(initialString);
-                    newVal.setPrefWidth(cellPrefWidth);
-                    newVal.setDisable(cellDisabled);
-                    DeleteButton deleteAt = new DeleteButton(arrList.size(), "X");
-                    deleteAt.setOnMouseClicked(de -> {
-                        deleteFromList(deleteAt.index);
-                    });
-                    deleteAt.setDisable(cellDisabled);
-                    hBox.getChildren().addAll(newVal, deleteAt);
+            });
+        } else {
+            HBox hBox = new HBox();
+            TextField newVal = new TextField(initialString);
+            newVal.setPrefWidth(cellPrefWidth);
+            newVal.setDisable(cellDisabled);
+            DeleteButton deleteAt = new DeleteButton(arrList.size(), "X");
+            deleteAt.setOnMouseClicked(de -> {
+                deleteFromList(deleteAt.index);
+            });
+            deleteAt.setDisable(cellDisabled);
+            hBox.getChildren().addAll(newVal, deleteAt);
+            arrList.add(hBox);
 
-                    TournamentList newTourList = new TournamentList("", 2, cellPrefWidth, false);
-                    newTourList.addToList("NEW PLAYER", false, true);
-
-                    vBox.getChildren().addAll(hBox, newTourList);
-                    arrList.add(vBox);
-
-                    reconstructVBox();
-                });
-            } else {
-                VBox vBox = new VBox();
-                HBox hBox = new HBox();
-                TextField newVal = new TextField(initialString);
-                newVal.setPrefWidth(cellPrefWidth);
-                newVal.setDisable(cellDisabled);
-                DeleteButton deleteAt = new DeleteButton(arrList.size(), "X");
-                deleteAt.setOnMouseClicked(de -> {
-                    deleteFromList(deleteAt.index);
-                });
-                deleteAt.setDisable(cellDisabled);
-                hBox.getChildren().addAll(newVal, deleteAt);
-
-                TournamentList newTourList = new TournamentList("", 0, cellPrefWidth, false);
-                newTourList.addToList("NEW PLAYER", false, true);
-
-                vBox.getChildren().addAll(hBox, newTourList);
-                arrList.add(vBox);
-
-                reconstructVBox();
-            }
+            reconstructVBox();
         }
+    }
+
+    public VBox getVBox() {
+        return vBox;
     }
 
     public ArrayList<Node> getArrList() {
