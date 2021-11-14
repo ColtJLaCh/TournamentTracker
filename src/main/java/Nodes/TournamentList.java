@@ -19,7 +19,7 @@ import javafx.scene.transform.Translate;
 import java.util.ArrayList;
 
 public class TournamentList extends ScrollPane {
-    private ArrayList<Node> arrList = new ArrayList<Node>();
+    private ArrayList<HBox> arrList = new ArrayList<HBox>();
     private Label label;
     private VBox vBox = new VBox();
     private Button addButton = new Button("+ ADD NEW");
@@ -103,7 +103,7 @@ public class TournamentList extends ScrollPane {
         return vBox;
     }
 
-    public ArrayList<Node> getArrList() {
+    public ArrayList<HBox> getArrList() {
         return arrList;
     }
 

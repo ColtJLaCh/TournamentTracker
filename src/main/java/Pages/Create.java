@@ -56,13 +56,22 @@ public class Create extends Page {
     Button counterUp = new Button();
     Button counterDown = new Button();
 
+    //CREATE
+    Button createButton = new Button("CREATE TOURNAMENT");
+    Text errorText = new Text("error: some parameter is wrong!");
+
     //For the two column layout next to stats
     VBox column1VBox = new VBox(48);
     VBox column2VBox = new VBox(48);
     HBox doubleColumnHBox = new HBox(48);
 
-
-    //Database dbc = Database.getInstance();
+    //Data
+    String dataTourName = "";
+    int dataTourStyle = tourStyle; //0 is singles, 1 is teams
+    String[] dataTeamName; //On singles this will be set to NO TEAM
+    String[][] dataPlayerNames; //if teams, first dimension is the player, the second dimension is the team number, if singles team number will be 0
+    String[] dataStats; //if teams stats 0 and 1 will be applied to team, all others will be applied to players
+    int dataSets = setCount;
 
     public Create() {
         reconstructClassVBox();
@@ -189,11 +198,23 @@ public class Create extends Page {
         counterVBox.getChildren().addAll(setsLabel,counterUp,counterHBox,counterDown);
 
         //---------------------------CREATE---------------------------
+        VBox createVBox = new VBox(2);
+        Label createLabel = new Label("Create tournament with parameters");
+        createLabel.setUnderline(true);
+        createLabel.setLabelFor(createVBox);
+        createButton.setPrefSize(240,40);
+        createButton.setMinSize(240,40);
+        createButton.setMaxSize(240,40);
+        Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
+        errorText.setFont(franklinGothicMedium12);
+        errorText.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+        createVBox.getChildren().addAll(createLabel,createButton,errorText);
+
 
         //---------------------------FINAL LAYOUT---------------------------
         //This is to set up the two columns next to the stats
         column1VBox.getChildren().addAll(tourStyleVBox,playerList);
-        column2VBox.getChildren().addAll(counterVBox);
+        column2VBox.getChildren().addAll(counterVBox,createVBox);
         doubleColumnHBox.getChildren().addAll(statList,column1VBox,column2VBox);
 
         //---------------------------CLASS STUFF---------------------------
@@ -233,6 +254,54 @@ public class Create extends Page {
         }
     }
 
+    public void collectData() {
+        dataTourName = tourNameTextField.getText();
+        dataTourStyle = tourStyle;
+        if (tourStyle == 0) { //Tour style == 0 (SINGLES)
+            dataPlayerNames = new String[playerList.getArrList().size()][1];
+            for (int i = 0; i < playerList.getArrList().size(); i++) {
+                TextField playerTextField = (TextField)playerList.getArrList().get(i).getChildren().get(0);
+                dataPlayerNames[i][0] = playerTextField.getText();
+                System.out.println("SINGLES PLAYER #" + i + ": " + dataPlayerNames[i][0]);
+            }
+        }else{ //Tour style == 1 (TEAMS)
+            int teamsVBoxSize = teamsVBox.getChildren().size()-1;
+            int largestTeamSize = 0;
+
+            for (int i = 1; i < teamsVBoxSize; i++) {
+               VBox teamVBox = (VBox)teamsVBox.getChildren().get(i);
+               TournamentList teamList = (TournamentList)teamVBox.getChildren().get(1);
+               if (teamList.getArrList().size() > largestTeamSize) largestTeamSize = teamList.getArrList().size();
+            }
+
+            dataPlayerNames = new String[largestTeamSize][teamsVBoxSize];
+
+            dataTeamName = new String[teamsVBoxSize];
+            for (int t = 1; t < teamsVBoxSize; t++) {
+                VBox team = (VBox)teamsVBox.getChildren().get(t);
+                HBox teamBox = (HBox)team.getChildren().get(0);
+                TextField teamTextField = (TextField) teamBox.getChildren().get(0);
+
+                dataTeamName[t-1] = teamTextField.getText();
+                TournamentList teamTourList = (TournamentList) team.getChildren().get(1);
+
+                for (int p = 0; p < teamTourList.getArrList().size(); p++) {
+                    TextField playerTextField = (TextField) teamTourList.getArrList().get(p).getChildren().get(0);
+                    dataPlayerNames[p][t-1] = playerTextField.getText();
+                    System.out.println("TEAM PLAYER #" + p + " ON TEAM " + dataTeamName[t-1] + ": " + dataPlayerNames[p][t-1]);
+                }
+
+            }
+        }
+        dataStats = new String[statList.getArrList().size()];
+        for (int s = 0; s < statList.getArrList().size(); s++) {
+            HBox statCell = statList.getArrList().get(s);
+            TextField statTextField = (TextField)statCell.getChildren().get(0);
+            dataStats[s] = statTextField.getText();
+            System.out.println("STAT #" + s + ": " + dataStats[s]);
+        }
+        dataSets = setCount;
+    }
 
     //Methods to add to pageBehavior
 
@@ -279,11 +348,13 @@ public class Create extends Page {
             tourStyle = 0;
             column1VBox.getChildren().set(1,playerList);
             reconstructClassVBox(tourNameVbox,doubleColumnHBox);
+            collectData();
         });
         tourStyleRadButton[1].setOnMouseClicked(e1->{
             tourStyle = 1;
             column1VBox.getChildren().set(1,teamsVBox);
             reconstructClassVBox(tourNameVbox,doubleColumnHBox);
+            collectData();
         });
     }
 
