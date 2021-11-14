@@ -15,7 +15,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class Create extends Page {
     TournamentList statList = new TournamentList("STATS (wins/losses/time/ect)",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
 
     //TEAMS AND PLAYERS
+    int tourStyle = 0; //0 = Players, 1 = Teams
     ToggleGroup tourStyleRadToggleGroup = new ToggleGroup();
     RadioButton[] tourStyleRadButton = new RadioButton[2];
 
@@ -45,9 +49,16 @@ public class Create extends Page {
     VBox teamsVBox = new VBox(10);
     Button addTeam = new Button("+ ADD TEAM");
 
-
+    //SETS
+    VBox counterVBox = new VBox(4);
+    int setCount = 2;
+    TextField counter = new TextField(String.valueOf(setCount));
+    Button counterUp = new Button();
+    Button counterDown = new Button();
 
     //For the two column layout next to stats
+    VBox column1VBox = new VBox(48);
+    VBox column2VBox = new VBox(48);
     HBox doubleColumnHBox = new HBox(48);
 
 
@@ -103,12 +114,86 @@ public class Create extends Page {
         teamsVBox.getChildren().addAll(teamsLabel,addTeam);
 
 
+        //---------------------------SETS---------------------------
+        Label setsLabel = new Label("Sets (amount of opening sub brackets)");
+        setsLabel.setUnderline(true);
+        setsLabel.setLabelFor(counterVBox);
+
+        HBox counterHBox = new HBox(10);
+        Label counterLabel = new Label("Sets of Sub-Brackets");
+        counterLabel.setLabelFor(counter);
+        counterLabel.setTranslateY(6); //Move label down slightly to center it
+        counterLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+        counter.setFont(Font.font("Mono-space", FontWeight.BOLD, 12));
+        counter.setAlignment(Pos.CENTER);
+        counter.setPrefSize(30,30);
+        counter.setMaxSize(30,30);
+        counter.setTextFormatter(new TextFormatter<String>(change -> {
+            if (change.getControlNewText().length() <= 2 && isNumber(change.getControlNewText())) {
+                if (isNumber(counter.getText())) {
+                    setCount = Integer.parseInt(counter.getText());
+                }
+                return change;
+            }else if (change.getControlNewText().length() > 0) {
+                return null;
+            }else{
+                change.setText("0");
+                setCount = 0;
+                return change;
+            }
+        }));
+        counterHBox.getChildren().addAll(counter,counterLabel);
+
+
+        counterUp.setPrefSize(30,30);
+        counterUp.setId("counter");
+        counterUp.setStyle("#counter {" +
+                "-fx-background-color: white; " +
+                "-fx-shape: 'M 300 50 250 100 350 100 z';" +
+                "-fx-effect: dropshadow(gaussian, black, 1, 1, 0, 0);" +
+                "}" +
+                "#counter:pressed {" +
+                "-fx-background-color: black;" +
+                "}");
+        counterUp.setOnMouseClicked(up -> {
+            if (setCount < 99) {
+                setCount += 1;
+            }else{
+                setCount = 0;
+            }
+
+            counter.setText(String.valueOf(setCount));
+        });
+
+        counterDown.setPrefSize(30,30);
+        counterDown.setId("counter");
+        counterDown.setStyle("#counter {" +
+                    "-fx-background-color: white; " +
+                    "-fx-shape: 'M 300 50 250 100 350 100 z';" +
+                    "-fx-effect: dropshadow(gaussian, black, 1, 1, 0, 0);" +
+                "}" +
+                "#counter:pressed {" +
+                        "-fx-background-color: black;" +
+                "}");
+        counterDown.setRotate(180);
+        counterDown.setOnMouseClicked(down -> {
+            if (setCount > 0) {
+                setCount -= 1;
+            }else{
+                setCount = 99;
+            }
+            counter.setText(String.valueOf(setCount));
+        });
+
+        counterVBox.setAlignment(Pos.CENTER_LEFT);
+        counterVBox.getChildren().addAll(setsLabel,counterUp,counterHBox,counterDown);
+
+        //---------------------------CREATE---------------------------
+
         //---------------------------FINAL LAYOUT---------------------------
         //This is to set up the two columns next to the stats
-        VBox column1VBox = new VBox(48);
-        VBox column2VBox = new VBox(48);
-        column1VBox.getChildren().addAll(tourStyleVBox,teamsVBox);
-        //column2VBox.getChildren().addAll();
+        column1VBox.getChildren().addAll(tourStyleVBox,playerList);
+        column2VBox.getChildren().addAll(counterVBox);
         doubleColumnHBox.getChildren().addAll(statList,column1VBox,column2VBox);
 
         //---------------------------CLASS STUFF---------------------------
@@ -127,6 +212,39 @@ public class Create extends Page {
     }
 
     //Local methods
+    /**
+     * @param input The string inputted, to be checked whether or not is integer
+     * @return returns true if int, false if not
+     */
+    static private boolean isNumber(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public void reloadTeams() {
+        for (int i = 1; i < teamsVBox.getChildren().size()-1; i++) {
+            VBox teamTourList = (VBox) teamsVBox.getChildren().get(i);
+            TournamentList team = (TournamentList) teamTourList.getChildren().get(1);
+            addToTourList(team,"NEW PLAYER");
+        }
+    }
+
+
+    //Methods to add to pageBehavior
+
+    /** addToTourList(tourList, initialCellString)
+     * This method is used to reconstruct the classVBox after editing any Tournament List, needed to update the values of the list properly on the UI
+     * @param tourList
+     * @param initialCellString
+     * @author Colton LaChance
+     */
+    public void addToTourList(TournamentList tourList, String initialCellString) {
+        tourList.addToList(initialCellString,false, false);
+    }
 
     private void createTeam() {
         addTeam.setOnMouseClicked(e-> {
@@ -156,26 +274,19 @@ public class Create extends Page {
         reloadTeams();
     }
 
-    public void reloadTeams() {
-        for (int i = 1; i < teamsVBox.getChildren().size()-1; i++) {
-            VBox teamTourList = (VBox) teamsVBox.getChildren().get(i);
-            TournamentList team = (TournamentList) teamTourList.getChildren().get(1);
-            addToTourList(team,"NEW PLAYER");
-        }
+    public void setTournamentStyle() {
+        tourStyleRadButton[0].setOnMouseClicked(e0->{
+            tourStyle = 0;
+            column1VBox.getChildren().set(1,playerList);
+            reconstructClassVBox(tourNameVbox,doubleColumnHBox);
+        });
+        tourStyleRadButton[1].setOnMouseClicked(e1->{
+            tourStyle = 1;
+            column1VBox.getChildren().set(1,teamsVBox);
+            reconstructClassVBox(tourNameVbox,doubleColumnHBox);
+        });
     }
 
-
-    //Methods to add to pageBehavior
-
-    /** addToTourList(tourList, initialCellString)
-     * This method is used to reconstruct the classVBox after editing any Tournament List, needed to update the values of the list properly on the UI
-     * @param tourList
-     * @param initialCellString
-     * @author Colton LaChance
-     */
-    public void addToTourList(TournamentList tourList, String initialCellString) {
-        tourList.addToList(initialCellString,false, false);
-    }
 
     //Use this inherited method to call all methods related to class needed for functionality
     @Override
@@ -183,5 +294,6 @@ public class Create extends Page {
         addToTourList(statList,"NEW STAT");
         addToTourList(playerList,"NEW PLAYER");
         createTeam();
+        setTournamentStyle();
     }
 }
