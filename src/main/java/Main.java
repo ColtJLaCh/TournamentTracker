@@ -64,6 +64,7 @@ public class Main extends Application {
         //Set current page
         page = create;
         pageLayout = page.getPane();
+        page.pageSetStyle();
         //Start page behavior
         page.pageBehavior();
 

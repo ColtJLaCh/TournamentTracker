@@ -15,14 +15,21 @@ public class Page {
         for (Node node : nodes) {
             this.classVBox.getChildren().add(node);
         }
-        classVBox.setStyle("-fx-focus-color: black;" +
-                "-fx-background-insets: 1, 1, 1, 1;");
         return classVBox;
     }
 
     //Use this method to get page
     public BorderPane getPane() {
         return this.classPane;
+    }
+
+    public void pageSetStyle() {
+         /*
+          This is just here to add the Black outline to focused nodes,
+          while retaining no focus on other nodes like the BG scroll pane for the create page.
+         */
+        classVBox.setStyle("-fx-focus-color: black;" +
+                "-fx-background-insets: 1, 1, 1, 1;");
     }
 
     //Use this method to call all methods related to class

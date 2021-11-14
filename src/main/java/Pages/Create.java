@@ -54,6 +54,7 @@ public class Create extends Page {
     //Database dbc = Database.getInstance();
 
     public Create() {
+        reconstructClassVBox();
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
         //---------------------------TOURNAMENT NAME---------------------------
