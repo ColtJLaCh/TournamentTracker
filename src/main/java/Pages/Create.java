@@ -16,15 +16,20 @@ import javafx.scene.text.Text;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-/** PAGE CLASS
- * Constructor contains all layout information, add methods and properties as needed for functionality
+/** Create extends Page
+ * Creates a tournament and using the Database class, uploads a table to a Database.
+ * @author Colton LaChance
  */
 public class Create extends Page {
 
+    //Initialze the database as global for use
     Database dbc = Database.getInstance();
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     ScrollPane classScrollPane = new ScrollPane();
+
+
+    //SECTIONS ------- These are the different sections global variables, needed for functionality.
 
     //TOUR NAME
     TextField tourNameTextField = new TextField();
@@ -55,6 +60,8 @@ public class Create extends Page {
     Button createButton = new Button("CREATE TOURNAMENT");
     Text errorText = new Text("ERROR: All names must be under 50 characters");
 
+    //MISC -------- These are for layout or any other parts of functionality unrelated to sections
+
     //For the two column layout next to stats
     VBox column1VBox = new VBox(48);
     VBox column2VBox = new VBox(48);
@@ -68,6 +75,10 @@ public class Create extends Page {
     String[] dataStats; //if teams stats 0 and 1 will be applied to team, all others will be applied to players
     int dataSets = setCount;
 
+    /**Create() CONSTRUCTOR
+     * This is where all of the local layout variables go, as well as some functionality, only needed to be declared once.
+     * Separated into multiple sections defined by the layout for easier navigation
+     */
     public Create() {
         reconstructClassVBox();
         //Initialize layout assets here, ImageViews, Panes, Text etc...
@@ -132,7 +143,7 @@ public class Create extends Page {
         counter.setAlignment(Pos.CENTER);
         counter.setPrefSize(30,30);
         counter.setMaxSize(30,30);
-        counter.setTextFormatter(new TextFormatter<String>(change -> {
+        counter.setTextFormatter(new TextFormatter<String>(change -> { //This lambda forces sets textfield to only contain 2 digits and always have at least a 0 value
             if (change.getControlNewText().length() <= 2 && isNumber(change.getControlNewText())) {
                 if (isNumber(counter.getText())) {
                     setCount = Integer.parseInt(counter.getText());
@@ -148,7 +159,7 @@ public class Create extends Page {
         }));
         counterHBox.getChildren().addAll(counter,counterLabel);
 
-
+        //Counter buttons for sets
         counterUp.setPrefSize(30,30);
         counterUp.setId("counter");
         counterUp.setStyle("#counter {" +
@@ -218,7 +229,7 @@ public class Create extends Page {
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(50); //Set spacing here
         classScrollPane.setContent(classVBox);
-        classScrollPane.setStyle("-fx-background: #E2E2E2;" + //Very light gray
+        classScrollPane.setStyle("-fx-background: #E2E2E2;" + //This is to make the scrollpane in the background transparent and unfocusable
                 "-fx-focus-color: transparent;" +
                 "-fx-background-insets: 0, 0, 0, 0;");
         classScrollPane.setMinSize(UsefulConstants.DEFAULT_SCREEN_WIDTH,UsefulConstants.DEFAULT_SCREEN_HEIGHT-100);
@@ -228,7 +239,7 @@ public class Create extends Page {
     }
 
     //Local methods
-    /**
+    /** isNumber(String input)
      * @param input The string inputted, to be checked whether or not is integer
      * @return returns true if int, false if not
      */
@@ -241,6 +252,10 @@ public class Create extends Page {
         }
     }
 
+    /** reloadTeams()
+     * Adding a new Team or swapping to Team Tournament Style, this method reloads all functionality for the teams. Ie: On click events for the create new and delete buttons
+     * @author Colton LaChance
+     */
     public void reloadTeams() {
         for (int i = 1; i < teamsVBox.getChildren().size()-1; i++) {
             VBox teamTourList = (VBox) teamsVBox.getChildren().get(i);
@@ -249,11 +264,19 @@ public class Create extends Page {
         }
     }
 
+    /**collectData()
+     * This method collects all needed data for creating a new table and stores it into the data globals initialized at start of class.
+     * @author Colton LaChance
+     */
     public void collectData() {
+        //TOUR NAME
         dataTourName = tourNameTextField.getText();
+
+        //TOUR STYLE
         dataTourStyle = tourStyle;
         if (tourStyle == 0) { //Tour style == 0 (SINGLES)
 
+            //PLAYER NAMES
             dataPlayerNames = new String[1][playerList.getArrList().size()];
             dataTeamName = new String[1];
             dataTeamName[0] = "NO TEAM";
@@ -264,6 +287,8 @@ public class Create extends Page {
             }
 
         }else{ //Tour style == 1 (TEAMS)
+
+            //PLAYER AND TEAM NAMES
             int teamsVBoxSize = teamsVBox.getChildren().size()-2; // -2 for label and add button
             int largestTeamSize = 0;
 
@@ -273,7 +298,6 @@ public class Create extends Page {
                 if (teamList.getArrList().size() > largestTeamSize) largestTeamSize = teamList.getArrList().size();
             }
 
-            System.out.println(teamsVBoxSize);
             dataPlayerNames = new String[teamsVBoxSize][largestTeamSize];
             dataTeamName = new String[teamsVBoxSize];
 
@@ -288,11 +312,15 @@ public class Create extends Page {
                 for (int p = 0; p < teamTourList.getArrList().size(); p++) {
                     TextField playerTextField = (TextField) teamTourList.getArrList().get(p).getChildren().get(0);
                     dataPlayerNames[t-1][p] = playerTextField.getText();
-                    System.out.println("TEAM PLAYER #" + p + " ON TEAM " + dataTeamName[t-1] + ": " + dataPlayerNames[t-1][p]);
+
+                    //FOR DEBUGGING
+                    //System.out.println("TEAM PLAYER #" + p + " ON TEAM " + dataTeamName[t-1] + ": " + dataPlayerNames[t-1][p]);
                 }
 
             }
         }
+
+        //STATS
         dataStats = new String[statList.getArrList().size()];
         for (int s = 0; s < statList.getArrList().size(); s++) {
             HBox statCell = statList.getArrList().get(s);
@@ -306,7 +334,8 @@ public class Create extends Page {
     //Methods to add to pageBehavior
 
     /** addToTourList(tourList, initialCellString)
-     * This method is used to reconstruct the classVBox after editing any Tournament List, needed to update the values of the list properly on the UI
+     * This method was originally used for reloading the class vbox, but that's no longer thew case as it would only reload once when this was called.
+     * Now it's just here because I've used it multiple times throughout the class and am keeping it for future touch ups if some extra functionality is needed.
      * @param tourList
      * @param initialCellString
      * @author Colton LaChance
@@ -315,6 +344,10 @@ public class Create extends Page {
         tourList.addToList(initialCellString,false, false);
     }
 
+    /**createTeam()
+     * This method reconstructs the teamsVbox when the addTeam button is clicked, appending a new team to the end.
+     * @author Colton LaChance
+     */
     private void createTeam() {
         addTeam.setOnMouseClicked(e-> {
             TournamentList newTourList = new TournamentList("",2,UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
@@ -343,6 +376,10 @@ public class Create extends Page {
         reloadTeams();
     }
 
+    /**setTournamentStyle()
+     * switches tournament style when selecting one of the two radio buttons Singles or Teams
+     * @author Colton LaChance
+     */
     public void setTournamentStyle() {
         tourStyleRadButton[0].setOnMouseClicked(e0->{
             tourStyle = 0;
@@ -356,6 +393,11 @@ public class Create extends Page {
         });
     }
 
+    /**createTournament()
+     * Compiles the data together from the collectData method and inputs it into the Database using the Database .class sql methods,
+     * after checking if all information is valid. (Matches the sql table parameters)
+     * @author Colton LaChance
+     */
     public void createTournament() {
         createButton.setOnMouseClicked(createTour ->{
             collectData();
