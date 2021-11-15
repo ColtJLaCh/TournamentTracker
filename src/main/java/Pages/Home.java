@@ -1,9 +1,11 @@
 package Pages;
 import HelpfulClasses.UsefulConstants;
+import LoginCredentials.Login;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,10 +25,12 @@ public class Home extends Page {
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     private Label loginLabel = new Label("Sign in to Database");
     private TextField username = new TextField();
-    private TextField password = new TextField();
+    private PasswordField password = new PasswordField();
     private Button loginButton = new Button();
     private VBox loginVBox = new VBox();
     private Text loginErrorMessage = new Text();
+    //Create a Login so we can use its functionality on the home page.
+    Login login = new Login();
 
     public Home() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
@@ -43,10 +47,13 @@ public class Home extends Page {
         password.setPromptText("Password...");
         loginButton.setText("Login");
         loginButton.setMinWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/15);
+        loginButton.setOnAction(e->{
+            onLogin(username.getText(), password.getText());
+        });
+
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         loginErrorMessage.setFont(franklinGothicMedium12);
-        loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
-        loginErrorMessage.setText("Invalid username or password");
+        loginErrorMessage.setFill(new Color(1,0,0,0));
         loginVBox.setSpacing(4);
         loginVBox.getChildren().addAll(loginLabel,username,password,loginButton,loginErrorMessage);
         loginVBox.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/10);
@@ -67,11 +74,14 @@ public class Home extends Page {
 
     //Local methods
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     //Methods to add to pageBehavior
     private void onLogin() {
 
 =======
+=======
+>>>>>>> development
     //Called whenever the user presses the login button. If successful it should take you to the next screen.
     private void onLogin(String username, String password) {
         //System.out.println("Loggin in as " + username + " with password " +password);
@@ -79,9 +89,16 @@ public class Home extends Page {
             if(login.checkPassword(username, password)){
                 System.out.println("Logging in...");
                 login.loginUser(username);
+<<<<<<< HEAD
 
                 //Code to switch scenes
 
+=======
+                /*
+                Insert code to switch scenes here!
+
+                 */
+>>>>>>> development
             } else {
                 loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
                 loginErrorMessage.setText("Incorrect password");
@@ -90,7 +107,10 @@ public class Home extends Page {
             loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
             loginErrorMessage.setText("Invalid username");
         }
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> development
     }
 
     //Use this inherited method to call all methods related to class needed for functionality

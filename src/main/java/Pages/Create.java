@@ -172,12 +172,12 @@ public class Create extends Page {
         counterDown.setPrefSize(30,30);
         counterDown.setId("counter");
         counterDown.setStyle("#counter {" +
-                    "-fx-background-color: white; " +
-                    "-fx-shape: 'M 300 50 250 100 350 100 z';" +
-                    "-fx-effect: dropshadow(gaussian, black, 1, 1, 0, 0);" +
+                "-fx-background-color: white; " +
+                "-fx-shape: 'M 300 50 250 100 350 100 z';" +
+                "-fx-effect: dropshadow(gaussian, black, 1, 1, 0, 0);" +
                 "}" +
                 "#counter:pressed {" +
-                        "-fx-background-color: black;" +
+                "-fx-background-color: black;" +
                 "}");
         counterDown.setRotate(180);
         counterDown.setOnMouseClicked(down -> {
@@ -266,9 +266,9 @@ public class Create extends Page {
             int largestTeamSize = 0;
 
             for (int i = 1; i < teamsVBoxSize; i++) {
-               VBox teamVBox = (VBox)teamsVBox.getChildren().get(i);
-               TournamentList teamList = (TournamentList)teamVBox.getChildren().get(1);
-               if (teamList.getArrList().size() > largestTeamSize) largestTeamSize = teamList.getArrList().size();
+                VBox teamVBox = (VBox)teamsVBox.getChildren().get(i);
+                TournamentList teamList = (TournamentList)teamVBox.getChildren().get(1);
+                if (teamList.getArrList().size() > largestTeamSize) largestTeamSize = teamList.getArrList().size();
             }
 
             dataPlayerNames = new String[teamsVBoxSize][largestTeamSize];
@@ -380,9 +380,15 @@ public class Create extends Page {
             }
 
             if (dataTourNameOkay &&
+<<<<<<< HEAD
             dataTeamNameOkay &&
             dataPlayerNameOkay &&
             dataStatsOkay) {
+=======
+                    dataTeamNameOkay &&
+                    dataPlayerNameOkay &&
+                    dataStatsOkay) {
+>>>>>>> development
                 errorText.setOpacity(0);
                 try {
                     dbc.createTable(dataTourName,dataSets,dataStats,dbc.getConnection());
