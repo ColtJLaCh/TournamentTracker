@@ -21,11 +21,8 @@ public class Database {
                 String basicTable = "BasicTable";
                 String[] extras = {"Wins", "Losses"};
 
-<<<<<<< HEAD
-                createTable(basicTable, 0, extras, connection);
-=======
+
                 createTable(basicTable,2, extras, connection);
->>>>>>> development
 
                 //Add a player to table
                 String[] player = {"Chicago 25ers", "6", "4"};
@@ -79,13 +76,8 @@ public class Database {
     public void createTable(String tableName, int sets, String[] extraColumns,
                              Connection connection) throws SQLException {
         String sqlCreate = "CREATE TABLE `" + tableName + "` (" +
-<<<<<<< HEAD
-                "ID" + " int NOT NULL AUTO_INCREMENT, " +
-                "Sets" + " INT DEFAULT " + sets + ", " +
-=======
                 "ID" + " INT NOT NULL AUTO_INCREMENT, " +
                 "Sets" + " INT DEFAULT '" + sets + "'," +
->>>>>>> development
                 "Player" + " VARCHAR(50), " +
                 "TeamName" + " VARCHAR(50), ";
         for (int i = 0; i < extraColumns.length; i++) {
@@ -110,17 +102,7 @@ public class Database {
         }
     }
 
-<<<<<<< HEAD
-    public void addToTable(String tableName, String[] newPlayers,String teamName, Connection connection) throws SQLException {
-        String sqlInsert = "INSERT INTO `" + tableName + "` (Player,TeamName) VALUES ('" + newPlayers[0] + "','" + teamName + "')";
 
-        for (int p = 1; p < newPlayers.length; p++) {
-            sqlInsert = sqlInsert  + ", ('" + newPlayers[p] + "','" + teamName + "')";
-        }
-        sqlInsert = sqlInsert + ";";
-
-        System.out.println(sqlInsert);
-=======
     public void addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
         String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('"+newPlayer[0] + "','" + teamName + "')";
 
@@ -128,7 +110,6 @@ public class Database {
             sqlInsert = sqlInsert  + ", ('"+ newPlayer[0] + "','" + teamName + "')";
         }
         sqlInsert = sqlInsert + ";";
->>>>>>> development
 
         //System.out.println(sqlInsert);
         DatabaseMetaData md = connection.getMetaData();

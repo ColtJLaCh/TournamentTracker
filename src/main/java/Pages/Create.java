@@ -380,15 +380,9 @@ public class Create extends Page {
             }
 
             if (dataTourNameOkay &&
-<<<<<<< HEAD
-            dataTeamNameOkay &&
-            dataPlayerNameOkay &&
-            dataStatsOkay) {
-=======
                     dataTeamNameOkay &&
                     dataPlayerNameOkay &&
                     dataStatsOkay) {
->>>>>>> development
                 errorText.setOpacity(0);
                 try {
                     dbc.createTable(dataTourName,dataSets,dataStats,dbc.getConnection());
