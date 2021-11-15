@@ -1,32 +1,27 @@
 package Pages;
 
 import Database.Database;
+import Database.DBConst;
+import java.sql.*;
 import HelpfulClasses.UsefulConstants;
 import Nodes.TournamentList;
-import com.sun.javafx.css.StyleCache;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Screen;
-
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
 public class Create extends Page {
+
+    Database dbc = Database.getInstance();
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     ScrollPane classScrollPane = new ScrollPane();
@@ -58,7 +53,7 @@ public class Create extends Page {
 
     //CREATE
     Button createButton = new Button("CREATE TOURNAMENT");
-    Text errorText = new Text("error: some parameter is wrong!");
+    Text errorText = new Text("ERROR: All names must be under 50 characters");
 
     //For the two column layout next to stats
     VBox column1VBox = new VBox(48);
@@ -207,7 +202,7 @@ public class Create extends Page {
         createButton.setMaxSize(240,40);
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         errorText.setFont(franklinGothicMedium12);
-        errorText.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+        errorText.setFill(new Color(1,0,0,0)); // <---- You can set the fill opacity to make the error message visable/invisible
         createVBox.getChildren().addAll(createLabel,createButton,errorText);
 
 
@@ -258,11 +253,13 @@ public class Create extends Page {
         dataTourName = tourNameTextField.getText();
         dataTourStyle = tourStyle;
         if (tourStyle == 0) { //Tour style == 0 (SINGLES)
-            dataPlayerNames = new String[playerList.getArrList().size()][1];
+            dataPlayerNames = new String[1][playerList.getArrList().size()];
+            dataTeamName = new String[1];
+            dataTeamName[0] = "NO TEAM";
             for (int i = 0; i < playerList.getArrList().size(); i++) {
                 TextField playerTextField = (TextField)playerList.getArrList().get(i).getChildren().get(0);
-                dataPlayerNames[i][0] = playerTextField.getText();
-                System.out.println("SINGLES PLAYER #" + i + ": " + dataPlayerNames[i][0]);
+                dataPlayerNames[0][i] = playerTextField.getText();
+                System.out.println("SINGLES PLAYER #" + i + ": " + dataPlayerNames[0][i]);
             }
         }else{ //Tour style == 1 (TEAMS)
             int teamsVBoxSize = teamsVBox.getChildren().size()-1;
@@ -274,7 +271,7 @@ public class Create extends Page {
                if (teamList.getArrList().size() > largestTeamSize) largestTeamSize = teamList.getArrList().size();
             }
 
-            dataPlayerNames = new String[largestTeamSize][teamsVBoxSize];
+            dataPlayerNames = new String[teamsVBoxSize][largestTeamSize];
 
             dataTeamName = new String[teamsVBoxSize];
             for (int t = 1; t < teamsVBoxSize; t++) {
@@ -287,8 +284,8 @@ public class Create extends Page {
 
                 for (int p = 0; p < teamTourList.getArrList().size(); p++) {
                     TextField playerTextField = (TextField) teamTourList.getArrList().get(p).getChildren().get(0);
-                    dataPlayerNames[p][t-1] = playerTextField.getText();
-                    System.out.println("TEAM PLAYER #" + p + " ON TEAM " + dataTeamName[t-1] + ": " + dataPlayerNames[p][t-1]);
+                    dataPlayerNames[t-1][p] = playerTextField.getText();
+                    System.out.println("TEAM PLAYER #" + p + " ON TEAM " + dataTeamName[t-1] + ": " + dataPlayerNames[t-1][p]);
                 }
 
             }
@@ -348,16 +345,61 @@ public class Create extends Page {
             tourStyle = 0;
             column1VBox.getChildren().set(1,playerList);
             reconstructClassVBox(tourNameVbox,doubleColumnHBox);
-            collectData();
         });
         tourStyleRadButton[1].setOnMouseClicked(e1->{
             tourStyle = 1;
             column1VBox.getChildren().set(1,teamsVBox);
             reconstructClassVBox(tourNameVbox,doubleColumnHBox);
-            collectData();
         });
     }
 
+    public void createTournament() {
+        createButton.setOnMouseClicked(createTour ->{
+            collectData();
+
+            //Check if all data is valid
+            Boolean dataTourNameOkay = true;
+            Boolean dataTeamNameOkay = true;
+            Boolean dataPlayerNameOkay = true;
+            Boolean dataStatsOkay = true;
+
+            if (dataTourName.length() > 50) dataTourNameOkay = false;
+            if (tourStyle == 0) {
+
+            }else {
+                for (int t = 0; t < teamsVBox.getChildren().size()-1; t++) {
+                    if (dataTeamName[t].length() > 50) dataTeamNameOkay = false;
+                    for (int p = 0; p < dataPlayerNames[t].length; p++) {
+                        if (dataPlayerNames[p][t].length() > 50) dataPlayerNameOkay = false;
+                    }
+                }
+            }
+
+            for (int s = 0; s < dataStats.length; s++) {
+                if (dataStats[s].length() > 50) dataStatsOkay = false;
+            }
+
+            if (dataTourNameOkay &&
+            dataTeamNameOkay &&
+            dataPlayerNameOkay &&
+            dataStatsOkay) {
+                errorText.setOpacity(0);
+                try {
+                    dbc.createTable(dataTourName,dataSets,dataStats,dbc.getConnection());
+                    for (int i = 0; i < dataTeamName.length; i++) {
+                        dbc.addToTable(dataTourName, dataPlayerNames[i],dataTeamName[i], dbc.getConnection());
+                    }
+
+                    System.out.println("CREATED TABLE!");
+                }catch (Exception e){
+                    //dbc.close();
+                    e.printStackTrace();
+                }
+            }else{
+                errorText.setOpacity(1);
+            }
+        });
+    }
 
     //Use this inherited method to call all methods related to class needed for functionality
     @Override
@@ -366,5 +408,6 @@ public class Create extends Page {
         addToTourList(playerList,"NEW PLAYER");
         createTeam();
         setTournamentStyle();
+        createTournament();
     }
 }

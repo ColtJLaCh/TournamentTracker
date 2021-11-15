@@ -14,7 +14,7 @@ public class Main extends Application {
 
     Scene currentScene;
 
-    Page page;
+    public Page page;
     BorderPane pageLayout;
     Home home = new Home();
     Create create = new Create();

@@ -67,9 +67,30 @@ public class Home extends Page {
 
     //Local methods
 
+<<<<<<< Updated upstream
     //Methods to add to pageBehavior
     private void onLogin() {
 
+=======
+    //Called whenever the user presses the login button. If successful it should take you to the next screen.
+    private void onLogin(String username, String password) {
+        //System.out.println("Loggin in as " + username + " with password " +password);
+        if(login.getUsers().contains(username)){
+            if(login.checkPassword(username, password)){
+                System.out.println("Logging in...");
+                login.loginUser(username);
+
+                //Code to switch scenes
+
+            } else {
+                loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+                loginErrorMessage.setText("Incorrect password");
+            }
+        } else {
+            loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+            loginErrorMessage.setText("Invalid username");
+        }
+>>>>>>> Stashed changes
     }
 
     //Use this inherited method to call all methods related to class needed for functionality
