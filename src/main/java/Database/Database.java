@@ -85,6 +85,8 @@ public class Database {
         }
         sqlCreate = sqlCreate + "PRIMARY KEY(" + "ID" + ")" + ");";
 
+        System.out.println(sqlCreate);
+
         Statement createTable;
         //Get database information
         DatabaseMetaData md = connection.getMetaData();
@@ -104,10 +106,10 @@ public class Database {
 
 
     public void addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
-        String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('"+newPlayer[0] + "','" + teamName + "')";
+        String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('" + newPlayer[0] + "','" + teamName + "')";
 
         for (int i = 1; i < newPlayer.length; i++) {
-            sqlInsert = sqlInsert  + ", ('"+ newPlayer[0] + "','" + teamName + "')";
+            sqlInsert = sqlInsert  + ", ('"+ newPlayer[i] + "','" + teamName + "')";
         }
         sqlInsert = sqlInsert + ";";
 

@@ -253,6 +253,7 @@ public class Create extends Page {
         dataTourName = tourNameTextField.getText();
         dataTourStyle = tourStyle;
         if (tourStyle == 0) { //Tour style == 0 (SINGLES)
+
             dataPlayerNames = new String[1][playerList.getArrList().size()];
             dataTeamName = new String[1];
             dataTeamName[0] = "NO TEAM";
@@ -261,20 +262,22 @@ public class Create extends Page {
                 dataPlayerNames[0][i] = playerTextField.getText();
                 System.out.println("SINGLES PLAYER #" + i + ": " + dataPlayerNames[0][i]);
             }
+
         }else{ //Tour style == 1 (TEAMS)
-            int teamsVBoxSize = teamsVBox.getChildren().size()-1;
+            int teamsVBoxSize = teamsVBox.getChildren().size()-2; // -2 for label and add button
             int largestTeamSize = 0;
 
-            for (int i = 1; i < teamsVBoxSize; i++) {
+            for (int i = 1; i <= teamsVBoxSize; i++) {
                 VBox teamVBox = (VBox)teamsVBox.getChildren().get(i);
                 TournamentList teamList = (TournamentList)teamVBox.getChildren().get(1);
                 if (teamList.getArrList().size() > largestTeamSize) largestTeamSize = teamList.getArrList().size();
             }
 
+            System.out.println(teamsVBoxSize);
             dataPlayerNames = new String[teamsVBoxSize][largestTeamSize];
-
             dataTeamName = new String[teamsVBoxSize];
-            for (int t = 1; t < teamsVBoxSize; t++) {
+
+            for (int t = 1; t <= teamsVBoxSize; t++) {
                 VBox team = (VBox)teamsVBox.getChildren().get(t);
                 HBox teamBox = (HBox)team.getChildren().get(0);
                 TextField teamTextField = (TextField) teamBox.getChildren().get(0);
@@ -365,12 +368,14 @@ public class Create extends Page {
 
             if (dataTourName.length() > 50) dataTourNameOkay = false;
             if (tourStyle == 0) {
-
+                for (int p = 0; p < dataPlayerNames[0].length; p++) {
+                    if (dataPlayerNames[0][p].length() > 50) dataPlayerNameOkay = false;
+                }
             }else {
-                for (int t = 0; t < teamsVBox.getChildren().size()-1; t++) {
+                for (int t = 0; t < teamsVBox.getChildren().size()-2; t++) {
                     if (dataTeamName[t].length() > 50) dataTeamNameOkay = false;
                     for (int p = 0; p < dataPlayerNames[t].length; p++) {
-                        if (dataPlayerNames[p][t].length() > 50) dataPlayerNameOkay = false;
+                        if (dataPlayerNames[t][p].length() > 50) dataPlayerNameOkay = false;
                     }
                 }
             }
