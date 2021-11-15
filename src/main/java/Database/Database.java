@@ -21,7 +21,7 @@ public class Database {
                 String basicTable = "BasicTable";
                 String[] extras = {"Wins", "Losses"};
 
-                createTable(basicTable, extras, connection);
+                createTable(basicTable,2, extras, connection);
 
                 //Add a player to table
                 String[] player = {"Chicago 25ers", "6", "4"};
@@ -72,11 +72,13 @@ public class Database {
         }
     }
 
-    private void createTable(String tableName, String[] extraColumns,
+    public void createTable(String tableName, int sets, String[] extraColumns,
                              Connection connection) throws SQLException {
         String sqlCreate = "CREATE TABLE `" + tableName + "` (" +
-                "ID" + " int NOT NULL AUTO_INCREMENT, " +
-                "Player" + " VARCHAR(50), ";
+                "ID" + " INT NOT NULL AUTO_INCREMENT, " +
+                "Sets" + " INT DEFAULT '" + sets + "'," +
+                "Player" + " VARCHAR(50), " +
+                "TeamName" + " VARCHAR(50), ";
         for (int i = 0; i < extraColumns.length; i++) {
             sqlCreate = sqlCreate + extraColumns[i] + " VARCHAR(50), ";
         }
@@ -99,13 +101,13 @@ public class Database {
         }
     }
 
-    private void addToTable(String tableName, String[] newPlayer, Connection connection) throws SQLException {
-        String sqlInsert = "INSERT INTO `" + tableName + "` VALUES (0, '"+newPlayer[0] + "'";
+    public void addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
+        String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('"+newPlayer[0] + "','" + teamName + "')";
 
         for (int i = 1; i < newPlayer.length; i++) {
-            sqlInsert = sqlInsert  + ", '" + newPlayer[i]+ "'";
+            sqlInsert = sqlInsert  + ", ('"+ newPlayer[0] + "','" + teamName + "')";
         }
-        sqlInsert = sqlInsert + ");";
+        sqlInsert = sqlInsert + ";";
 
         //System.out.println(sqlInsert);
         DatabaseMetaData md = connection.getMetaData();
