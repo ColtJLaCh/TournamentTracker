@@ -14,7 +14,7 @@ public class Main extends Application {
 
     Scene currentScene;
 
-    Page page;
+    public Page page;
     BorderPane pageLayout;
     Home home = new Home();
     Create create = new Create();
@@ -62,8 +62,9 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        page = home;
+        page = create;
         pageLayout = page.getPane();
+        page.pageSetStyle();
         //Start page behavior
         page.pageBehavior();
 
@@ -74,7 +75,7 @@ public class Main extends Application {
         root.setTop(rootVBox);
 
         //root styles
-        root.setStyle("-fx-background-color: #E2E2E2"); //Very light gray
+        root.setStyle("-fx-background-color: #E2E2E2;");
 
         //Show scene!
         Scene scene = new Scene(root,1240,780);

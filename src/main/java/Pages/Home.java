@@ -74,6 +74,7 @@ public class Home extends Page {
 
     //Local methods
 
+
     //Called whenever the user presses the login button. If successful it should take you to the next screen.
     private void onLogin(String username, String password) {
         //System.out.println("Loggin in as " + username + " with password " +password);
@@ -81,10 +82,6 @@ public class Home extends Page {
             if(login.checkPassword(username, password)){
                 System.out.println("Logging in...");
                 login.loginUser(username);
-                /*
-                Insert code to switch scenes here!
-
-                 */
             } else {
                 loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
                 loginErrorMessage.setText("Incorrect password");

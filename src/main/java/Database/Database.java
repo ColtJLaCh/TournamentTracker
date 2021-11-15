@@ -21,7 +21,8 @@ public class Database {
                 String basicTable = "BasicTable";
                 String[] extras = {"Wins", "Losses"};
 
-                createTable(basicTable, extras, connection);
+
+                createTable(basicTable,2, extras, connection);
 
                 //Add a player to table
                 String[] player = {"Chicago 25ers", "6", "4"};
@@ -72,15 +73,19 @@ public class Database {
         }
     }
 
-    private void createTable(String tableName, String[] extraColumns,
+    public void createTable(String tableName, int sets, String[] extraColumns,
                              Connection connection) throws SQLException {
         String sqlCreate = "CREATE TABLE `" + tableName + "` (" +
-                "ID" + " int NOT NULL AUTO_INCREMENT, " +
-                "Player" + " VARCHAR(50), ";
+                "ID" + " INT NOT NULL AUTO_INCREMENT, " +
+                "Sets" + " INT DEFAULT '" + sets + "'," +
+                "Player" + " VARCHAR(50), " +
+                "TeamName" + " VARCHAR(50), ";
         for (int i = 0; i < extraColumns.length; i++) {
-            sqlCreate = sqlCreate + extraColumns[i] + " VARCHAR(50), ";
+            sqlCreate = sqlCreate + extraColumns[i] + " VARCHAR(50) DEFAULT '0', ";
         }
         sqlCreate = sqlCreate + "PRIMARY KEY(" + "ID" + ")" + ");";
+
+        System.out.println(sqlCreate);
 
         Statement createTable;
         //Get database information
@@ -99,13 +104,14 @@ public class Database {
         }
     }
 
-    private void addToTable(String tableName, String[] newPlayer, Connection connection) throws SQLException {
-        String sqlInsert = "INSERT INTO `" + tableName + "` VALUES (0, '"+newPlayer[0] + "'";
+
+    public void addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
+        String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('" + newPlayer[0] + "','" + teamName + "')";
 
         for (int i = 1; i < newPlayer.length; i++) {
-            sqlInsert = sqlInsert  + ", '" + newPlayer[i]+ "'";
+            sqlInsert = sqlInsert  + ", ('"+ newPlayer[i] + "','" + teamName + "')";
         }
-        sqlInsert = sqlInsert + ");";
+        sqlInsert = sqlInsert + ";";
 
         //System.out.println(sqlInsert);
         DatabaseMetaData md = connection.getMetaData();
@@ -122,7 +128,7 @@ public class Database {
         }
     }
 
-    private void updatePlayer(String tableName, int playerID, String[] changingValues,
+    public void updatePlayer(String tableName, int playerID, String[] changingValues,
                               String[] newValues, Connection connection ) throws SQLException {
         String sqlUpdate = "UPDATE `" + tableName + "` SET " + changingValues[0] + " = '" + newValues[0] + "'";
 
@@ -145,7 +151,7 @@ public class Database {
         }
     }
 
-    private ResultSet getTable(String tableName, Connection connection) throws SQLException {
+    public ResultSet getTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
         ResultSet resultSet = md.getTables(DBConst.DB_NAME,
