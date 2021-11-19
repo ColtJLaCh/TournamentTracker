@@ -192,7 +192,7 @@ public class Database {
     }
 
 
-    private void dropTable(String tableName, Connection connection) throws SQLException {
+    public void dropTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
         ResultSet resultSet = md.getTables(DBConst.DB_NAME,
