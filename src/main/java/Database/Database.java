@@ -1,10 +1,14 @@
 package Database;
 import java.sql.*;
 
+
 public class Database {
     private static Database instance;
     private Connection connection = null;
 
+    /**
+     *
+     */
     private Database(){
         //Database connection
         if(connection == null){
@@ -51,6 +55,10 @@ public class Database {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static Database getInstance(){
         if(instance == null){
             instance = new Database();
@@ -58,6 +66,10 @@ public class Database {
         return instance;
     }
 
+    /**
+     *
+     * @return
+     */
     public Connection getConnection() {
         return connection;
     }
@@ -73,6 +85,15 @@ public class Database {
         }
     }
 
+    /**
+     *
+     * @param tableName
+     * @param sets
+     * @param extraColumns
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public boolean createTable(String tableName, int sets, String[] extraColumns,
                              Connection connection) throws SQLException {
         String sqlCreate = "CREATE TABLE `" + tableName + "` (" +
@@ -106,7 +127,15 @@ public class Database {
         }
     }
 
-
+    /**
+     *
+     * @param tableName
+     * @param newPlayer
+     * @param teamName
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public boolean addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
         String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('" + newPlayer[0] + "','" + teamName + "')";
 
@@ -132,6 +161,16 @@ public class Database {
         }
     }
 
+    /**
+     *
+     * @param tableName
+     * @param playerID
+     * @param changingValues
+     * @param newValues
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public boolean updatePlayer(String tableName, int playerID, String[] changingValues,
                               String[] newValues, Connection connection ) throws SQLException {
         String sqlUpdate = "UPDATE `" + tableName + "` SET " + changingValues[0] + " = '" + newValues[0] + "'";
@@ -157,6 +196,13 @@ public class Database {
         }
     }
 
+    /**
+     *
+     * @param tableName
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public ResultSet getTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
@@ -177,6 +223,14 @@ public class Database {
         }
     }
 
+    /**
+     *
+     * @param tableName
+     * @param condition
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public ResultSet curateTable(String tableName, String condition, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
@@ -197,7 +251,13 @@ public class Database {
         }
     }
 
-
+    /**
+     *
+     * @param tableName
+     * @param connection
+     * @return
+     * @throws SQLException
+     */
     public boolean dropTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName

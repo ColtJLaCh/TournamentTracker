@@ -3,10 +3,7 @@ package Pages;
 import Database.*;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,21 +23,23 @@ public class Delete extends Page {
     Database dbc = Database.getInstance();
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
-    ScrollPane classScrollPane = new ScrollPane();
 
     Button deleteButton = new Button("END TOURNAMENT");
 
     public Delete() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
+        //First column for the Tables Choice Box
         VBox tablesVBox = new VBox(2);
         Label tableLabel = new Label("Tournaments managed by " + DB_USER);
         tableLabel.setLabelFor(tablesVBox);
         ChoiceBox tourBox = new ChoiceBox();
         Connection conn = dbc.getConnection();
+        //Gather all table names from the user's database
         try {
             DatabaseMetaData md = conn.getMetaData();
             ResultSet rs = md.getTables(DB_NAME, null, "%", null);
+            //For each table, add its name to the choicebox
             while (rs.next()) {
                 tourBox.getItems().add(rs.getString(3));
             }
@@ -49,6 +48,7 @@ public class Delete extends Page {
         }
         tablesVBox.getChildren().addAll(tableLabel,tourBox);
 
+        //Second column for the delete button
         VBox deleteVBox = new VBox(2);
         Label deleteLabel = new Label("Delete selected tournament");
         deleteLabel.setUnderline(true);
@@ -57,13 +57,23 @@ public class Delete extends Page {
         deleteButton.setMinSize(240,40);
         deleteButton.setMaxSize(240,40);
         deleteButton.setOnAction(e->{
+            // Make sure the user has actually selected something
             if(tourBox.getSelectionModel().getSelectedItem()!=null) {
-                System.out.println("Deleting " + tourBox.getSelectionModel().getSelectedItem().toString());
+                //String representing user's selection
+                String dropTour = tourBox.getSelectionModel().getSelectedItem().toString();
                 try {
-                    if(dbc.dropTable(tourBox.getSelectionModel().getSelectedItem().toString(), conn)){
-                        System.out.println("Tournament " + tourBox.getSelectionModel().getSelectedItem().toString() + " successfully deleted.");
-                    } else {
-                        System.out.println("Tournament doesn't exist.");
+                    //Alert pops up asking the user if they're sure they want to delete.
+                    Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                    a.setContentText("Are you sure you want to delete tournament " + dropTour + "?");
+                    a.showAndWait();
+                    if(a.getResult() == ButtonType.YES) {
+                        if (dbc.dropTable(tourBox.getSelectionModel().getSelectedItem().toString(), conn)) {
+                            System.out.println("Tournament " + dropTour + " successfully deleted.");
+
+                            //For Colton - Navigate to View page here!
+                        } else {
+                            System.out.println("Tournament doesn't exist.");
+                        }
                     }
                 } catch (SQLException dropException){
                     System.out.println("Error dropping table.");
@@ -73,7 +83,7 @@ public class Delete extends Page {
 
         deleteVBox.getChildren().addAll(deleteLabel,deleteButton);
 
-
+        //Add both columns to the HBox
         HBox hbox = new HBox(tablesVBox, deleteVBox);
 
         classVBox = new VBox(hbox); //Vbox needed for Top to Bottom layout, add assets here
