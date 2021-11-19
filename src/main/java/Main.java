@@ -18,10 +18,11 @@ public class Main extends Application {
     BorderPane pageLayout;
     Home home = new Home();
     Create create = new Create();
-    Delete delete;
+    Delete delete = new Delete();
     Update update;
     Stats stats;
     View view;
+    Scene scene;
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -41,8 +42,14 @@ public class Main extends Application {
 
         //File Menu items
         MenuItem createNew = new MenuItem("Create New...");
+        createNew.setOnAction(e->{
+            System.out.println("Moving to create");
+        });
         MenuItem updateTour = new MenuItem("Update Tournament");
         MenuItem deleteTour = new MenuItem("Delete Tournament");
+        deleteTour.setOnAction(e->{
+            System.out.println("Moving to delete");
+        });
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(e->{
             System.exit(0);
@@ -62,7 +69,9 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        page = create;
+        //page = create;
+        //page = home;
+        page = delete;
         pageLayout = page.getPane();
         page.pageSetStyle();
         //Start page behavior
@@ -78,7 +87,7 @@ public class Main extends Application {
         root.setStyle("-fx-background-color: #E2E2E2;");
 
         //Show scene!
-        Scene scene = new Scene(root,1240,780);
+        scene = new Scene(root,1240,780);
         stage.setTitle("Tournament Tracker");
         stage.setScene(scene);
         stage.show();

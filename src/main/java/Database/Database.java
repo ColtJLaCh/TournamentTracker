@@ -18,11 +18,11 @@ public class Database {
                 System.out.println("Created Connection");
 
                 //Create a basic table
-                String basicTable = "BasicTable";
+                //String basicTable = "BasicTable";
                 String[] extras = {"Wins", "Losses"};
 
 
-                createTable(basicTable,2, extras, connection);
+                //createTable(basicTable,2, extras, connection);
 
                 //Add a player to table
                 String[] player = {"Chicago 25ers", "6", "4"};
@@ -36,11 +36,11 @@ public class Database {
                 //updatePlayer(basicTable, 3, changes,newValues, connection);
 
                 //Rertrieve table rows
-                ResultSet basicTourney = getTable(basicTable, connection);
+                //ResultSet basicTourney = getTable(basicTable, connection);
 
 
                 //Retrieve specific table rows
-                ResultSet tourneyWinners = curateTable(basicTable, "Wins > 6", connection);
+                //ResultSet tourneyWinners = curateTable(basicTable, "Wins > 6", connection);
 
 
                 //Drop the basic table
