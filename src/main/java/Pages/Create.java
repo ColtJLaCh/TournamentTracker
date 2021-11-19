@@ -334,7 +334,7 @@ public class Create extends Page {
     //Methods to add to pageBehavior
 
     /** addToTourList(tourList, initialCellString)
-     * This method was originally used for reloading the class vbox, but that's no longer thew case as it would only reload once when this was called.
+     * This method was originally used for reloading the class vbox, but that's no longer the case as it would only reload once when this was called.
      * Now it's just here because I've used it multiple times throughout the class and am keeping it for future touch ups if some extra functionality is needed.
      * @param tourList
      * @param initialCellString
