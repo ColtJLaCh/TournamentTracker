@@ -73,7 +73,7 @@ public class Database {
         }
     }
 
-    public void createTable(String tableName, int sets, String[] extraColumns,
+    public boolean createTable(String tableName, int sets, String[] extraColumns,
                              Connection connection) throws SQLException {
         String sqlCreate = "CREATE TABLE `" + tableName + "` (" +
                 "ID" + " INT NOT NULL AUTO_INCREMENT, " +
@@ -85,7 +85,7 @@ public class Database {
         }
         sqlCreate = sqlCreate + "PRIMARY KEY(" + "ID" + ")" + ");";
 
-        System.out.println(sqlCreate);
+        //System.out.println(sqlCreate);
 
         Statement createTable;
         //Get database information
@@ -96,16 +96,18 @@ public class Database {
         //If the table is present
         if(resultSet.next()){
             System.out.println("A tournament with the name " + tableName + " already exists!");
+            return false;
         }
         else{
             createTable = connection.createStatement();
             createTable.execute(sqlCreate);
             System.out.println("The " + tableName + " tournament has been created.");
+            return true;
         }
     }
 
 
-    public void addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
+    public boolean addToTable(String tableName, String[] newPlayer,String teamName, Connection connection) throws SQLException {
         String sqlInsert = "INSERT INTO `" + tableName + "` (Player, TeamName) VALUES ('" + newPlayer[0] + "','" + teamName + "')";
 
         for (int i = 1; i < newPlayer.length; i++) {
@@ -123,12 +125,14 @@ public class Database {
             Statement add2Table = connection.createStatement();
             add2Table.execute(sqlInsert);
             System.out.println("Added player to tournament " + tableName);
+            return true;
         } else {
             System.out.println("Error: Tournament doesn't exist.");
+            return false;
         }
     }
 
-    public void updatePlayer(String tableName, int playerID, String[] changingValues,
+    public boolean updatePlayer(String tableName, int playerID, String[] changingValues,
                               String[] newValues, Connection connection ) throws SQLException {
         String sqlUpdate = "UPDATE `" + tableName + "` SET " + changingValues[0] + " = '" + newValues[0] + "'";
 
@@ -146,8 +150,10 @@ public class Database {
             Statement updateTable = connection.createStatement();
             updateTable.execute(sqlUpdate);
             System.out.println("Updated player info");
+            return true;
         } else {
             System.out.println("Error: Tournament doesn't exist.");
+            return false;
         }
     }
 
@@ -171,7 +177,7 @@ public class Database {
         }
     }
 
-    private ResultSet curateTable(String tableName, String condition, Connection connection) throws SQLException {
+    public ResultSet curateTable(String tableName, String condition, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
         ResultSet resultSet = md.getTables(DBConst.DB_NAME,
@@ -192,7 +198,7 @@ public class Database {
     }
 
 
-    public void dropTable(String tableName, Connection connection) throws SQLException {
+    public boolean dropTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
         ResultSet resultSet = md.getTables(DBConst.DB_NAME,
@@ -202,8 +208,10 @@ public class Database {
             Statement dropTable = connection.createStatement();
             dropTable.execute("DROP TABLE `" + tableName + "`");
             System.out.println("Successfully deleted tournament " + tableName);
+            return true;
         } else {
             System.out.println("Error: Tournament doesn't exist.");
+            return false;
         }
     }
 }

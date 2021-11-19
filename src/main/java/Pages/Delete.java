@@ -60,7 +60,11 @@ public class Delete extends Page {
             if(tourBox.getSelectionModel().getSelectedItem()!=null) {
                 System.out.println("Deleting " + tourBox.getSelectionModel().getSelectedItem().toString());
                 try {
-                    dbc.dropTable(tourBox.getSelectionModel().getSelectedItem().toString(), conn);
+                    if(dbc.dropTable(tourBox.getSelectionModel().getSelectedItem().toString(), conn)){
+                        System.out.println("Tournament " + tourBox.getSelectionModel().getSelectedItem().toString() + " successfully deleted.");
+                    } else {
+                        System.out.println("Tournament doesn't exist.");
+                    }
                 } catch (SQLException dropException){
                     System.out.println("Error dropping table.");
                 }

@@ -432,12 +432,16 @@ public class Create extends Page {
                     dataStatsOkay) {
                 errorText.setOpacity(0);
                 try {
-                    dbc.createTable(dataTourName,dataSets,dataStats,dbc.getConnection());
-                    for (int i = 0; i < dataTeamName.length; i++) {
-                        dbc.addToTable(dataTourName, dataPlayerNames[i],dataTeamName[i], dbc.getConnection());
+                    if(dbc.createTable(dataTourName,dataSets,dataStats,dbc.getConnection())){
+                        for (int i = 0; i < dataTeamName.length; i++) {
+                            dbc.addToTable(dataTourName, dataPlayerNames[i],dataTeamName[i], dbc.getConnection());
+                        }
+                        System.out.println("CREATED TABLE!");
+                    } else {
+                        //If tournament already exists, send error
+                        //errorText.setOpacity(1);
                     }
 
-                    System.out.println("CREATED TABLE!");
                 }catch (Exception e){
                     //dbc.close();
                     e.printStackTrace();
