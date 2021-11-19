@@ -4,8 +4,11 @@ import HelpfulClasses.UsefulConstants;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.lang.reflect.Array;
 
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
