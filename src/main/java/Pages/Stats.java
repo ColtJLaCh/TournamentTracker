@@ -1,6 +1,12 @@
 package Pages;
 
+import HelpfulClasses.UsefulConstants;
 import javafx.geometry.Insets;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -12,6 +18,15 @@ import java.util.ArrayList;
 public class Stats extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    ScrollPane classScrollPane = new ScrollPane();
+
+    //Layout
+    HBox statsHBox = new HBox();
+
+    VBox statsBoxVBox = new VBox(4);
+    ChoiceBox<String> statsBox = new ChoiceBox<>();
+    VBox statsPlayersVBox = new VBox(32);
+    VBox statsVBoxLeft = new VBox();
 
     //Data
     String dataTourName = "";
@@ -21,15 +36,33 @@ public class Stats extends Page {
     String[][] dataStatsArr; // A 2d array for tracking the stats of each player
 
     public Stats() {
-        //Initialize layout assets here, ImageViews, Panes, Text etc...
-        Text exampleText = new Text("Some example text!");
+        dummyData();
 
-        VBox classVBox = new VBox(exampleText); //Vbox needed for Top to Bottom layout, add assets here
+        statsBox.setMinWidth(UsefulConstants.DEFAULT_SCREEN_HEIGHT/6);
+        statsBox.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_HEIGHT/6);
+        statsBox.getItems().addAll(dataStats);
+        statsBox.setValue(dataStats[0]);
+        statsBoxVBox.getChildren().addAll(statsBox);
+        statsBoxVBox.setPadding(new Insets(4,4,4,4));
+        statsBoxVBox.setStyle("-fx-border-color: gray;" +
+                "-fx-border-width: 0 0 1 0;" +
+                "-fx-border-style: dashed;");
+
+        statsVBoxLeft.getChildren().addAll(statsBoxVBox,statsPlayersVBox);
+        statsHBox.getChildren().addAll(statsVBoxLeft);
+        classVBox = new VBox(statsHBox); //Vbox needed for Top to Bottom layout, add assets here
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(10); //Set spacing here
 
-        classPane.setTop(classVBox);//Set it to top to place all content directly under menu
+        classScrollPane.setContent(classVBox);
+        classScrollPane.setStyle("-fx-background: #E2E2E2;" + //This is to make the scrollpane in the background transparent and unfocusable
+                "-fx-focus-color: transparent;" +
+                "-fx-background-insets: 0, 0, 0, 0;");
+        classScrollPane.setMinSize(UsefulConstants.DEFAULT_SCREEN_WIDTH,UsefulConstants.DEFAULT_SCREEN_HEIGHT-100);
+        classScrollPane.setMaxSize(UsefulConstants.DEFAULT_SCREEN_WIDTH,UsefulConstants.DEFAULT_SCREEN_HEIGHT-100);
+
+        classPane.setTop(classScrollPane);//Set it to top to place all content directly under menu
     }
 
     //Local methods

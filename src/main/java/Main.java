@@ -20,7 +20,7 @@ public class Main extends Application {
     Create create = new Create();
     Delete delete;
     Update update;
-    Stats stats;
+    Stats stats = new Stats();
     View view = new View();
 
     public static void main(String[] args) {
@@ -62,7 +62,7 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        page = view;
+        page = stats;
         pageLayout = page.getPane();
         page.pageSetStyle();
         //Start page behavior
