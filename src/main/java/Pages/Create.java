@@ -130,7 +130,7 @@ public class Create extends Page {
 
 
         //---------------------------SETS---------------------------
-        Label setsLabel = new Label("Sets (amount of opening sub brackets)");
+        Label setsLabel = new Label("Sets (amount of players per set)");
         setsLabel.setUnderline(true);
         setsLabel.setLabelFor(counterVBox);
 
