@@ -20,9 +20,11 @@ public class Main extends Application {
     Create create = new Create();
     Delete delete = new Delete();
     Update update;
-    Stats stats;
-    View view;
+    Stats stats = new Stats();
+    View view = new View();
+
     Scene scene;
+
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -69,8 +71,7 @@ public class Main extends Application {
         TabPane tabPane = new TabPane();
 
         //Set current page
-        //page = create;
-        //page = home;
+
         page = delete;
         pageLayout = page.getPane();
         page.pageSetStyle();
