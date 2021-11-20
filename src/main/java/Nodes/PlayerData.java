@@ -7,10 +7,11 @@ public class PlayerData {
     private String team;
     private String[] stats;
 
-    private PlayerData(String id, String name, String team, String... statsToAdd) {
+    public PlayerData(String id, String name, String team, String[] statsToAdd) {
         this.id = id;
         this.name = name;
         this.team = team;
+        this.stats = new String[statsToAdd.length];
         for (int i = 0; i < stats.length; i++) {
             this.stats[i] = statsToAdd[i];
         }
@@ -46,5 +47,21 @@ public class PlayerData {
 
     public void setStats(String[] stats) {
         this.stats = stats;
+    }
+
+    public String getStat(int index) {
+        return this.stats[index];
+    }
+
+    public String[] getData() {
+        int dataLength = 3+this.stats.length;
+        String[] dataString = new String[dataLength];
+        dataString[0] = this.id;
+        dataString[1] = this.name;
+        dataString[2] = this.team;
+        for (int i = 0; i < this.stats.length; i++){
+            dataString[3+i] = this.stats[i];
+        }
+        return dataString;
     }
 }
