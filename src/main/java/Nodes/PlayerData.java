@@ -29,6 +29,10 @@ public class PlayerData {
         return team;
     }
 
+    public String getStat(int ind) {
+        return statVals[ind];
+    }
+
     public String[] getData() {
         int dataLength = 3+this.statVals.length;
         String[] dataString = new String[dataLength];

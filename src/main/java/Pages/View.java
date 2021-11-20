@@ -85,9 +85,10 @@ public class View extends Page {
         dataSets = 2;
         */
 
+        Random rand = new Random();
         for (int p = 0; p < dataPlayerArr.length; p++) {
             for (int s = 0; s < dataStats.length; s++) {
-                dataStatsArr[p][s] = "0";
+                dataStatsArr[p][s] = String.valueOf(rand.nextInt(20));
             }
         }
     }
