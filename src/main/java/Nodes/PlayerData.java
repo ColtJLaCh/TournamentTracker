@@ -1,4 +1,10 @@
 package Nodes;
+
+/**PlayerData
+ * A class used for easy sorting of all player data, Ids, names, teams and stats,
+ * contains a method called getData() that returns all declared properties into an array of Strings
+ * @author Colton LaChance
+ */
 public class PlayerData {
 
     private final String id;
@@ -7,6 +13,15 @@ public class PlayerData {
 
     private final String[] statVals;
 
+    /**
+     * PlayerData()
+     * @param id
+     * @param name
+     * @param team
+     * @param statsValsToAdd
+     * Creates a PlayerData object used to pull an array of Strings from for easy sorting of Player information
+     * @author Colton LaChance
+     */
     public PlayerData(String id, String name, String team, String[] statsValsToAdd) {
         this.id = id;
         this.name = name;
@@ -33,6 +48,11 @@ public class PlayerData {
         return statVals[ind];
     }
 
+    /** String[] getData()
+     * Pulls all declared properties from PlayerData object and returns their values in an array of Strings
+     * @return String[]
+     * @author Colton LaChance
+     */
     public String[] getData() {
         int dataLength = 3+this.statVals.length;
         String[] dataString = new String[dataLength];
