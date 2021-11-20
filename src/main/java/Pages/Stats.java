@@ -38,6 +38,7 @@ public class Stats extends Page {
     public Stats() {
         dummyData();
 
+        //Stats choice box
         statsBox.setMinWidth(UsefulConstants.DEFAULT_SCREEN_HEIGHT/6);
         statsBox.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_HEIGHT/6);
         statsBox.getItems().addAll(dataStats);
@@ -47,6 +48,10 @@ public class Stats extends Page {
         statsBoxVBox.setStyle("-fx-border-color: gray;" +
                 "-fx-border-width: 0 0 1 0;" +
                 "-fx-border-style: dashed;");
+
+        //Player names
+
+
 
         statsVBoxLeft.getChildren().addAll(statsBoxVBox,statsPlayersVBox);
         statsHBox.getChildren().addAll(statsVBoxLeft);
@@ -86,6 +91,12 @@ public class Stats extends Page {
         dataTeamArr = new String[]{"TEAM1","TEAM2","TEAM3","TEAM4","TEAM5","TEAM6","TEAM7","TEAM8"};
         dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
         */
+
+        for (int p = 0; p < dataPlayerArr.length; p++) {
+            for (int s = 0; s < dataStats.length; s++) {
+                dataStatsArr[p][s] = "0";
+            }
+        }
     }
 
     //Methods to add to pageBehavior

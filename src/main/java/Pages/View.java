@@ -68,9 +68,9 @@ public class View extends Page {
         //Singles
         ///*
         dataTourName = "DummyTournamentSINGLES";
-        dataStats = new String[] {"Wins", "Losses", "Time"};
-        dataPlayerArr = new String[]{"Jesse","Jamie","Bobby","Billy","Brody","Mort"};
-        dataTeamArr = new String[]{"NO TEAM","NO TEAM","NO TEAM","NO TEAM","NO TEAM","NO TEAM"};
+        dataStats = new String[]{"Wins", "Losses", "Time"};
+        dataPlayerArr = new String[]{"Jesse", "Jamie", "Bobby", "Billy", "Brody", "Mort"};
+        dataTeamArr = new String[]{"NO TEAM", "NO TEAM", "NO TEAM", "NO TEAM", "NO TEAM", "NO TEAM"};
         dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
         dataSets = 2;
         //*/
@@ -84,6 +84,12 @@ public class View extends Page {
         dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
         dataSets = 2;
         */
+
+        for (int p = 0; p < dataPlayerArr.length; p++) {
+            for (int s = 0; s < dataStats.length; s++) {
+                dataStatsArr[p][s] = "0";
+            }
+        }
     }
 
     private void insertData() {
@@ -94,12 +100,6 @@ public class View extends Page {
             if (lastTeam != team) {
                 uniqueTeams.add(team);
                 lastTeam = team;
-            }
-        }
-
-        for (int p = 0; p < dataPlayerArr.length; p++) {
-            for (int s = 0; s < dataStats.length; s++) {
-                dataStatsArr[p][s] = "0";
             }
         }
 
