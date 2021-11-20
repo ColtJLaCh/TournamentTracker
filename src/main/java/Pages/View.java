@@ -2,33 +2,33 @@ package Pages;
 
 import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
-import javafx.beans.property.Property;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.Style;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.Region;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-/** PAGE CLASS
- * Constructor contains all layout information, add methods and properties as needed for functionality
+/** View extends Page
+ * A view page for Tournament Tracker application, extends custom parent class Page and utilizes local and inherited methods to create a layout.
+ * Displays current tournament information, which players are competing against who and they're wins/losses, as well as an option to show more information on any player/team
+ * @author Colton LaChance
  */
 public class View extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
 
-    //Data
+    //Data -- The globals containing all player data to be inserted into a PlayerData object
+    ObservableList<String[]> playerData;
+
     String dataTourName = "";
     String[] dataTeamArr; //The ordered array of teams to be matched up to players
     ArrayList<String> uniqueTeams = new ArrayList<String>(); //An arrayList containing only unique values of teams
@@ -38,21 +38,23 @@ public class View extends Page {
     int dataSets = 2; //2 is default set count, sets are the same for all players, so no need to store data in array
     int dataTourStyle = 0; //0 is singles, 1 is teams, not calculated til after data has been received
 
-    TableView<String>[] brackets;
-    ObservableList<String[]> playerData;
-    ArrayList<String> columns = new ArrayList<String>();
+    TableView<String>[] brackets; //Each set of players/teams competing against eachother
+    ArrayList<String> columns = new ArrayList<String>(); //The columns of the brackets TableView
 
     public View() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
+        //Create the dummy data then insert it into the globals
         dummyData(); //TODO: Replace this with retrieve method when functionality is added
         insertData();
 
+        //Add a text label to top left corner to show tournament type
         Text tourTypeText = new Text("TYPE: " + (dataTourStyle == 0 ? "SINGLES TOURNAMENT" : "TEAMS TOURNAMENT"));
 
+        //Add to class Vbox before creating brackets
         classVBox = new VBox(tourTypeText); //Vbox needed for Top to Bottom layout, add assets here
 
-        createBrackets();
+        createBrackets(); //Create the tableview layout
 
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
@@ -62,6 +64,11 @@ public class View extends Page {
     }
 
     //Local methods
+
+    /**dummyData()
+     * Initializes some dummy data to be inserted into the layout for testing, will be replaced with fetch from table method
+     * @author Colton LaChance
+     */
     private void dummyData() {
         //Fake table data, this will be injected into these variables when functionality is programmed
 
@@ -93,6 +100,10 @@ public class View extends Page {
         }
     }
 
+    /**insertData()
+     * Inserts fetched data from some globals into PlayerData objects
+     * @author Colton LaChance
+     */
     private void insertData() {
         String lastTeam = "";
         for (String team : dataTeamArr) {
@@ -137,19 +148,25 @@ public class View extends Page {
         }
     }
 
+    /**createBrackets()
+     * Using information from the global properties and playerData, creates layout for the brackets[] TableViews, then adds them to the classVBox
+     */
     private void createBrackets() {
-        int bracketNum = 0;
-        int lastTeamInd = 0;
-        for (TableView bracket : brackets) {
-            ObservableList<String[]> bracketData = FXCollections.observableArrayList();
-            bracket = new TableView();
+        int bracketNum = 0; //Here because I used a foreach loop
+        int lastTeamInd = 0; //This is for teams, makes sure that every bracket has unique teams playing against eachother
 
+        for (TableView bracket : brackets) {
+            ObservableList<String[]> bracketData = FXCollections.observableArrayList(); //Create the observable list to insert into bracket
+
+            //Initialize and set bracket parameters
+            bracket = new TableView();
             bracket.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/3);
             bracket.setFixedCellSize(25);
             bracket.setEditable(false);
 
+            //Create cell factories for columns, based on String[] indexes
             for (int c = 0; c < columns.size(); c++) {
-                if (c == 0 || (dataTourStyle == 0 ? c == 1 : c == 2) || c == 3 || c == 4) {
+                if (c == 0 || (dataTourStyle == 0 ? c == 1 : c == 2) || c == 3 || c == 4) { //This is here to only show id, team/player name, and wins/losses
                     TableColumn tc = new TableColumn();
                     tc = new TableColumn(columns.get(c));
                     final int index = c;
@@ -163,34 +180,38 @@ public class View extends Page {
                 }
             }
 
+            //This checks to see what data from playerData to load into the current bracket. Whether singles or teams
             if (dataTourStyle == 0) {
-                for (int br = bracketNum*dataSets; br < bracketNum*dataSets+dataSets; br++) {
+                for (int br = bracketNum*dataSets; br < bracketNum*dataSets+dataSets; br++) { //Get index of players within current bracket
                     bracketData.add(playerData.get(br));
                 }
             }else{
                 int br = 0;
-                for (int t = lastTeamInd; t < playerData.size(); t++) {
+                for (int t = lastTeamInd; t < playerData.size(); t++) { //lastTeamIndex is used to find teams in current bracket
                     if (playerData.get(t)[2] != playerData.get(lastTeamInd)[2] || t == 0) {
                         bracketData.add(playerData.get(t));
                         lastTeamInd = t;
                         br++;
                     }
-                    if (br >= dataSets) {
+                    if (br >= dataSets) { //If the bracket size is greater than the max bracket size, end the for loop
                         break;
                     }
                 }
             }
 
+            //Set the items and set some params of the current bracket (TableView)
             bracket.setItems(bracketData);
-
             bracket.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             bracket.setMinHeight(bracket.getFixedCellSize()*(bracket.getItems().size()+1));
             bracket.setMaxHeight(bracket.getFixedCellSize()*(bracket.getItems().size()+1));
+
+            //Add bracket to classVBox
             classVBox.getChildren().add(bracket);
 
+            //This divider is used to show who will be playing against each other in the next set of brackets
             Text setLine = new Text("-------------------------------------------------------------------------------------------------------------------------------------");
             if (brackets.length > 0) {
-                if (((bracketNum+1) % 2) == 0 && bracketNum+1 != brackets.length) {
+                if (((bracketNum+1) % 2) == 0 && bracketNum+1 != brackets.length) { //Evenly divides the brackets
                     classVBox.getChildren().add(setLine);
                 }
             }
