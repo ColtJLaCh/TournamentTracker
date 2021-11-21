@@ -28,12 +28,17 @@ public class Delete extends Page {
 
     public Delete() {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
+        Label deletePageLabel = new Label("DELETE TOURNAMENTS");
 
         //First column for the Tables Choice Box
         VBox tablesVBox = new VBox(2);
+        tablesVBox.setPadding(new Insets(10,0,0,32));
         Label tableLabel = new Label("Tournaments managed by " + DB_USER);
+        tableLabel.setUnderline(true);
         tableLabel.setLabelFor(tablesVBox);
         ChoiceBox tourBox = new ChoiceBox();
+        tourBox.setMinWidth(200);
+        tourBox.setMaxWidth(200);
         Connection conn = dbc.getConnection();
         //Gather all table names from the user's database
         try {
@@ -82,11 +87,13 @@ public class Delete extends Page {
         });
 
         deleteVBox.getChildren().addAll(deleteLabel,deleteButton);
+        deleteVBox.setPadding(new Insets(10,0,0,0));
 
         //Add both columns to the HBox
         HBox hbox = new HBox(tablesVBox, deleteVBox);
+        hbox.setSpacing(64);
 
-        classVBox = new VBox(hbox); //Vbox needed for Top to Bottom layout, add assets here
+        classVBox = new VBox(deletePageLabel,hbox); //Vbox needed for Top to Bottom layout, add assets here
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
         classVBox.setSpacing(10); //Set spacing here
