@@ -25,6 +25,23 @@ public class Main extends Application {
 
     Scene scene;
 
+    //Build a menubar
+    MenuBar menu = new MenuBar();
+
+    //Create TabPane
+    TabPane tabPane = new TabPane();
+
+    //RootVbox
+    VBox rootVBox = new VBox();
+
+    enum Pages {
+        HOME,
+        CREATE,
+        UPDATE,
+        DELETE,
+        STATS,
+        VIEW
+    }
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -34,10 +51,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane root = new BorderPane();
-        VBox rootVBox = new VBox();
 
-        //Build a menubar
-        MenuBar menu = new MenuBar();
         //Build menu items
         Menu fileMenu = new Menu("File");
         Menu viewMenu = new Menu("View");
@@ -45,11 +59,13 @@ public class Main extends Application {
         //File Menu items
         MenuItem createNew = new MenuItem("Create New...");
         createNew.setOnAction(e->{
+            changePage(Pages.CREATE);
             System.out.println("Moving to create");
         });
         MenuItem updateTour = new MenuItem("Update Tournament");
         MenuItem deleteTour = new MenuItem("Delete Tournament");
         deleteTour.setOnAction(e->{
+            changePage(Pages.DELETE);
             System.out.println("Moving to delete");
         });
         MenuItem exit = new MenuItem("Exit");
@@ -59,7 +75,15 @@ public class Main extends Application {
 
         //View menu items
         MenuItem viewTour = new MenuItem("View Tournament");
+        viewTour.setOnAction(e->{
+            changePage(Pages.VIEW);
+            System.out.println("Moving to view");
+        });
         MenuItem viewStats = new MenuItem("View Statistics");
+        viewStats.setOnAction(e->{
+            changePage(Pages.STATS);
+            System.out.println("Moving to stats");
+        });
 
         fileMenu.getItems().addAll(createNew,updateTour,deleteTour,exit);
         viewMenu.getItems().addAll(viewTour,viewStats);
@@ -67,19 +91,11 @@ public class Main extends Application {
         //Add menu items to the bar
         menu.getMenus().addAll(fileMenu, viewMenu);
 
-        //Create TabPane
-        TabPane tabPane = new TabPane();
-
         //Set current page
-
-        page = delete;
-        pageLayout = page.getPane();
-        page.pageSetStyle();
-        //Start page behavior
-        page.pageBehavior();
+        changePage(Pages.HOME);
 
         //Add all elements together
-        rootVBox.getChildren().addAll(menu,tabPane,pageLayout);
+        reconstructRootVBox();
 
         //Set root Vbox to maintian top-bottom layout
         root.setTop(rootVBox);
@@ -92,5 +108,38 @@ public class Main extends Application {
         stage.setTitle("Tournament Tracker");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void changePage(Pages pageInd) {
+        switch (pageInd) {
+            case HOME:
+                page = new Home();
+            break;
+            case CREATE:
+                page = new Create();
+            break;
+            case DELETE:
+                page = new Delete();
+            break;
+            case UPDATE:
+                page = new Update();
+            break;
+            case VIEW:
+                page = new View();
+            break;
+            case STATS:
+                page = new Stats();
+            break;
+        }
+        pageLayout = page.getPane();
+        page.pageSetStyle();
+        //Start page behavior
+        page.pageBehavior();
+        reconstructRootVBox();
+    }
+
+    private void reconstructRootVBox() {
+        rootVBox.getChildren().clear();
+        rootVBox.getChildren().addAll(menu,tabPane,pageLayout);
     }
 }
