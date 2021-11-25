@@ -443,7 +443,8 @@ public class Create extends Page {
                             dbc.addToTable(dataTourName, dataPlayerNames[i],dataTeamName[i], dbc.getConnection());
                         }
                         System.out.println("CREATED TABLE!");
-
+                        parentTab.setLockTab(true);
+                        parentTab.setText(dataTourName);
                     } else {
                         //If tournament already exists, send error
                         errorText.setOpacity(1);

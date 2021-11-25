@@ -35,6 +35,8 @@ public class TourTab extends Tab {
     public TourTab(Main mainPage) {
         this.mainPage = mainPage;
         page = new Create(this);
+        this.page.pageSetStyle();
+        this.page.pageBehavior();
         this.pageLayout = page.getPane();
         this.setText("NEW TOUR");
         this.setOnClosed(e -> {
@@ -44,21 +46,21 @@ public class TourTab extends Tab {
         this.setContent(pageLayout);
 
         mainPage.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
-            if (this.isSelected() && !this.lockTab) {
+            if (this.isSelected() && this.lockTab) {
                 changePage(Pages.DELETE);
                 System.out.println("Moving to delete");
             }
         });
 
         mainPage.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
-            if (this.isSelected() && !this.lockTab) {
+            if (this.isSelected() && this.lockTab) {
                 changePage(Pages.VIEW);
                 System.out.println("Moving to view");
             }
         });
 
         mainPage.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
-            if (this.isSelected() && !this.lockTab) {
+            if (this.isSelected() && this.lockTab) {
                 changePage(Pages.STATS);
                 System.out.println("Moving to stats");
             }
@@ -69,6 +71,8 @@ public class TourTab extends Tab {
         this.lockTab = lock;
         if (this.lockTab == true) {
             this.setClosable(false);
+        }else{
+            this.setClosable(true);
         }
     }
 
@@ -76,22 +80,22 @@ public class TourTab extends Tab {
         switch (pageInd) {
             case HOME:
                 this.page = new Home();
-                break;
+            break;
             case CREATE:
                 this.page = new Create(this);
-                break;
+            break;
             case DELETE:
                 this.page = new Delete(this);
-                break;
+            break;
             case UPDATE:
                 this.page = new Update();
-                break;
+            break;
             case VIEW:
                 this.page = new View(this);
-                break;
+            break;
             case STATS:
                 this.page = new Stats(this);
-                break;
+            break;
         }
         this.pageLayout = this.page.getPane();
         this.page.pageSetStyle();
