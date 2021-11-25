@@ -1,5 +1,6 @@
 package Main;
 
+import Nodes.TourTab;
 import Pages.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -13,39 +14,38 @@ public class Main extends Application {
 
     Scene currentScene;
 
-    public Page page;
-    BorderPane pageLayout;
     Home home = new Home();
-    Create create = new Create();
-    Delete delete = new Delete();
-    Update update;
-    Stats stats = new Stats();
-    View view = new View();
 
     Scene scene;
 
     //Build a menubar
     MenuBar menu = new MenuBar();
+    MenuItem createNew = new MenuItem("Create New...");
+    MenuItem updateTour = new MenuItem("Update Tournament");
+    MenuItem deleteTour = new MenuItem("Delete Tournament");
+    MenuItem exit = new MenuItem("Exit");
+
+    MenuItem viewTour = new MenuItem("View Tournament");
+    MenuItem viewStats = new MenuItem("View Statistics");
+
+    public enum MenuItems {
+        MENU_CREATE,
+        MENU_UPDATE,
+        MENU_DELETE,
+        MENU_EXIT,
+        MENU_VIEW,
+        MENU_STATS
+    }
 
     //Create TabPane
-    TabPane tabPane = new TabPane();
+    public TabPane tabPane = new TabPane();
 
     //RootVbox
     VBox rootVBox = new VBox();
 
-    public enum Pages {
-        HOME,
-        CREATE,
-        UPDATE,
-        DELETE,
-        STATS,
-        VIEW
-    }
-
     public static void main(String[] args) {
         Application.launch(args);
     }
-
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -56,36 +56,20 @@ public class Main extends Application {
         Menu viewMenu = new Menu("View");
 
         //File Menu items
-        MenuItem createNew = new MenuItem("Create New...");
-        createNew.setOnAction(e->{
-            changePage(Pages.CREATE);
+        //Set up main menu options here due to independent page switching
+       createNew.setOnAction(e -> {
             System.out.println("Moving to create");
-
-            Tab newTab = new Tab("NEW TOUR");
+            TourTab newTab = new TourTab(this);
             tabPane.getTabs().add(newTab);
+            tabPane.getSelectionModel().select(newTab);
+            reconstructRootVBox();
         });
-        MenuItem updateTour = new MenuItem("Update Tournament");
-        MenuItem deleteTour = new MenuItem("Delete Tournament");
-        deleteTour.setOnAction(e->{
-            changePage(Pages.DELETE);
-            System.out.println("Moving to delete");
-        });
-        MenuItem exit = new MenuItem("Exit");
-        exit.setOnAction(e->{
+
+        exit.setOnAction(e -> {
             System.exit(0);
         });
 
         //View menu items
-        MenuItem viewTour = new MenuItem("View Tournament");
-        viewTour.setOnAction(e->{
-            changePage(Pages.VIEW);
-            System.out.println("Moving to view");
-        });
-        MenuItem viewStats = new MenuItem("View Statistics");
-        viewStats.setOnAction(e->{
-            changePage(Pages.STATS);
-            System.out.println("Moving to stats");
-        });
 
         fileMenu.getItems().addAll(createNew,updateTour,deleteTour,exit);
         viewMenu.getItems().addAll(viewTour,viewStats);
@@ -94,7 +78,6 @@ public class Main extends Application {
         menu.getMenus().addAll(fileMenu, viewMenu);
 
         //Set current page
-        changePage(Pages.HOME);
 
         //Add all elements together
         reconstructRootVBox();
@@ -112,36 +95,37 @@ public class Main extends Application {
         stage.show();
     }
 
-    public void changePage(Pages pageInd) {
-        switch (pageInd) {
-            case HOME:
-                page = new Home();
-            break;
-            case CREATE:
-                page = new Create();
-            break;
-            case DELETE:
-                page = new Delete();
-            break;
-            case UPDATE:
-                page = new Update();
-            break;
-            case VIEW:
-                page = new View();
-            break;
-            case STATS:
-                page = new Stats();
-            break;
+    public void reconstructRootVBox() {
+        this.rootVBox.getChildren().clear();
+        if (tabPane.getTabs().isEmpty() || tabPane.getSelectionModel().getSelectedItem() == null) {
+            this.rootVBox.getChildren().addAll(this.menu,this.home.getPane());
+            this.home.pageSetStyle();
+            this.home.pageBehavior();
+        }else {
+            this.rootVBox.getChildren().addAll(this.menu, this.tabPane);
         }
-        pageLayout = page.getPane();
-        page.pageSetStyle();
-        //Start page behavior
-        page.pageBehavior();
-        reconstructRootVBox();
     }
 
-    private void reconstructRootVBox() {
-        rootVBox.getChildren().clear();
-        rootVBox.getChildren().addAll(menu,tabPane,pageLayout);
+    public MenuItem getMenuItem(MenuItems mitem) {
+        switch (mitem) {
+            case MENU_CREATE:
+                return createNew;
+
+            case MENU_DELETE:
+                return deleteTour;
+
+            case MENU_EXIT:
+                return exit;
+
+            case MENU_UPDATE:
+                return updateTour;
+
+            case MENU_STATS:
+                return viewStats;
+
+            case MENU_VIEW:
+                return viewTour;
+        }
+        return null;
     }
 }
