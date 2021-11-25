@@ -1,11 +1,10 @@
+package Main;
+
 import Pages.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -34,7 +33,7 @@ public class Main extends Application {
     //RootVbox
     VBox rootVBox = new VBox();
 
-    enum Pages {
+    public enum Pages {
         HOME,
         CREATE,
         UPDATE,
@@ -61,6 +60,9 @@ public class Main extends Application {
         createNew.setOnAction(e->{
             changePage(Pages.CREATE);
             System.out.println("Moving to create");
+
+            Tab newTab = new Tab("NEW TOUR");
+            tabPane.getTabs().add(newTab);
         });
         MenuItem updateTour = new MenuItem("Update Tournament");
         MenuItem deleteTour = new MenuItem("Delete Tournament");
@@ -110,7 +112,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    private void changePage(Pages pageInd) {
+    public void changePage(Pages pageInd) {
         switch (pageInd) {
             case HOME:
                 page = new Home();
