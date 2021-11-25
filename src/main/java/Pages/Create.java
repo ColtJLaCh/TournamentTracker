@@ -445,6 +445,7 @@ public class Create extends Page {
                         System.out.println("CREATED TABLE!");
                         parentTab.setLockTab(true);
                         parentTab.setText(dataTourName);
+                        parentTab.changePage(TourTab.Pages.VIEW);
                     } else {
                         //If tournament already exists, send error
                         errorText.setOpacity(1);

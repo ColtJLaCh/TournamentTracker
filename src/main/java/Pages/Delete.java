@@ -71,7 +71,7 @@ public class Delete extends Page {
                     if (dbc.dropTable(parentTab.getText(), conn)) {
                         reconstructClassVBox(deletePageLabel,deleteVBox);
                         System.out.println("Tournament " + dropTour + " successfully deleted.");
-                        //For Colton - Navigate to View page here!
+                        parentTab.forceClose();
                     } else {
                         System.out.println("Tournament doesn't exist.");
                     }

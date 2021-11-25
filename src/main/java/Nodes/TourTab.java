@@ -2,8 +2,11 @@ package Nodes;
 
 import Main.Main;
 import Pages.*;
+import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
 import javafx.application.Application;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.skin.TabPaneSkin;
 import javafx.scene.layout.BorderPane;
 
 public class TourTab extends Tab {
@@ -101,5 +104,10 @@ public class TourTab extends Tab {
         this.page.pageSetStyle();
         this.page.pageBehavior();
         this.setContent(pageLayout);
+    }
+
+    public void forceClose() {
+        getTabPane().getTabs().remove(this);
+        mainPage.reconstructRootVBox();
     }
 }
