@@ -33,8 +33,6 @@ public class TourTab extends Tab {
         VIEW
     }
 
-
-
     public TourTab(Main mainPage) {
         this.mainPage = mainPage;
         page = new Create(this);
@@ -66,6 +64,31 @@ public class TourTab extends Tab {
             if (this.isSelected() && this.lockTab) {
                 changePage(Pages.STATS);
                 System.out.println("Moving to stats");
+            }
+        });
+
+        this.setOnSelectionChanged(t -> {
+            if (this.isSelected()) {
+                mainPage.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.DELETE);
+                        System.out.println("Moving to delete");
+                    }
+                });
+
+                mainPage.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.VIEW);
+                        System.out.println("Moving to view");
+                    }
+                });
+
+                mainPage.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.STATS);
+                        System.out.println("Moving to stats");
+                    }
+                });
             }
         });
     }
