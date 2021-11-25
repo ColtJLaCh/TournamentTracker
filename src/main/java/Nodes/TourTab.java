@@ -67,7 +67,7 @@ public class TourTab extends Tab {
             }
         });
 
-        this.setOnSelectionChanged(e -> {
+        this.setOnSelectionChanged(t -> {
             if (this.isSelected()) {
                 mainPage.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
                     if (this.isSelected() && this.lockTab) {
