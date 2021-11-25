@@ -2,6 +2,7 @@ package Pages;
 
 import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
+import Nodes.TourTab;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -25,6 +26,9 @@ public class Stats extends Page {
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
 
     ScrollPane classScrollPane = new ScrollPane(); //Used to hold entire classVBox in a ScrollPane
+
+    //Parent tab
+    TourTab parentTab;
 
     //Boxes and layout
     HBox statsHBox = new HBox(); //The HBox that holds the left and right VBoxes together
@@ -54,7 +58,9 @@ public class Stats extends Page {
      * Sets up the layout using globals and methods for the Stats page
      * @author Colton LaChance
      */
-    public Stats() {
+    public Stats(TourTab parentTab) {
+        this.parentTab = parentTab;
+
         dummyData();
 
         //Stats choice box layout

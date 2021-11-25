@@ -1,6 +1,7 @@
 package Pages;
 
 import Database.*;
+import Nodes.TourTab;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -23,6 +24,9 @@ public class Delete extends Page {
     Database dbc = Database.getInstance();
     Connection conn = dbc.getConnection();
 
+    //Parent Tab
+    TourTab parentTab;
+
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     HBox hbox = new HBox();
     ChoiceBox tourBox = new ChoiceBox();
@@ -31,7 +35,9 @@ public class Delete extends Page {
 
     Button deleteButton = new Button("END TOURNAMENT");
 
-    public Delete() {
+    public Delete(TourTab parentTab) {
+        this.parentTab = parentTab;
+
         //Initialize layout assets here, ImageViews, Panes, Text etc...
         Label deletePageLabel = new Label("DELETE TOURNAMENTS");
 

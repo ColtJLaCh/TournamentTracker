@@ -15,11 +15,11 @@ public class TourTab extends Tab {
     public Page page;
     BorderPane pageLayout;
     Home home = new Home();
-    Create create = new Create();
-    Delete delete = new Delete();
+    Create create = new Create(this);
+    Delete delete = new Delete(this);
     Update update;
-    Stats stats = new Stats();
-    View view = new View();
+    Stats stats = new Stats(this);
+    View view = new View(this);
 
     public enum Pages {
         HOME,
@@ -34,7 +34,7 @@ public class TourTab extends Tab {
 
     public TourTab(Main mainPage) {
         this.mainPage = mainPage;
-        page = new Create();
+        page = new Create(this);
         this.pageLayout = page.getPane();
         this.setText("NEW TOUR");
         this.setOnClosed(e -> {
@@ -44,20 +44,24 @@ public class TourTab extends Tab {
         this.setContent(pageLayout);
 
         mainPage.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
-            if (this.isSelected()) {
+            if (this.isSelected() && !this.lockTab) {
                 changePage(Pages.DELETE);
                 System.out.println("Moving to delete");
             }
         });
 
         mainPage.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
-            changePage(Pages.VIEW);
-            System.out.println("Moving to view");
+            if (this.isSelected() && !this.lockTab) {
+                changePage(Pages.VIEW);
+                System.out.println("Moving to view");
+            }
         });
 
         mainPage.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
-            changePage(Pages.STATS);
-            System.out.println("Moving to stats");
+            if (this.isSelected() && !this.lockTab) {
+                changePage(Pages.STATS);
+                System.out.println("Moving to stats");
+            }
         });
     }
 
@@ -74,19 +78,19 @@ public class TourTab extends Tab {
                 this.page = new Home();
                 break;
             case CREATE:
-                this.page = new Create();
+                this.page = new Create(this);
                 break;
             case DELETE:
-                this.page = new Delete();
+                this.page = new Delete(this);
                 break;
             case UPDATE:
                 this.page = new Update();
                 break;
             case VIEW:
-                this.page = new View();
+                this.page = new View(this);
                 break;
             case STATS:
-                this.page = new Stats();
+                this.page = new Stats(this);
                 break;
         }
         this.pageLayout = this.page.getPane();
