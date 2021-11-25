@@ -4,6 +4,7 @@ import Database.Database;
 import Database.DBConst;
 import java.sql.*;
 import HelpfulClasses.UsefulConstants;
+import Nodes.TourTab;
 import Nodes.TournamentList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,6 +28,9 @@ public class Create extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     ScrollPane classScrollPane = new ScrollPane();
+
+    //Parent Tab
+    TourTab parentTab;
 
 
     //SECTIONS ------- These are the different sections global variables, needed for functionality.
@@ -79,7 +83,9 @@ public class Create extends Page {
      * This is where all of the local layout variables go, as well as some functionality, only needed to be declared once.
      * Separated into multiple sections defined by the layout for easier navigation
      */
-    public Create() {
+    public Create(TourTab parentTab) {
+        this.parentTab = parentTab;
+
         reconstructClassVBox();
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
@@ -437,9 +443,12 @@ public class Create extends Page {
                             dbc.addToTable(dataTourName, dataPlayerNames[i],dataTeamName[i], dbc.getConnection());
                         }
                         System.out.println("CREATED TABLE!");
+                        parentTab.setLockTab(true);
+                        parentTab.setText(dataTourName);
+                        parentTab.changePage(TourTab.Pages.VIEW);
                     } else {
                         //If tournament already exists, send error
-                        //errorText.setOpacity(1);
+                        errorText.setOpacity(1);
                     }
 
                 }catch (Exception e){

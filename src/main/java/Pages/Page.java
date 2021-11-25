@@ -1,5 +1,6 @@
 package Pages;
 
+import Nodes.TourTab;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;

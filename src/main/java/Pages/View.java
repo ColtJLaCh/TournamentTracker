@@ -3,6 +3,7 @@ package Pages;
 import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
 
+import Nodes.TourTab;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,6 +26,7 @@ import java.util.*;
 public class View extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    TourTab parentTab;
 
     //Data -- The globals containing all player data to be inserted into a PlayerData object
     ObservableList<String[]> playerData;
@@ -41,7 +43,8 @@ public class View extends Page {
     TableView<String>[] brackets; //Each set of players/teams competing against eachother
     ArrayList<String> columns = new ArrayList<String>(); //The columns of the brackets TableView
 
-    public View() {
+    public View(TourTab parentTab) {
+        this.parentTab = parentTab;
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
         //Create the dummy data then insert it into the globals
