@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.Database;
 import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
 import Nodes.TourTab;
@@ -14,6 +15,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.*;
 
 /** Stats extends Page
@@ -24,6 +29,7 @@ import java.util.*;
 public class Stats extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    Database dbc = Database.getInstance();
 
     ScrollPane classScrollPane = new ScrollPane(); //Used to hold entire classVBox in a ScrollPane
 
@@ -58,10 +64,12 @@ public class Stats extends Page {
      * Sets up the layout using globals and methods for the Stats page
      * @author Colton LaChance
      */
-    public Stats(TourTab parentTab) {
+    public Stats(TourTab parentTab, String tourName) {
         this.parentTab = parentTab;
+        dataTourName = tourName;
 
-        dummyData();
+        //dummyData();
+        collectData();
 
         //Stats choice box layout
         statsBox.setMinWidth(UsefulConstants.DEFAULT_SCREEN_HEIGHT/6);
@@ -141,6 +149,43 @@ public class Stats extends Page {
         }
     }
 
+    private void collectData() {
+        Connection conn = dbc.getConnection();
+        try {
+            System.out.println(dataTourName);
+            ResultSet tourData = dbc.getTable(dataTourName,conn);
+            ResultSetMetaData tdmd = tourData.getMetaData();
+
+            int rows = 0;
+            tourData.last();
+            rows = tourData.getRow();
+            tourData.beforeFirst();
+
+            dataStats = new String[tdmd.getColumnCount()-4];
+            dataPlayerArr = new String[rows];
+            dataTeamArr = new String[rows];
+            dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
+
+            int row = 0;
+            while (tourData.next()) {
+                for (int st = 0; st < dataStats.length; st++) {
+                    dataStats[st] = tdmd.getColumnName(st+5);
+                    for (int p = 0; p < rows; p++) {
+                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
+                    }
+                }
+
+                dataPlayerArr[row] = tourData.getString("Player");
+                dataTeamArr[row] = tourData.getString("TeamName");
+
+                row += 1;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving tables.");
+        }
+    }
+
     /**insertData()
      * Inserts fetched data from some globals into PlayerData objects
      * @author Colton LaChance
@@ -200,7 +245,11 @@ public class Stats extends Page {
             statBar[i] = new Rectangle();
             statBar[i].setFill(new Color(0.80,0.85,0,1)); //Greenish yellow
             if (i == 0) baseStatVal = statVal; //If this is the first index, the base length is set
-            statBar[i].setWidth(statVal/baseStatVal*UsefulConstants.DEFAULT_SCREEN_WIDTH/2); //Set the base length to half the size of default width, all other stats will be fractions of this
+            if (baseStatVal != 0) {
+                statBar[i].setWidth(statVal / baseStatVal * UsefulConstants.DEFAULT_SCREEN_WIDTH / 2 + 1); //Set the base length to half the size of default width, all other stats will be fractions of this
+            }else{
+                statBar[i].setWidth(1);
+            }
             statBar[i].setHeight(48);
 
             //Create the numbers on the rectangles

@@ -107,6 +107,7 @@ public class Home extends Page {
                     while (rs.next()) {
                         TourTab premadeTournament = new TourTab(mainClass,true);
                         premadeTournament.setText(rs.getString(3));
+                        premadeTournament.changePage(TourTab.Pages.VIEW);
                         mainClass.tabPane.getTabs().add(premadeTournament);
                         mainClass.reconstructRootVBox();
                     }

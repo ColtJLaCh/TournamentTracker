@@ -1,5 +1,6 @@
 package Nodes;
 
+import HelpfulClasses.UsefulConstants;
 import Main.Main;
 import Pages.*;
 import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
@@ -17,11 +18,11 @@ public class TourTab extends Tab {
     //Page stuff
     public Page page;
     BorderPane pageLayout;
-    Create create = new Create(this);
-    Delete delete = new Delete(this);
+    Create create;
+    Delete delete;
     Update update;
-    Stats stats = new Stats(this);
-    View view = new View(this);
+    Stats stats;
+    View view;
 
     public enum Pages {
         HOME,
@@ -35,19 +36,21 @@ public class TourTab extends Tab {
     public TourTab(Main mainClass,boolean premade) {
         this.mainClass = mainClass;
         if (!premade) {
+            this.setText("NEW TOUR");
             page = new Create(this);
-        }else{
-            page = new View(this);
-            setLockTab(true);
+            this.page.pageSetStyle();
+            this.page.pageBehavior();
+            this.pageLayout = page.getPane();
         }
-        this.page.pageSetStyle();
-        this.page.pageBehavior();
-        this.pageLayout = page.getPane();
-        this.setText("NEW TOUR");
+
         this.setOnClosed(e -> {
             mainClass.reconstructRootVBox();
             System.out.println("Moving to home");
         });
+        if (this.pageLayout != null) {
+            this.pageLayout.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+            this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+        }
         this.setContent(pageLayout);
 
         mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
@@ -108,9 +111,6 @@ public class TourTab extends Tab {
 
     public void changePage(Pages pageInd) {
         switch (pageInd) {
-            case CREATE:
-                this.page = new Create(this);
-            break;
             case DELETE:
                 this.page = new Delete(this);
             break;
@@ -118,16 +118,21 @@ public class TourTab extends Tab {
                 this.page = new Update();
             break;
             case VIEW:
-                this.page = new View(this);
+                this.page = new View(this,this.getText());
             break;
             case STATS:
-                this.page = new Stats(this);
+                this.page = new Stats(this, this.getText());
             break;
         }
         this.pageLayout = this.page.getPane();
         this.page.pageSetStyle();
         this.page.pageBehavior();
+        if (this.pageLayout != null) {
+            this.pageLayout.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+            this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+        }
         this.setContent(pageLayout);
+        this.lockTab = true;
     }
 
     public void forceClose() {
