@@ -64,6 +64,11 @@ public class Delete extends Page {
             String dropTour = parentTab.getText();
             try {
                 //Alert pops up asking the user if they're sure they want to delete.
+                dbc.dropTable(parentTab.getText(), conn);
+                reconstructClassVBox(deletePageLabel,deleteVBox);
+                parentTab.forceClose();
+
+                /*
                 Alert a = new Alert(Alert.AlertType.CONFIRMATION);
                 a.setContentText("Are you sure you want to delete tournament " + dropTour + "?");
                 a.showAndWait();
@@ -76,6 +81,7 @@ public class Delete extends Page {
                         System.out.println("Tournament doesn't exist.");
                     }
                 }
+                */
             } catch (SQLException dropException){
                 System.out.println("Error dropping table.");
             }

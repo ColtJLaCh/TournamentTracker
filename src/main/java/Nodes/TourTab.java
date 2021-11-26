@@ -38,6 +38,7 @@ public class TourTab extends Tab {
             page = new Create(this);
         }else{
             page = new View(this);
+            setLockTab(true);
         }
         this.page.pageSetStyle();
         this.page.pageBehavior();
