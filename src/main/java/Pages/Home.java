@@ -1,6 +1,9 @@
 package Pages;
+import Database.Database;
 import HelpfulClasses.UsefulConstants;
 import LoginCredentials.Login;
+import Main.Main;
+import Nodes.TourTab;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,12 +18,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static Database.DBConst.DB_NAME;
+
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
 
 
 public class Home extends Page {
+
+    //Initialze the database as global for use
+    Database dbc = Database.getInstance();
+    Main mainClass;
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
     private Label loginLabel = new Label("Sign in to Database");
@@ -32,7 +46,9 @@ public class Home extends Page {
     //Create a Login so we can use its functionality on the home page.
     Login login = new Login();
 
-    public Home() {
+    public Home(Main mainClass) {
+        this.mainClass = mainClass;
+
         //Initialize layout assets here, ImageViews, Panes, Text etc...
         ImageView titleHomePage = new ImageView(new Image("./images/hometitletext.png"));
         ImageView tourImgHomePage1 = new ImageView(new Image("./images/homepagetourimg.png"));
@@ -82,6 +98,21 @@ public class Home extends Page {
             if(login.checkPassword(username, password)){
                 System.out.println("Logging in...");
                 login.loginUser(username);
+                //Gather all table names from the user's database
+                Connection conn = dbc.getConnection();
+                try {
+                    DatabaseMetaData md = conn.getMetaData();
+                    ResultSet rs = md.getTables(DB_NAME, null, "%", null);
+                    //For each table, add its name to the choicebox
+                    while (rs.next()) {
+                        TourTab premadeTournament = new TourTab(mainClass,true);
+                        premadeTournament.setText(rs.getString(3));
+                        mainClass.tabPane.getTabs().add(premadeTournament);
+                        mainClass.reconstructRootVBox();
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error retrieving tables.");
+                }
             } else {
                 loginErrorMessage.setFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
                 loginErrorMessage.setText("Incorrect password");

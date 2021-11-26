@@ -11,13 +11,12 @@ import javafx.scene.layout.BorderPane;
 
 public class TourTab extends Tab {
     private static TourTab tab;
-    private Main mainPage;
+    private Main mainClass;
     private boolean lockTab;
 
     //Page stuff
     public Page page;
     BorderPane pageLayout;
-    Home home = new Home();
     Create create = new Create(this);
     Delete delete = new Delete(this);
     Update update;
@@ -33,34 +32,39 @@ public class TourTab extends Tab {
         VIEW
     }
 
-    public TourTab(Main mainPage) {
-        this.mainPage = mainPage;
-        page = new Create(this);
+    public TourTab(Main mainClass,boolean premade) {
+        this.mainClass = mainClass;
+        if (!premade) {
+            page = new Create(this);
+        }else{
+            page = new View(this);
+            setLockTab(true);
+        }
         this.page.pageSetStyle();
         this.page.pageBehavior();
         this.pageLayout = page.getPane();
         this.setText("NEW TOUR");
         this.setOnClosed(e -> {
-            mainPage.reconstructRootVBox();
+            mainClass.reconstructRootVBox();
             System.out.println("Moving to home");
         });
         this.setContent(pageLayout);
 
-        mainPage.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
+        mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
             if (this.isSelected() && this.lockTab) {
                 changePage(Pages.DELETE);
                 System.out.println("Moving to delete");
             }
         });
 
-        mainPage.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
+        mainClass.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
             if (this.isSelected() && this.lockTab) {
                 changePage(Pages.VIEW);
                 System.out.println("Moving to view");
             }
         });
 
-        mainPage.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
+        mainClass.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
             if (this.isSelected() && this.lockTab) {
                 changePage(Pages.STATS);
                 System.out.println("Moving to stats");
@@ -69,21 +73,21 @@ public class TourTab extends Tab {
 
         this.setOnSelectionChanged(t -> {
             if (this.isSelected()) {
-                mainPage.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
+                mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
                     if (this.isSelected() && this.lockTab) {
                         changePage(Pages.DELETE);
                         System.out.println("Moving to delete");
                     }
                 });
 
-                mainPage.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
+                mainClass.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
                     if (this.isSelected() && this.lockTab) {
                         changePage(Pages.VIEW);
                         System.out.println("Moving to view");
                     }
                 });
 
-                mainPage.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
+                mainClass.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
                     if (this.isSelected() && this.lockTab) {
                         changePage(Pages.STATS);
                         System.out.println("Moving to stats");
@@ -104,9 +108,6 @@ public class TourTab extends Tab {
 
     public void changePage(Pages pageInd) {
         switch (pageInd) {
-            case HOME:
-                this.page = new Home();
-            break;
             case CREATE:
                 this.page = new Create(this);
             break;
@@ -131,6 +132,6 @@ public class TourTab extends Tab {
 
     public void forceClose() {
         getTabPane().getTabs().remove(this);
-        mainPage.reconstructRootVBox();
+        mainClass.reconstructRootVBox();
     }
 }

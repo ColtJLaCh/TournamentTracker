@@ -14,7 +14,7 @@ public class Main extends Application {
 
     Scene currentScene;
 
-    Home home = new Home();
+    Home home = new Home(this);
 
     Scene scene;
 
@@ -59,7 +59,7 @@ public class Main extends Application {
         //Set up main menu options here due to independent page switching
        createNew.setOnAction(e -> {
             System.out.println("Moving to create");
-            TourTab newTab = new TourTab(this);
+            TourTab newTab = new TourTab(this,false);
             tabPane.getTabs().add(newTab);
             tabPane.getSelectionModel().select(newTab);
             reconstructRootVBox();
