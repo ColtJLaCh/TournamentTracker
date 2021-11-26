@@ -1,5 +1,6 @@
 package Nodes;
 
+import HelpfulClasses.UsefulConstants;
 import Main.Main;
 import Pages.*;
 import com.sun.javafx.scene.control.behavior.TabPaneBehavior;
@@ -46,6 +47,10 @@ public class TourTab extends Tab {
             mainClass.reconstructRootVBox();
             System.out.println("Moving to home");
         });
+        if (this.pageLayout != null) {
+            this.pageLayout.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+            this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+        }
         this.setContent(pageLayout);
 
         mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
@@ -122,6 +127,10 @@ public class TourTab extends Tab {
         this.pageLayout = this.page.getPane();
         this.page.pageSetStyle();
         this.page.pageBehavior();
+        if (this.pageLayout != null) {
+            this.pageLayout.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+            this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+        }
         this.setContent(pageLayout);
         this.lockTab = true;
     }

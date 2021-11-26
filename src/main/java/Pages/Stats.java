@@ -245,7 +245,11 @@ public class Stats extends Page {
             statBar[i] = new Rectangle();
             statBar[i].setFill(new Color(0.80,0.85,0,1)); //Greenish yellow
             if (i == 0) baseStatVal = statVal; //If this is the first index, the base length is set
-            statBar[i].setWidth(statVal/baseStatVal*UsefulConstants.DEFAULT_SCREEN_WIDTH/2); //Set the base length to half the size of default width, all other stats will be fractions of this
+            if (baseStatVal != 0) {
+                statBar[i].setWidth(statVal / baseStatVal * UsefulConstants.DEFAULT_SCREEN_WIDTH / 2 + 1); //Set the base length to half the size of default width, all other stats will be fractions of this
+            }else{
+                statBar[i].setWidth(1);
+            }
             statBar[i].setHeight(48);
 
             //Create the numbers on the rectangles
