@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.Database;
 import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
 
@@ -16,7 +17,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
+import java.sql.*;
 import java.util.*;
+
+import static Database.DBConst.DB_NAME;
 
 /** View extends Page
  * A view page for Tournament Tracker application, extends custom parent class Page and utilizes local and inherited methods to create a layout.
@@ -26,6 +30,8 @@ import java.util.*;
 public class View extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    Database dbc = Database.getInstance();
+
     TourTab parentTab;
 
     //Data -- The globals containing all player data to be inserted into a PlayerData object
@@ -43,12 +49,14 @@ public class View extends Page {
     TableView<String>[] brackets; //Each set of players/teams competing against eachother
     ArrayList<String> columns = new ArrayList<String>(); //The columns of the brackets TableView
 
-    public View(TourTab parentTab) {
+    public View(TourTab parentTab, String tourName) {
         this.parentTab = parentTab;
+        dataTourName = tourName;
         //Initialize layout assets here, ImageViews, Panes, Text etc...
 
         //Create the dummy data then insert it into the globals
-        dummyData(); //TODO: Replace this with retrieve method when functionality is added
+        //dummyData();
+        collectData();
         insertData();
 
         //Add a text label to top left corner to show tournament type
@@ -76,14 +84,13 @@ public class View extends Page {
         //Fake table data, this will be injected into these variables when functionality is programmed
 
         //Singles
-        ///*
         dataTourName = "DummyTournamentSINGLES";
         dataStats = new String[]{"Wins", "Losses", "Time"};
         dataPlayerArr = new String[]{"Jesse", "Jamie", "Bobby", "Billy", "Brody", "Mort"};
         dataTeamArr = new String[]{"NO TEAM", "NO TEAM", "NO TEAM", "NO TEAM", "NO TEAM", "NO TEAM"};
         dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
         dataSets = 2;
-        //*/
+
 
         //Teams
         /*
@@ -103,6 +110,44 @@ public class View extends Page {
         }
     }
 
+    private void collectData() {
+        Connection conn = dbc.getConnection();
+        try {
+            System.out.println(dataTourName);
+            ResultSet tourData = dbc.getTable(dataTourName,conn);
+            ResultSetMetaData tdmd = tourData.getMetaData();
+
+            int rows = 0;
+            tourData.last();
+            rows = tourData.getRow();
+            tourData.beforeFirst();
+
+            dataStats = new String[tdmd.getColumnCount()-4];
+            dataPlayerArr = new String[rows];
+            dataTeamArr = new String[rows];
+            dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
+
+            int row = 0;
+            while (tourData.next()) {
+                for (int st = 0; st < dataStats.length; st++) {
+                    dataStats[st] = tdmd.getColumnName(st+5);
+                    for (int p = 0; p < rows; p++) {
+                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
+                    }
+                }
+
+                dataPlayerArr[row] = tourData.getString("Player");
+                dataTeamArr[row] = tourData.getString("TeamName");
+
+                dataSets = Integer.parseInt(tourData.getString("Sets"));
+                row += 1;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving tables.");
+        }
+    }
+
     /**insertData()
      * Inserts fetched data from some globals into PlayerData objects
      * @author Colton LaChance
@@ -110,7 +155,7 @@ public class View extends Page {
     private void insertData() {
         String lastTeam = "";
         for (String team : dataTeamArr) {
-            if (team != "NO TEAM") dataTourStyle = 1;
+            if (!team.equals("NO TEAM")) dataTourStyle = 1;
 
             if (lastTeam != team) {
                 uniqueTeams.add(team);
@@ -185,8 +230,12 @@ public class View extends Page {
 
             //This checks to see what data from playerData to load into the current bracket. Whether singles or teams
             if (dataTourStyle == 0) {
-                for (int br = bracketNum*dataSets; br < bracketNum*dataSets+dataSets; br++) { //Get index of players within current bracket
-                    bracketData.add(playerData.get(br));
+                if (playerData.size() > 1) {
+                    for (int br = bracketNum * dataSets; br < bracketNum * dataSets + dataSets; br++) { //Get index of players within current bracket
+                        bracketData.add(playerData.get(br));
+                    }
+                }else{
+                    bracketData.add(playerData.get(0));
                 }
             }else{
                 int br = 0;

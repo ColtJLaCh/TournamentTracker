@@ -210,12 +210,17 @@ public class Database {
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
-            Statement dataTable = connection.createStatement();
+            Statement dataTable = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet tournament = dataTable.executeQuery("SELECT * FROM `" + tableName + "`");
 
+            tournament.beforeFirst();
+
             while (tournament.next()){
-                System.out.println(tournament.getInt("ID") + ", " +tournament.getString("Player"));
+                System.out.println(tournament.getString("ID") + ", " +tournament.getString("Player"));
             }
+
+            tournament.beforeFirst();
+
             return tournament;
         } else {
             System.out.println("Error: Tournament doesn't exist.");
