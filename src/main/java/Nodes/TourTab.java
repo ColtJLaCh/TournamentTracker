@@ -41,6 +41,8 @@ public class TourTab extends Tab {
             this.page.pageSetStyle();
             this.page.pageBehavior();
             this.pageLayout = page.getPane();
+        }else{
+            setLockTab(true);
         }
 
         this.setOnClosed(e -> {
@@ -132,7 +134,6 @@ public class TourTab extends Tab {
             this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
         }
         this.setContent(pageLayout);
-        this.lockTab = true;
     }
 
     public void forceClose() {
