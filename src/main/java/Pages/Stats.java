@@ -1,5 +1,6 @@
 package Pages;
 
+import Database.Database;
 import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
 import Nodes.TourTab;
@@ -14,6 +15,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.*;
 
 /** Stats extends Page
@@ -24,6 +29,7 @@ import java.util.*;
 public class Stats extends Page {
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
+    Database dbc = Database.getInstance();
 
     ScrollPane classScrollPane = new ScrollPane(); //Used to hold entire classVBox in a ScrollPane
 
@@ -58,10 +64,12 @@ public class Stats extends Page {
      * Sets up the layout using globals and methods for the Stats page
      * @author Colton LaChance
      */
-    public Stats(TourTab parentTab) {
+    public Stats(TourTab parentTab, String tourName) {
         this.parentTab = parentTab;
+        dataTourName = tourName;
 
-        dummyData();
+        //dummyData();
+        collectData();
 
         //Stats choice box layout
         statsBox.setMinWidth(UsefulConstants.DEFAULT_SCREEN_HEIGHT/6);
@@ -138,6 +146,43 @@ public class Stats extends Page {
             for (int s = 0; s < dataStats.length; s++) {
                 dataStatsArr[p][s] = String.valueOf(rand.nextInt(20));
             }
+        }
+    }
+
+    private void collectData() {
+        Connection conn = dbc.getConnection();
+        try {
+            System.out.println(dataTourName);
+            ResultSet tourData = dbc.getTable(dataTourName,conn);
+            ResultSetMetaData tdmd = tourData.getMetaData();
+
+            int rows = 0;
+            tourData.last();
+            rows = tourData.getRow();
+            tourData.beforeFirst();
+
+            dataStats = new String[tdmd.getColumnCount()-4];
+            dataPlayerArr = new String[rows];
+            dataTeamArr = new String[rows];
+            dataStatsArr = new String[dataPlayerArr.length][dataStats.length];
+
+            int row = 0;
+            while (tourData.next()) {
+                for (int st = 0; st < dataStats.length; st++) {
+                    dataStats[st] = tdmd.getColumnName(st+5);
+                    for (int p = 0; p < rows; p++) {
+                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
+                    }
+                }
+
+                dataPlayerArr[row] = tourData.getString("Player");
+                dataTeamArr[row] = tourData.getString("TeamName");
+
+                row += 1;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving tables.");
         }
     }
 

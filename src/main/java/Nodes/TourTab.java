@@ -116,7 +116,7 @@ public class TourTab extends Tab {
                 this.page = new View(this,this.getText());
             break;
             case STATS:
-                this.page = new Stats(this);
+                this.page = new Stats(this, this.getText());
             break;
         }
         this.pageLayout = this.page.getPane();
