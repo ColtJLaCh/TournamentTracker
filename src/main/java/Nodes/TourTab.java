@@ -117,7 +117,7 @@ public class TourTab extends Tab {
                 this.page = new Delete(this);
             break;
             case UPDATE:
-                this.page = new Update();
+                this.page = new Update(this,this.getText());
             break;
             case VIEW:
                 this.page = new View(this,this.getText());
