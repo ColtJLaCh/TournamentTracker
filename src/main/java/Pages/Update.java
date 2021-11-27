@@ -132,7 +132,11 @@ public class Update extends Page {
                 playerChoiceBox.getSelectionModel().getSelectedItem().toString().equals("FULL TEAM")) {
             statList = FXCollections.observableArrayList("TeamName","Wins","Losses");
         }else {
-            statList = FXCollections.observableArrayList("Player", "TeamName");
+            if (dataTourStyle == 1) {
+                statList = FXCollections.observableArrayList("Player", "TeamName");
+            }else{
+                statList = FXCollections.observableArrayList("Player","TeamName","Wins","Losses");
+            }
         }
         for (int st = 2; st < dataStats.length; st++) {
             statList.add(dataStats[st]);
@@ -149,7 +153,11 @@ public class Update extends Page {
                     playerChoiceBox.getSelectionModel().getSelectedItem().toString().equals("FULL TEAM")) {
                 statListFinal = FXCollections.observableArrayList("TeamName","Wins","Losses");
             }else {
-                statListFinal = FXCollections.observableArrayList("Player", "TeamName");
+                if (dataTourStyle == 1) {
+                    statListFinal = FXCollections.observableArrayList("Player", "TeamName");
+                }else{
+                    statListFinal = FXCollections.observableArrayList("Player","TeamName","Wins","Losses");
+                }
             }
 
             for (int st = 2; st < dataStats.length; st++) {
@@ -175,6 +183,29 @@ public class Update extends Page {
         buttonLabel.setUnderline(true);
         updateButton = new Button("Update");
         buttonVBox.getChildren().addAll(buttonLabel,updateButton);
+
+        updateButton.setOnMouseClicked(ev -> {
+            Connection conn = dbc.getConnection();
+            String playerName = playerChoiceBox.getSelectionModel().getSelectedItem().toString();
+            String[] player = new String[playerData.get(0).length];
+            if (!playerName.equals("FULL TEAM")) {
+                for (String[] data : playerData) {
+                    if (data[1].equals(playerName))
+                        player = data;
+                }
+                int pID = Integer.parseInt(player[0])+1;
+                try {
+                    dbc.updatePlayer(dataTourName,
+                            pID,
+                            new String[]{statChoiceBox.getSelectionModel().getSelectedItem().toString()},
+                            new String[]{updateVal.getText()},
+                            conn);
+                } catch (SQLException e) {
+                    System.out.println("Error updating tables.");
+                }
+            }else{
+            }
+        });
 
         layoutHBox.getChildren().addAll(valueVBox,buttonVBox);
         classVBox = new VBox(layoutHBox); //Vbox needed for Top to Bottom layout, add assets here
@@ -208,9 +239,7 @@ public class Update extends Page {
             while (tourData.next()) {
                 for (int st = 0; st < dataStats.length; st++) {
                     dataStats[st] = tdmd.getColumnName(st+5);
-                    for (int p = 0; p < rows; p++) {
-                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
-                    }
+                    dataStatsArr[row][st] = tourData.getString(dataStats[st]);
                 }
 
                 dataPlayerArr[row] = tourData.getString("Player");

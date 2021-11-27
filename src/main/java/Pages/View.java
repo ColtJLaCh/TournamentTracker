@@ -131,9 +131,7 @@ public class View extends Page {
             while (tourData.next()) {
                 for (int st = 0; st < dataStats.length; st++) {
                     dataStats[st] = tdmd.getColumnName(st+5);
-                    for (int p = 0; p < rows; p++) {
-                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
-                    }
+                    dataStatsArr[row][st] = tourData.getString(dataStats[st]);
                 }
 
                 dataPlayerArr[row] = tourData.getString("Player");

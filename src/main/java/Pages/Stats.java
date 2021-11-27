@@ -170,9 +170,7 @@ public class Stats extends Page {
             while (tourData.next()) {
                 for (int st = 0; st < dataStats.length; st++) {
                     dataStats[st] = tdmd.getColumnName(st+5);
-                    for (int p = 0; p < rows; p++) {
-                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
-                    }
+                    dataStatsArr[row][st] = tourData.getString(dataStats[st]);
                 }
 
                 dataPlayerArr[row] = tourData.getString("Player");
@@ -242,6 +240,7 @@ public class Stats extends Page {
 
             //Create the rectangles
             double statVal = Double.parseDouble(playerData.get(i)[3+statChoice]); //Current parsed stat value from table
+            System.out.println(statVal);
             statBar[i] = new Rectangle();
             statBar[i].setFill(new Color(0.80,0.85,0,1)); //Greenish yellow
             if (i == 0) baseStatVal = statVal; //If this is the first index, the base length is set
@@ -285,6 +284,7 @@ public class Stats extends Page {
         statsBox.setOnAction(event -> {
             for (int i = 0; i < statsBox.getItems().size(); i++) {
                 if (statsBox.getValue() == statsBox.getItems().get(i)) statChoice = i;
+
             }
 
             populatePlayerAndStatsVBox();

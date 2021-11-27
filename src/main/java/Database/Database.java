@@ -186,6 +186,7 @@ public class Database {
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
+            System.out.println(sqlUpdate);
             Statement updateTable = connection.createStatement();
             updateTable.execute(sqlUpdate);
             System.out.println("Updated player info");
