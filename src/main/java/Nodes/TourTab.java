@@ -49,6 +49,7 @@ public class TourTab extends Tab {
             mainClass.reconstructRootVBox();
             System.out.println("Moving to home");
         });
+
         if (this.pageLayout != null) {
             this.pageLayout.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
             this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
@@ -59,6 +60,13 @@ public class TourTab extends Tab {
             if (this.isSelected() && this.lockTab) {
                 changePage(Pages.DELETE);
                 System.out.println("Moving to delete");
+            }
+        });
+
+        mainClass.getMenuItem(Main.MenuItems.MENU_UPDATE).setOnAction(e->{
+            if (this.isSelected() && this.lockTab) {
+                changePage(Pages.UPDATE);
+                System.out.println("Moving to update");
             }
         });
 
@@ -78,6 +86,13 @@ public class TourTab extends Tab {
 
         this.setOnSelectionChanged(t -> {
             if (this.isSelected()) {
+                mainClass.getMenuItem(Main.MenuItems.MENU_UPDATE).setOnAction(e->{
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.UPDATE);
+                        System.out.println("Moving to update");
+                    }
+                });
+
                 mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
                     if (this.isSelected() && this.lockTab) {
                         changePage(Pages.DELETE);
@@ -117,7 +132,7 @@ public class TourTab extends Tab {
                 this.page = new Delete(this);
             break;
             case UPDATE:
-                this.page = new Update();
+                this.page = new Update(this,this.getText());
             break;
             case VIEW:
                 this.page = new View(this,this.getText());

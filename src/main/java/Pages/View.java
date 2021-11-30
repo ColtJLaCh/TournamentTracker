@@ -131,9 +131,7 @@ public class View extends Page {
             while (tourData.next()) {
                 for (int st = 0; st < dataStats.length; st++) {
                     dataStats[st] = tdmd.getColumnName(st+5);
-                    for (int p = 0; p < rows; p++) {
-                        dataStatsArr[p][st] = tourData.getString(dataStats[st]);
-                    }
+                    dataStatsArr[row][st] = tourData.getString(dataStats[st]);
                 }
 
                 dataPlayerArr[row] = tourData.getString("Player");
@@ -174,18 +172,10 @@ public class View extends Page {
         brackets = new TableView[amntOfSets];
 
         playerData = FXCollections.observableArrayList();
-        for (int t = 0; t < uniqueTeams.size(); t++) {
-            for (int p = 0; p < dataPlayerArr.length; p++) {
-                if (dataTourStyle == 0) {
-                    String pId = String.valueOf(p);
-                    String[] dataToAdd = new PlayerData(pId, dataPlayerArr[p],"NO TEAM",dataStatsArr[p]).getData();
-                    playerData.add(dataToAdd);
-                }else{
-                    String tId = String.valueOf(t);
-                    String[] dataToAdd = new PlayerData(tId, dataPlayerArr[p], uniqueTeams.get(t),dataStatsArr[p]).getData();
-                    playerData.add(dataToAdd);
-                }
-            }
+        for (int p = 0; p < dataPlayerArr.length; p++) {
+            String pId = String.valueOf(p);
+            String[] dataToAdd = new PlayerData(pId, dataPlayerArr[p],dataTeamArr[p],dataStatsArr[p]).getData();
+            playerData.add(dataToAdd);
         }
 
         columns.add("Id");
@@ -231,8 +221,10 @@ public class View extends Page {
             //This checks to see what data from playerData to load into the current bracket. Whether singles or teams
             if (dataTourStyle == 0) {
                 if (playerData.size() > 1) {
-                    for (int br = bracketNum * dataSets; br < bracketNum * dataSets + dataSets; br++) { //Get index of players within current bracket
-                        bracketData.add(playerData.get(br));
+                    for (int br = 0; br < dataPlayerArr.length-dataSets; br+=dataSets) { //Get index of players within current bracket
+                        for (int p = 0; p < dataSets; p++) {
+                            bracketData.add(playerData.get(br+p));
+                        }
                     }
                 }else{
                     bracketData.add(playerData.get(0));
