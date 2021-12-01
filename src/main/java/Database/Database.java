@@ -293,6 +293,7 @@ public class Database {
         }
     }
 
+    //Grab the user credentials from the login class.
     private void updateCredentials() {
         String[] userInfo = login.getUserInfo();
         db_user = userInfo[0];

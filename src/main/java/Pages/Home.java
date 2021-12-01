@@ -98,6 +98,7 @@ public class Home extends Page {
                 Database dbc = Database.getInstance();
                 Connection conn = dbc.getConnection();
                 try {
+                    //Instantiate Database here so the recent login credentials may be used.
                     DatabaseMetaData md = conn.getMetaData();
                     ResultSet rs = md.getTables(Database.getDb_name(), null, "%", null);
                     //For each table, add its name to the choicebox
