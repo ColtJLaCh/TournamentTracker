@@ -100,4 +100,22 @@ public class Login {
             ioException.printStackTrace();
         }
     }
+
+    //Get all user information from the file and return it as an array.
+    public String[] getUserInfo(){
+        String[] userInfo = {"", "", ""};
+        try {
+            Scanner scanner = new Scanner(userFile[2]);
+            scanner.useDelimiter(",");
+            for(int i=0; i<=2;i++){
+                userInfo[i] = scanner.next();
+            }
+            //System.out.println(userInfo);
+            return userInfo;
+        }
+        catch (IOException ioException) {
+            System.out.println("File Read Error");
+        }
+        return null;
+    }
 }

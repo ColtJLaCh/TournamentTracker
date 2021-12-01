@@ -23,8 +23,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static Database.DBConst.DB_NAME;
-
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
@@ -32,8 +30,6 @@ import static Database.DBConst.DB_NAME;
 
 public class Home extends Page {
 
-    //Initialze the database as global for use
-    Database dbc = Database.getInstance();
     Main mainClass;
 
     //Anything with functionality goes here, Buttons, TextFields etc... as well as needed globals
@@ -99,10 +95,11 @@ public class Home extends Page {
                 System.out.println("Logging in...");
                 login.loginUser(username);
                 //Gather all table names from the user's database
+                Database dbc = Database.getInstance();
                 Connection conn = dbc.getConnection();
                 try {
                     DatabaseMetaData md = conn.getMetaData();
-                    ResultSet rs = md.getTables(DB_NAME, null, "%", null);
+                    ResultSet rs = md.getTables(Database.getDb_name(), null, "%", null);
                     //For each table, add its name to the choicebox
                     while (rs.next()) {
                         TourTab premadeTournament = new TourTab(mainClass,true);

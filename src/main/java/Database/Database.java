@@ -1,4 +1,6 @@
 package Database;
+import LoginCredentials.Login;
+
 import java.sql.*;
 
 
@@ -6,19 +8,29 @@ public class Database {
     private static Database instance;
     private Connection connection = null;
 
+    Login login = new Login();
+    private static String db_name;
+    public static String getDb_name() {
+        return db_name;
+    }
+
+    private static String db_user;
+    private static String db_pass;
+
     /**
      *
      */
     private Database(){
         //Database connection
+        updateCredentials();
         if(connection == null){
             try{
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection =
                         DriverManager.getConnection("jdbc:mysql://localhost/"
-                                        + DBConst.DB_NAME + "?serverTimezone=UTC",
-                                DBConst.DB_USER,
-                                DBConst.DB_PASS);
+                                        + db_name + "?serverTimezone=UTC",
+                                db_user,
+                                db_pass);
                 System.out.println("Created Connection");
 
                 //Create a basic table
@@ -112,7 +124,7 @@ public class Database {
         //Get database information
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
+        ResultSet resultSet = md.getTables(db_name,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -147,7 +159,7 @@ public class Database {
         //System.out.println(sqlInsert);
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
+        ResultSet resultSet = md.getTables(db_name,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -182,7 +194,7 @@ public class Database {
 
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
+        ResultSet resultSet = md.getTables(db_name,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -207,7 +219,7 @@ public class Database {
     public ResultSet getTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
+        ResultSet resultSet = md.getTables(db_name,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -240,7 +252,7 @@ public class Database {
     public ResultSet curateTable(String tableName, String condition, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
+        ResultSet resultSet = md.getTables(db_name,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -267,7 +279,7 @@ public class Database {
     public boolean dropTable(String tableName, Connection connection) throws SQLException {
         DatabaseMetaData md = connection.getMetaData();
         //Looking for the table with tableName
-        ResultSet resultSet = md.getTables(DBConst.DB_NAME,
+        ResultSet resultSet = md.getTables(db_name,
                 null, tableName, null);
         //If the table is present
         if(resultSet.next()){
@@ -279,5 +291,12 @@ public class Database {
             System.out.println("Error: Tournament doesn't exist.");
             return false;
         }
+    }
+
+    private void updateCredentials() {
+        String[] userInfo = login.getUserInfo();
+        db_user = userInfo[0];
+        db_pass = userInfo[1];
+        db_name = userInfo[2];
     }
 }

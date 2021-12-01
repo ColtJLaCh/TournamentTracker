@@ -20,7 +20,6 @@ import javafx.util.Callback;
 import java.sql.*;
 import java.util.*;
 
-import static Database.DBConst.DB_NAME;
 
 /** View extends Page
  * A view page for Tournament Tracker application, extends custom parent class Page and utilizes local and inherited methods to create a layout.

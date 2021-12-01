@@ -13,9 +13,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import java.sql.*;
 
-import static Database.DBConst.DB_NAME;
-import static Database.DBConst.DB_USER;
-
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
  */
