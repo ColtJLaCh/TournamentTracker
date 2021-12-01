@@ -276,7 +276,7 @@ public class Create extends Page {
      */
     public void collectData() {
         //TOUR NAME
-        dataTourName = tourNameTextField.getText();
+        dataTourName = tourNameTextField.getText().replaceAll(" ", "_");
 
         //TOUR STYLE
         dataTourStyle = tourStyle;
@@ -331,7 +331,7 @@ public class Create extends Page {
         for (int s = 0; s < statList.getArrList().size(); s++) {
             HBox statCell = statList.getArrList().get(s);
             TextField statTextField = (TextField)statCell.getChildren().get(0);
-            dataStats[s] = statTextField.getText();
+            dataStats[s] = statTextField.getText(); //.replaceAll(" ", "_");
             System.out.println("STAT #" + s + ": " + dataStats[s]);
         }
         dataSets = setCount;
