@@ -63,16 +63,16 @@ public class Delete extends Page {
             //String representing user's selection
             String dropTour = parentTab.getText();
             try {
-                //Alert pops up asking the user if they're sure they want to delete.
-                dbc.dropTable(parentTab.getText(), conn);
+                //Force delete with no alert
+                /*dbc.dropTable(parentTab.getText(), conn);
                 reconstructClassVBox(deletePageLabel,deleteVBox);
-                parentTab.forceClose();
+                parentTab.forceClose();*/
 
-                /*
+                //Alert pops up asking the user if they're sure they want to delete.
                 Alert a = new Alert(Alert.AlertType.CONFIRMATION);
                 a.setContentText("Are you sure you want to delete tournament " + dropTour + "?");
                 a.showAndWait();
-                if(a.getResult() == ButtonType.YES) {
+                if(a.getResult() == ButtonType.OK) {
                     if (dbc.dropTable(parentTab.getText(), conn)) {
                         reconstructClassVBox(deletePageLabel,deleteVBox);
                         System.out.println("Tournament " + dropTour + " successfully deleted.");
@@ -81,7 +81,7 @@ public class Delete extends Page {
                         System.out.println("Tournament doesn't exist.");
                     }
                 }
-                */
+
             } catch (SQLException dropException){
                 System.out.println("Error dropping table.");
             }
