@@ -4,6 +4,7 @@ import HelpfulClasses.UsefulConstants;
 import LoginCredentials.Login;
 import Main.Main;
 import Nodes.TourTab;
+import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -61,6 +63,35 @@ public class Home extends Page {
         titleHBox.setAlignment(Pos.TOP_CENTER);
 
 
+        //Animations for Images
+
+        TranslateTransition titleDrop = new TranslateTransition(Duration.millis(2000), titleHomePage);
+        titleDrop.setFromY(-3000);
+        titleDrop.setToY(50);
+
+        ScaleTransition titleStretch = new ScaleTransition(Duration.millis(215), titleHomePage);
+        titleStretch.setByX(0.1);
+        titleStretch.setByY(-0.18);
+        titleStretch.setCycleCount(2);
+        titleStretch.setAutoReverse(true);
+
+        TranslateTransition titleSquash = new TranslateTransition(Duration.millis(215), titleHomePage);
+        titleSquash.setFromY(50);
+        titleSquash.setToY(70);
+        titleStretch.setCycleCount(2);
+        titleStretch.setAutoReverse(true);
+
+        ParallelTransition titleSquashAndStretch = new ParallelTransition();
+        titleSquashAndStretch.getChildren().addAll(titleStretch, titleSquash);
+
+        FadeTransition graphicFadeIn = new FadeTransition(Duration.millis(2500), sportsGraphic);
+        graphicFadeIn.setFromValue(0);
+        graphicFadeIn.setToValue(1);
+
+        SequentialTransition fullStartUp = new SequentialTransition();
+        fullStartUp.getChildren().addAll(titleDrop, titleSquashAndStretch, graphicFadeIn);
+
+        fullStartUp.play();
 
 
         //*******FOR NOAH******* Login stuff!
