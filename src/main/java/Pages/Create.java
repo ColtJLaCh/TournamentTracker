@@ -420,7 +420,15 @@ public class Create extends Page {
             Boolean dataPlayerNameOkay = true;
             Boolean dataStatsOkay = true;
 
-            if (dataTourName.length() > 50) dataTourNameOkay = false;
+            if (dataTourName.length() > 50) {
+                dataTourNameOkay = false;
+                errorText.setText("ERROR: All names must be under 50 characters");
+            }
+
+            if (dataTeamName.length == 0) {
+                dataTourNameOkay = false;
+                errorText.setText("ERROR: Please name your tournament!");
+            }
             if (tourStyle == 0) {
                 for (int p = 0; p < dataPlayerNames[0].length; p++) {
                     if (dataPlayerNames[0][p].length() > 50) {
