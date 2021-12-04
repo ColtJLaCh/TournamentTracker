@@ -62,7 +62,7 @@ public class Create extends Page {
 
     //CREATE
     Button createButton = new Button("CREATE TOURNAMENT");
-    Text errorText = new Text("ERROR: All names must be under 50 characters");
+    Label errorText = new Label("ERROR: All names must be under 50 characters");
 
     //MISC -------- These are for layout or any other parts of functionality unrelated to sections
 
@@ -224,7 +224,8 @@ public class Create extends Page {
         createButton.setMaxSize(240,40);
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         errorText.setFont(franklinGothicMedium12);
-        errorText.setFill(new Color(1,0,0,0)); // <---- You can set the fill opacity to make the error message visable/invisible
+        errorText.setTextFill(new Color(1,0,0,1)); // <---- You can set the fill opacity to make the error message visable/invisible
+        errorText.setOpacity(0);
         createVBox.getChildren().addAll(createLabel,createButton,errorText);
 
 
@@ -422,19 +423,34 @@ public class Create extends Page {
             if (dataTourName.length() > 50) dataTourNameOkay = false;
             if (tourStyle == 0) {
                 for (int p = 0; p < dataPlayerNames[0].length; p++) {
-                    if (dataPlayerNames[0][p].length() > 50) dataPlayerNameOkay = false;
+                    if (dataPlayerNames[0][p].length() > 50) {
+                        dataPlayerNameOkay = false;
+                        errorText.setText("ERROR: All names must be under 50 characters");
+                    }
                 }
             }else {
                 for (int t = 0; t < teamsVBox.getChildren().size()-2; t++) {
                     if (dataTeamName[t].length() > 50) dataTeamNameOkay = false;
                     for (int p = 0; p < dataPlayerNames[t].length; p++) {
-                        if (dataPlayerNames[t][p].length() > 50) dataPlayerNameOkay = false;
+                        if (dataPlayerNames[t][p].length() > 50) {
+                            dataPlayerNameOkay = false;
+                            errorText.setText("ERROR: All names must be under 50 characters");
+                        }
                     }
                 }
             }
 
             for (int s = 0; s < dataStats.length; s++) {
-                if (dataStats[s].length() > 50) dataStatsOkay = false;
+                if (dataStats[s].length() > 50) {
+                    dataStatsOkay = false;
+                    errorText.setText("ERROR: All names must be under 50 characters");
+                }
+                for (int s2 = 0; s2 < dataStats.length; s2++) {
+                    if (s != s2 && dataStats[s].equals(dataStats[s2])) {
+                        dataStatsOkay = false;
+                        errorText.setText("ERROR: Duplicate stat names!");
+                    }
+                }
             }
 
             if (dataTourNameOkay &&
