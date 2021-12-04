@@ -47,11 +47,20 @@ public class Home extends Page {
 
         //Initialize layout assets here, ImageViews, Panes, Text etc...
         ImageView titleHomePage = new ImageView(new Image("./images/hometitletext.png"));
-        ImageView tourImgHomePage1 = new ImageView(new Image("./images/homepagetourimg.png"));
-        ImageView tourImgHomePage2 = new ImageView(new Image("./images/homepagetourimg.png"));
+        //ImageView tourImgHomePage1 = new ImageView(new Image("./images/homepagetourimg.png"));
+        //ImageView tourImgHomePage2 = new ImageView(new Image("./images/homepagetourimg.png"));
+        ImageView sportsGraphic = new ImageView(new Image("./images/sports_graphic.png"));
 
-        HBox titleHBox = new HBox(tourImgHomePage1,titleHomePage,tourImgHomePage2);
+        titleHomePage.setFitHeight(350);
+        titleHomePage.setFitWidth(700);
+
+        sportsGraphic.setFitHeight(420);
+        sportsGraphic.setFitWidth(512);
+
+        HBox titleHBox = new HBox(titleHomePage,sportsGraphic);
         titleHBox.setAlignment(Pos.TOP_CENTER);
+
+
 
 
         //*******FOR NOAH******* Login stuff!
