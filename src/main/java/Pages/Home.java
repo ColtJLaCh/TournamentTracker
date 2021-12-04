@@ -66,7 +66,7 @@ public class Home extends Page {
         //Animations for Images
 
         TranslateTransition titleDrop = new TranslateTransition(Duration.millis(2000), titleHomePage);
-        titleDrop.setFromY(-3000);
+        titleDrop.setFromY(-2750);
         titleDrop.setToY(50);
 
         ScaleTransition titleStretch = new ScaleTransition(Duration.millis(215), titleHomePage);

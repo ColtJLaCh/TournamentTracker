@@ -15,6 +15,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -71,6 +73,10 @@ public class View extends Page {
         classVBox = new VBox(tourTypeText); //Vbox needed for Top to Bottom layout, add assets here
 
         createBrackets(); //Create the tableview layout
+
+        ImageView tourImgHomePage1 = new ImageView(new Image("./images/homepagetourimg.png"));
+
+        classVBox.getChildren().add(tourImgHomePage1);
 
         //classVBox.setAlignment(ALIGNMENT GOES HERE); //Usually Pos.TOP_LEFT
         classVBox.setPadding(new Insets(10,10,10,10)); //Set padding for Vbox (ORDER : double top, double right, double bottom, double left)
