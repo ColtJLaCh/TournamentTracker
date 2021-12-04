@@ -149,6 +149,11 @@ public class Home extends Page {
                         mainClass.tabPane.getTabs().add(premadeTournament);
                         mainClass.reconstructRootVBox();
                     }
+                    if (mainClass.tabPane.getTabs().isEmpty()) {
+                        TourTab newTournament = new TourTab(mainClass,false);
+                        mainClass.tabPane.getTabs().add(newTournament);
+                        mainClass.reconstructRootVBox();
+                    }
                 } catch (SQLException e) {
                     System.out.println("Error retrieving tables.");
                 }

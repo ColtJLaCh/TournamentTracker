@@ -93,7 +93,7 @@ public class Create extends Page {
         tourNameTextField.setPromptText("Enter tournament name here...");
         tourNameTextField.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/4);
 
-        Label tourNameLabel = new Label("TOURNAMENT NAME (max 35 characters)");
+        Label tourNameLabel = new Label("TOURNAMENT NAME (max 50 characters)");
         tourNameLabel.setUnderline(true);
         tourNameLabel.setAlignment(Pos.TOP_LEFT);
         tourNameLabel.setLabelFor(tourNameTextField);
