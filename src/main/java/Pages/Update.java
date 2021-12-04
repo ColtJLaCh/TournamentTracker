@@ -1,6 +1,7 @@
 package Pages;
 
 import Database.Database;
+import HelpfulClasses.UsefulConstants;
 import Nodes.PlayerData;
 import Nodes.TourTab;
 import javafx.beans.InvalidationListener;
@@ -101,9 +102,8 @@ public class Update extends Page {
 
             teamChoiceBox.setOnAction(e-> {
                 playerChoiceBox.setValue(null);
-                playerList.clear();
 
-                ObservableList<String> playerListFinal = playerList;
+                ObservableList<String> playerListFinal = FXCollections.observableArrayList();
                 playerListFinal.add("FULL TEAM");
                 for (int p = 0; p < dataPlayerArr.length; p++) {
                     if (playerData.get(p)[2].equals(teamChoiceBox.getSelectionModel().getSelectedItem().toString())) {
@@ -151,6 +151,8 @@ public class Update extends Page {
         layoutHBox.getChildren().add(statsVBox);
 
         playerChoiceBox.setOnAction(e-> {
+            statChoiceBox.setValue(null);
+
             ObservableList<String> statListFinal =  FXCollections.observableArrayList();
             if (playerChoiceBox.getSelectionModel().getSelectedItem() != null &&
                     playerChoiceBox.getSelectionModel().getSelectedItem().toString().equals("FULL TEAM")) {
@@ -185,6 +187,8 @@ public class Update extends Page {
         Label buttonLabel = new Label("Update with parameters");
         buttonLabel.setUnderline(true);
         updateButton = new Button("Update");
+        updateButton.setMinSize(UsefulConstants.DEFAULT_SCREEN_WIDTH/10,28);
+        updateButton.setMaxSize(UsefulConstants.DEFAULT_SCREEN_WIDTH/10,28);
 
         Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
         errorTextLabel.setFont(franklinGothicMedium12);
@@ -194,9 +198,22 @@ public class Update extends Page {
         buttonVBox.getChildren().addAll(buttonLabel,updateButton,errorTextLabel);
 
         updateButton.setOnMouseClicked(ev -> {
-            if (isNumber(updateVal.getText())
-                    || statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Player")
-                    || statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("TeamName") ) { //Check if the value inputted is of a numeric value
+
+            boolean missingTeamError = false;
+            boolean missingPlayerError = false;
+            boolean missingStatError = false;
+            boolean missingValueError = false;
+            boolean nonNumericValueError = false;
+
+            if (dataTourStyle == 1 && teamChoiceBox.getValue() == null) missingTeamError = true;
+            if (playerChoiceBox.getValue() == null) missingPlayerError = true;
+            if (statChoiceBox.getValue() == null) missingStatError = true;
+            if (updateVal.getText().isEmpty()) missingValueError = true;
+            if (!updateVal.getText().isEmpty() && isNumber(updateVal.getText())
+                    && !statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Player")
+                    && !statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("TeamName")) nonNumericValueError = true;
+
+            if (!missingTeamError && !missingPlayerError && !missingStatError && !missingValueError && !nonNumericValueError) {
                 Connection conn = dbc.getConnection();
                 String playerName = playerChoiceBox.getSelectionModel().getSelectedItem().toString();
                 String[] player = new String[playerData.get(0).length];
@@ -233,6 +250,11 @@ public class Update extends Page {
                 }
                 errorTextLabel.setOpacity(0);
             }else{
+                if (nonNumericValueError) errorTextLabel.setText("Stat must be of a numeric value!  EX:) `10` OR `2.74` ");
+                if (missingValueError) errorTextLabel.setText("Please enter value!");
+                if (missingStatError) errorTextLabel.setText("Please select property!");
+                if (missingPlayerError) errorTextLabel.setText("Please select player!");
+                if (missingTeamError) errorTextLabel.setText("Please select team!");
                 errorTextLabel.setOpacity(1);
             }
         });
