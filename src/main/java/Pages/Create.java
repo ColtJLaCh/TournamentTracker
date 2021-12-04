@@ -135,7 +135,11 @@ public class Create extends Page {
         teamsVBox.getChildren().addAll(teamsLabel,addTeam);
 
 
+
         //---------------------------SETS---------------------------
+
+        /*REMOVED UNTIL FARTHER NOTICE FOR DUE TO UN-NECCESSARY COMPLEXITY
+
         Label setsLabel = new Label("Sets (amount of players per set)");
         setsLabel.setUnderline(true);
         setsLabel.setLabelFor(counterVBox);
@@ -208,6 +212,7 @@ public class Create extends Page {
 
         counterVBox.setAlignment(Pos.CENTER_LEFT);
         counterVBox.getChildren().addAll(setsLabel,counterUp,counterHBox,counterDown);
+        */
 
         //---------------------------CREATE---------------------------
         VBox createVBox = new VBox(2);
@@ -276,7 +281,7 @@ public class Create extends Page {
      */
     public void collectData() {
         //TOUR NAME
-        dataTourName = tourNameTextField.getText().replaceAll(" ", "_");
+        dataTourName = tourNameTextField.getText().replaceAll("\s", "_");
 
         //TOUR STYLE
         dataTourStyle = tourStyle;
@@ -331,7 +336,7 @@ public class Create extends Page {
         for (int s = 0; s < statList.getArrList().size(); s++) {
             HBox statCell = statList.getArrList().get(s);
             TextField statTextField = (TextField)statCell.getChildren().get(0);
-            dataStats[s] = statTextField.getText(); //.replaceAll(" ", "_");
+            dataStats[s] = statTextField.getText().replaceAll("\s", "_");
             System.out.println("STAT #" + s + ": " + dataStats[s]);
         }
         dataSets = setCount;

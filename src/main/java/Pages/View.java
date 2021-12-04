@@ -10,9 +10,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -45,8 +48,11 @@ public class View extends Page {
     int dataSets = 2; //2 is default set count, sets are the same for all players, so no need to store data in array
     int dataTourStyle = 0; //0 is singles, 1 is teams, not calculated til after data has been received
 
-    TableView<String>[] brackets; //Each set of players/teams competing against eachother
+    TableView<String>[] brackets; //Each set of players/teams competing against eachother ***REMOVED DUE TO UN-NECCESSARY COMPELXITY*** Now only the first index is created currently
     ArrayList<String> columns = new ArrayList<String>(); //The columns of the brackets TableView
+
+    HBox layoutHBox = new HBox(32); //For the observable list and player names on hover
+    Label teamPlayerNames = new Label(""); //This is here for team tournaments, appears on the right side on mouse hover over team
 
     public View(TourTab parentTab, String tourName) {
         this.parentTab = parentTab;
@@ -160,6 +166,7 @@ public class View extends Page {
             }
         }
 
+        /*REMOVED DUE TO UN-NECCESSARY COMPELXITY
         int amntOfSets = dataSets;
         if (dataTourStyle == 0) {
             amntOfSets = (dataPlayerArr.length+dataSets-1)/dataSets;
@@ -167,8 +174,9 @@ public class View extends Page {
             if (!uniqueTeams.isEmpty())
                 amntOfSets = (uniqueTeams.size()+dataSets-1)/dataSets;
         }
+        */
 
-        brackets = new TableView[amntOfSets];
+        brackets = new TableView[1];
 
         playerData = FXCollections.observableArrayList();
         for (int p = 0; p < dataPlayerArr.length; p++) {
@@ -189,7 +197,7 @@ public class View extends Page {
      * Using information from the global properties and playerData, creates layout for the brackets[] TableViews, then adds them to the classVBox
      */
     private void createBrackets() {
-        int bracketNum = 0; //Here because I used a foreach loop
+        //int bracketNum = 0; //REMOVED
         int lastTeamInd = 0; //This is for teams, makes sure that every bracket has unique teams playing against eachother
 
         for (TableView bracket : brackets) {
@@ -197,6 +205,7 @@ public class View extends Page {
 
             //Initialize and set bracket parameters
             bracket = new TableView();
+            bracket.setMinWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/3);
             bracket.setMaxWidth(UsefulConstants.DEFAULT_SCREEN_WIDTH/3);
             bracket.setFixedCellSize(25);
             bracket.setEditable(false);
@@ -220,46 +229,60 @@ public class View extends Page {
             //This checks to see what data from playerData to load into the current bracket. Whether singles or teams
             if (dataTourStyle == 0) {
                 if (playerData.size() > 1) {
-                    for (int br = 0; br < dataPlayerArr.length-dataSets; br+=dataSets) { //Get index of players within current bracket
-                        for (int p = 0; p < dataSets; p++) {
-                            bracketData.add(playerData.get(br+p));
-                        }
+                    for (int p = 0; p < dataPlayerArr.length; p++) {
+                        bracketData.add(playerData.get(p));
                     }
                 }else{
                     bracketData.add(playerData.get(0));
                 }
             }else{
-                int br = 0;
+                int teamNum = 0;
                 for (int t = lastTeamInd; t < playerData.size(); t++) { //lastTeamIndex is used to find teams in current bracket
-                    if (playerData.get(t)[2] != playerData.get(lastTeamInd)[2] || t == 0) {
+                    if (!playerData.get(t)[2].equals(playerData.get(lastTeamInd)[2]) || t == 0) {
+                        playerData.get(t)[0] = String.valueOf(teamNum);
+                        teamNum++;
                         bracketData.add(playerData.get(t));
                         lastTeamInd = t;
-                        br++;
-                    }
-                    if (br >= dataSets) { //If the bracket size is greater than the max bracket size, end the for loop
-                        break;
                     }
                 }
-            }
 
+            }
             //Set the items and set some params of the current bracket (TableView)
             bracket.setItems(bracketData);
+
+            //Get the row for the team player names
+            if (dataTourStyle == 1) {
+                bracket.setRowFactory(tableView -> {
+                    final TableRow<String[]> row = new TableRow<>();
+
+                    row.hoverProperty().addListener((observable) -> {
+                        final String[] player = row.getItem();
+
+                        if (row.isHover() && player != null) {
+                            teamPlayerNames.setText("PLAYERS : ");
+                            for (int p = 0; p < dataPlayerArr.length; p++) {
+                                if (playerData.get(p)[2].equals(player[2])) {
+                                    teamPlayerNames.setText(teamPlayerNames.getText() + "\n" + playerData.get(p)[1]);
+                                }
+                            }
+
+                        }
+                    });
+
+                    return row;
+                });
+            }
+
             bracket.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             bracket.setMinHeight(bracket.getFixedCellSize()*(bracket.getItems().size()+1));
             bracket.setMaxHeight(bracket.getFixedCellSize()*(bracket.getItems().size()+1));
 
             //Add bracket to classVBox
-            classVBox.getChildren().add(bracket);
+            layoutHBox.getChildren().add(bracket);
+            if (dataTourStyle == 1) layoutHBox.getChildren().add(teamPlayerNames);
+            classVBox.getChildren().add(layoutHBox);
 
-            //This divider is used to show who will be playing against each other in the next set of brackets
-            Text setLine = new Text("-------------------------------------------------------------------------------------------------------------------------------------");
-            if (brackets.length > 0) {
-                if (((bracketNum+1) % 2) == 0 && bracketNum+1 != brackets.length) { //Evenly divides the brackets
-                    classVBox.getChildren().add(setLine);
-                }
-            }
-
-            bracketNum++;
+            //bracketNum++; REMOVED
         }
     }
 

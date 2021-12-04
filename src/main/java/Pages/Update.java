@@ -204,6 +204,20 @@ public class Update extends Page {
                     System.out.println("Error updating tables.");
                 }
             }else{
+                for (int p = 0; p < dataPlayerArr.length; p++) {
+                    if (playerData.get(p)[2].equals(teamChoiceBox.getSelectionModel().getSelectedItem().toString())) {
+                        int pID = Integer.parseInt(playerData.get(p)[0])+1;
+                        try {
+                            dbc.updatePlayer(dataTourName,
+                                    pID,
+                                    new String[]{statChoiceBox.getSelectionModel().getSelectedItem().toString()},
+                                    new String[]{updateVal.getText()},
+                                    conn);
+                        } catch (SQLException e) {
+                            System.out.println("Error updating tables.");
+                        }
+                    }
+                }
             }
         });
 
