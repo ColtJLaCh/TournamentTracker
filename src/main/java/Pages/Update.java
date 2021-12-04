@@ -3,7 +3,9 @@ package Pages;
 import Database.Database;
 import Nodes.PlayerData;
 import Nodes.TourTab;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -12,13 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.*;
 
 /** PAGE CLASS
  * Constructor contains all layout information, add methods and properties as needed for functionality
@@ -34,6 +38,7 @@ public class Update extends Page {
     ChoiceBox statChoiceBox;
     TextField updateVal;
     Button updateButton;
+    Label errorTextLabel = new Label("Stat must be of a numeric value!  EX:) `10` OR `2.74` ");
 
     HBox layoutHBox;
 
@@ -146,9 +151,7 @@ public class Update extends Page {
         layoutHBox.getChildren().add(statsVBox);
 
         playerChoiceBox.setOnAction(e-> {
-            statList.clear();
-
-            ObservableList<String> statListFinal = statList;
+            ObservableList<String> statListFinal =  FXCollections.observableArrayList();
             if (playerChoiceBox.getSelectionModel().getSelectedItem() != null &&
                     playerChoiceBox.getSelectionModel().getSelectedItem().toString().equals("FULL TEAM")) {
                 statListFinal = FXCollections.observableArrayList("TeamName","Wins","Losses");
@@ -182,42 +185,55 @@ public class Update extends Page {
         Label buttonLabel = new Label("Update with parameters");
         buttonLabel.setUnderline(true);
         updateButton = new Button("Update");
-        buttonVBox.getChildren().addAll(buttonLabel,updateButton);
+
+        Font franklinGothicMedium12 = Font.font("Franklin Gothic Medium", 12);
+        errorTextLabel.setFont(franklinGothicMedium12);
+        errorTextLabel.setTextFill(new Color(1,0,0,1));
+        errorTextLabel.setOpacity(0);
+
+        buttonVBox.getChildren().addAll(buttonLabel,updateButton,errorTextLabel);
 
         updateButton.setOnMouseClicked(ev -> {
-            Connection conn = dbc.getConnection();
-            String playerName = playerChoiceBox.getSelectionModel().getSelectedItem().toString();
-            String[] player = new String[playerData.get(0).length];
-            if (!playerName.equals("FULL TEAM")) {
-                for (String[] data : playerData) {
-                    if (data[1].equals(playerName))
-                        player = data;
-                }
-                int pID = Integer.parseInt(player[0])+1;
-                try {
-                    dbc.updatePlayer(dataTourName,
-                            pID,
-                            new String[]{statChoiceBox.getSelectionModel().getSelectedItem().toString()},
-                            new String[]{updateVal.getText()},
-                            conn);
-                } catch (SQLException e) {
-                    System.out.println("Error updating tables.");
-                }
-            }else{
-                for (int p = 0; p < dataPlayerArr.length; p++) {
-                    if (playerData.get(p)[2].equals(teamChoiceBox.getSelectionModel().getSelectedItem().toString())) {
-                        int pID = Integer.parseInt(playerData.get(p)[0])+1;
-                        try {
-                            dbc.updatePlayer(dataTourName,
-                                    pID,
-                                    new String[]{statChoiceBox.getSelectionModel().getSelectedItem().toString()},
-                                    new String[]{updateVal.getText()},
-                                    conn);
-                        } catch (SQLException e) {
-                            System.out.println("Error updating tables.");
+            if (isNumber(updateVal.getText())
+                    || statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Player")
+                    || statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("TeamName") ) { //Check if the value inputted is of a numeric value
+                Connection conn = dbc.getConnection();
+                String playerName = playerChoiceBox.getSelectionModel().getSelectedItem().toString();
+                String[] player = new String[playerData.get(0).length];
+                if (!playerName.equals("FULL TEAM")) {
+                    for (String[] data : playerData) {
+                        if (data[1].equals(playerName))
+                            player = data;
+                    }
+                    int pID = Integer.parseInt(player[0]) + 1;
+                    try {
+                        dbc.updatePlayer(dataTourName,
+                                pID,
+                                new String[]{statChoiceBox.getSelectionModel().getSelectedItem().toString()},
+                                new String[]{updateVal.getText()},
+                                conn);
+                    } catch (SQLException e) {
+                        System.out.println("Error updating tables.");
+                    }
+                } else {
+                    for (int p = 0; p < dataPlayerArr.length; p++) {
+                        if (playerData.get(p)[2].equals(teamChoiceBox.getSelectionModel().getSelectedItem().toString())) {
+                            int pID = Integer.parseInt(playerData.get(p)[0]) + 1;
+                            try {
+                                dbc.updatePlayer(dataTourName,
+                                        pID,
+                                        new String[]{statChoiceBox.getSelectionModel().getSelectedItem().toString()},
+                                        new String[]{updateVal.getText()},
+                                        conn);
+                            } catch (SQLException e) {
+                                System.out.println("Error updating tables.");
+                            }
                         }
                     }
                 }
+                errorTextLabel.setOpacity(0);
+            }else{
+                errorTextLabel.setOpacity(1);
             }
         });
 
@@ -265,6 +281,19 @@ public class Update extends Page {
 
         } catch (SQLException e) {
             System.out.println("Error retrieving tables.");
+        }
+    }
+
+    /** isNumber(String input)
+     * @param input The string inputted, to be checked whether or not is double
+     * @return returns true if double, false if not
+     */
+    static private boolean isNumber(String input) {
+        try {
+            Double.parseDouble(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 

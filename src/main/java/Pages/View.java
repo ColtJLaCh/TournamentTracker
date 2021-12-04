@@ -245,12 +245,14 @@ public class View extends Page {
                         lastTeamInd = t;
                     }
                 }
-
             }
+
+
             //Set the items and set some params of the current bracket (TableView)
             bracket.setItems(bracketData);
 
-            //Get the row for the team player names
+
+            //Get the row for the team, add player names to label
             if (dataTourStyle == 1) {
                 bracket.setRowFactory(tableView -> {
                     final TableRow<String[]> row = new TableRow<>();
@@ -265,7 +267,6 @@ public class View extends Page {
                                     teamPlayerNames.setText(teamPlayerNames.getText() + "\n" + playerData.get(p)[1]);
                                 }
                             }
-
                         }
                     });
 
