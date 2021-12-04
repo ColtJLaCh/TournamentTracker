@@ -425,7 +425,7 @@ public class Create extends Page {
                 errorText.setText("ERROR: All names must be under 50 characters");
             }
 
-            if (dataTourName.length == 0) {
+            if (dataTourName.isEmpty()) {
                 dataTourNameOkay = false;
                 errorText.setText("ERROR: Please name your tournament!");
             }
