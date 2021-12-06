@@ -17,6 +17,9 @@ keep track of individual stats within these tournaments.
 #### View Tournaments
 ![View](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-View%20Tourney.png)
 
+#### View Statistics
+![Stats](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/6c7e3b12f42b72337dc2cb2174c724f570fef36c/README-View%20Stats.png)
+
 #### Create a Tournament
 ![Create](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-Create.png)
 
