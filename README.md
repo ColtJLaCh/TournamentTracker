@@ -11,5 +11,17 @@ Tournament Tracker has support for singles tournaments, as well as team tourname
 keep track of individual stats within these tournaments.
 
 ## Visuals
+#### Home Screen
+![Home](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-Home%20Screen.png)
 
-![Home](README-Home Screen.png)
+#### View Tournaments
+![View](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-View%20Tourney.png)
+
+#### Create a Tournament
+![Create](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-Create.png)
+
+#### Update a Tournament
+![Update](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-Update.png)
+
+#### Delete a Tournament
+![Delete](https://github.com/ColtJLaCh/TournamentTracker-JavaFinal-NC/blob/4669ff8c7a03af6511004b425431c825b7c42356/README-Delete.png)
