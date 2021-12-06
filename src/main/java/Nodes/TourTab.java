@@ -151,6 +151,79 @@ public class TourTab extends Tab {
         this.setContent(pageLayout);
     }
 
+    public void setFocusedTab() {
+        this.setOnClosed(e -> {
+            mainClass.reconstructRootVBox();
+            System.out.println("Moving to home");
+        });
+
+        if (this.pageLayout != null) {
+            this.pageLayout.setMinHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+            this.pageLayout.setMaxHeight(UsefulConstants.DEFAULT_SCREEN_HEIGHT);
+        }
+        this.setContent(pageLayout);
+
+        mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
+            if (this.isSelected() && this.lockTab) {
+                changePage(Pages.DELETE);
+                System.out.println("Moving to delete");
+            }
+        });
+
+        mainClass.getMenuItem(Main.MenuItems.MENU_UPDATE).setOnAction(e->{
+            if (this.isSelected() && this.lockTab) {
+                changePage(Pages.UPDATE);
+                System.out.println("Moving to update");
+            }
+        });
+
+        mainClass.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
+            if (this.isSelected() && this.lockTab) {
+                changePage(Pages.VIEW);
+                System.out.println("Moving to view");
+            }
+        });
+
+        mainClass.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
+            if (this.isSelected() && this.lockTab) {
+                changePage(Pages.STATS);
+                System.out.println("Moving to stats");
+            }
+        });
+
+        this.setOnSelectionChanged(t -> {
+            if (this.isSelected()) {
+                mainClass.getMenuItem(Main.MenuItems.MENU_UPDATE).setOnAction(e->{
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.UPDATE);
+                        System.out.println("Moving to update");
+                    }
+                });
+
+                mainClass.getMenuItem(Main.MenuItems.MENU_DELETE).setOnAction(e -> {
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.DELETE);
+                        System.out.println("Moving to delete");
+                    }
+                });
+
+                mainClass.getMenuItem(Main.MenuItems.MENU_VIEW).setOnAction(e->{
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.VIEW);
+                        System.out.println("Moving to view");
+                    }
+                });
+
+                mainClass.getMenuItem(Main.MenuItems.MENU_STATS).setOnAction(e->{
+                    if (this.isSelected() && this.lockTab) {
+                        changePage(Pages.STATS);
+                        System.out.println("Moving to stats");
+                    }
+                });
+            }
+        });
+    }
+
     public void forceClose() {
         getTabPane().getTabs().remove(this);
         mainClass.reconstructRootVBox();

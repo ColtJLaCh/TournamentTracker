@@ -142,13 +142,25 @@ public class Home extends Page {
                     DatabaseMetaData md = conn.getMetaData();
                     ResultSet rs = md.getTables(Database.getDb_name(), null, "%", null);
                     //For each table, add its name to the choicebox
+
+
+                    TourTab firstTab = null; //This is for getting the first tab
+
                     while (rs.next()) {
                         TourTab premadeTournament = new TourTab(mainClass,true);
                         premadeTournament.setText(rs.getString(3));
                         premadeTournament.changePage(TourTab.Pages.VIEW);
+
+                        //Grab first tab
+                        if (firstTab == null) firstTab = premadeTournament;
+
                         mainClass.tabPane.getTabs().add(premadeTournament);
                         mainClass.reconstructRootVBox();
                     }
+
+                    //Set it as the focused tab so that it's functionality works without switching
+                    if (firstTab != null) firstTab.setFocusedTab();
+
                     if (mainClass.tabPane.getTabs().isEmpty()) {
                         TourTab newTournament = new TourTab(mainClass,false);
                         mainClass.tabPane.getTabs().add(newTournament);

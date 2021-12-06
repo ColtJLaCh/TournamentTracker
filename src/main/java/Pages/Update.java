@@ -81,7 +81,10 @@ public class Update extends Page {
             Label teamsLabel = new Label("Which Team?");
             teamsLabel.setUnderline(true);
             ObservableList<String> teamList = FXCollections.observableArrayList(uniqueTeams);
+
             teamChoiceBox = new ChoiceBox(teamList);
+            teamChoiceBox.setMinWidth(100);
+
             teamChoiceBox.setValue(teamList.get(0));
             teamsVBox.getChildren().addAll(teamsLabel,teamChoiceBox);
             layoutHBox.getChildren().add(teamsVBox);
@@ -97,6 +100,8 @@ public class Update extends Page {
             }
 
             playerChoiceBox = new ChoiceBox(playerList);
+            playerChoiceBox.setMinWidth(110);
+
             playerVBox.getChildren().addAll(playerLabel,playerChoiceBox);
             layoutHBox.getChildren().add(playerVBox);
 
@@ -110,7 +115,9 @@ public class Update extends Page {
                         playerListFinal.add(playerData.get(p)[1]);
                     }
                 }
-                playerChoiceBox = new ChoiceBox(playerListFinal);
+
+                playerChoiceBox.getItems().clear();
+                playerChoiceBox.setItems(playerListFinal);
 
                 playerVBox.getChildren().clear();
                 playerVBox.getChildren().addAll(playerLabel,playerChoiceBox);
@@ -124,7 +131,10 @@ public class Update extends Page {
             Label playerLabel = new Label("Which Player?");
             playerLabel.setUnderline(true);
             ObservableList<String> playerList = FXCollections.observableArrayList(dataPlayerArr);
+
             playerChoiceBox = new ChoiceBox(playerList);
+            playerChoiceBox.setMinWidth(110);
+
             playerVBox.getChildren().addAll(playerLabel,playerChoiceBox);
             layoutHBox.getChildren().add(playerVBox);
         }
@@ -132,36 +142,43 @@ public class Update extends Page {
         Label statLabel = new Label("Which Property?");
         statLabel.setUnderline(true);
 
-        ObservableList<String> statList;
+        ObservableList<String> statList = FXCollections.observableArrayList();
+        statList.clear();
+
         if (playerChoiceBox.getSelectionModel().getSelectedItem() != null &&
                 playerChoiceBox.getSelectionModel().getSelectedItem().toString().equals("FULL TEAM")) {
-            statList = FXCollections.observableArrayList("TeamName","Wins","Losses");
+            statList.addAll("TeamName","Wins","Losses");
         }else {
             if (dataTourStyle == 1) {
-                statList = FXCollections.observableArrayList("Player", "TeamName");
+                statList.addAll("Player", "TeamName");
             }else{
-                statList = FXCollections.observableArrayList("Player","TeamName","Wins","Losses");
+                statList.addAll("Player","TeamName","Wins","Losses");
             }
         }
         for (int st = 2; st < dataStats.length; st++) {
             statList.add(dataStats[st]);
         }
+
         statChoiceBox = new ChoiceBox(statList);
+        statChoiceBox.setMinWidth(110);
+
         statsVBox.getChildren().addAll(statLabel,statChoiceBox);
         layoutHBox.getChildren().add(statsVBox);
 
         playerChoiceBox.setOnAction(e-> {
             statChoiceBox.setValue(null);
 
-            ObservableList<String> statListFinal =  FXCollections.observableArrayList();
+            ObservableList<String> statListFinal = FXCollections.observableArrayList();
+            statListFinal.clear();
+
             if (playerChoiceBox.getSelectionModel().getSelectedItem() != null &&
                     playerChoiceBox.getSelectionModel().getSelectedItem().toString().equals("FULL TEAM")) {
-                statListFinal = FXCollections.observableArrayList("TeamName","Wins","Losses");
-            }else {
+                statListFinal.addAll("TeamName","Wins","Losses");
+            }else{
                 if (dataTourStyle == 1) {
-                    statListFinal = FXCollections.observableArrayList("Player", "TeamName");
+                    statListFinal.addAll("Player", "TeamName");
                 }else{
-                    statListFinal = FXCollections.observableArrayList("Player","TeamName","Wins","Losses");
+                    statListFinal.addAll("Player","TeamName","Wins","Losses");
                 }
             }
 
@@ -169,7 +186,8 @@ public class Update extends Page {
                 statListFinal.add(dataStats[st]);
             }
 
-            statChoiceBox = new ChoiceBox(statListFinal);
+            statChoiceBox.getItems().clear();
+            statChoiceBox.setItems(statListFinal);
 
             statsVBox.getChildren().clear();
             statsVBox.getChildren().addAll(statLabel,statChoiceBox);
@@ -209,7 +227,7 @@ public class Update extends Page {
             if (playerChoiceBox.getValue() == null) missingPlayerError = true;
             if (statChoiceBox.getValue() == null) missingStatError = true;
             if (updateVal.getText().isEmpty()) missingValueError = true;
-            if (!updateVal.getText().isEmpty() && isNumber(updateVal.getText())
+            if (!updateVal.getText().isEmpty() && !isNumber(updateVal.getText())
                     && !statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("Player")
                     && !statChoiceBox.getSelectionModel().getSelectedItem().toString().equals("TeamName")) nonNumericValueError = true;
 
