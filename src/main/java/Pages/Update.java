@@ -25,8 +25,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
 
-/** PAGE CLASS
- * Constructor contains all layout information, add methods and properties as needed for functionality
+/**Update extends Page
+ * A page for updating tournament data
+ * Retrieves current data, overrides it with defined parameters
+ * and updates it in the database
+ * @author Colton LaChance
  */
 public class Update extends Page {
 
@@ -62,6 +65,13 @@ public class Update extends Page {
     int dataSets = 2; //2 is default set count, sets are the same for all players, so no need to store data in array
     int dataTourStyle = 0; //0 is singles, 1 is teams, not calculated til after data has been received
 
+    /**Update Constructor(TourTab, String)
+     * Sets layout and nav functionality, as well as
+     * database updating functionality
+     * @param parentTab
+     * @param tourName
+     * @author Colton LaChance
+     */
     public Update(TourTab parentTab, String tourName) {
         //Initialize layout assets here, ImageViews, Panes, Text etc...
         this.parentTab = parentTab;
@@ -286,7 +296,10 @@ public class Update extends Page {
         classPane.setTop(classVBox);//Set it to top to place all content directly under menu
     }
 
-    //Local methods
+    /**collectData()
+     * Retrieve data from Database
+     * @author Colton LaChance
+     */
     private void collectData() {
         Connection conn = dbc.getConnection();
         try {

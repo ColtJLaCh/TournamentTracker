@@ -5,12 +5,23 @@ import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+/**Page
+ * Parent class for all visual layouts in app
+ * @author Colton LaChance
+ */
 public class Page {
 
     protected BorderPane classPane = new BorderPane();
     protected VBox classVBox = new VBox();
 
     //Local methods
+
+    /**VBox reconstructClassVBox(Node...)
+     * Reconstructs main layout Vbox with parameters listed
+     * @param nodes
+     * @return
+     * @author Colton LaChance
+     */
     public VBox reconstructClassVBox(Node... nodes) {
         this.classVBox.getChildren().clear();
         for (Node node : nodes) {

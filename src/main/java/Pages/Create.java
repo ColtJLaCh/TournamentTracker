@@ -490,7 +490,6 @@ public class Create extends Page {
         });
     }
 
-    //Use this inherited method to call all methods related to class needed for functionality
     @Override
     public void pageBehavior() {
         addToTourList(statList,"NEW STAT");

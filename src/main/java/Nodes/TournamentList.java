@@ -18,6 +18,14 @@ import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
 
+/**TournamentList extends ScrollPane
+ * A visual list of TextFields that are used to create parameters
+ * for initializing a tournament, and uploading it to a database.
+ *
+ * Additional list rows can be added or removed with the ADD and X buttons
+ *
+ * @author Colton LaChance
+ */
 public class TournamentList extends ScrollPane {
     private ArrayList<HBox> arrList = new ArrayList<HBox>();
     private Label label;
@@ -38,6 +46,10 @@ public class TournamentList extends ScrollPane {
         this.setPannable(false);
     }
 
+    /**reconstructVBox()
+     * Reconstructs the list, refreshing it when changes are made.
+     * @author Colton LaChance
+     */
     public void reconstructVBox() {
         vBox.getChildren().clear();
         if (label.getText() != "") vBox.getChildren().add(label);
@@ -58,12 +70,24 @@ public class TournamentList extends ScrollPane {
         this.setStyle("-fx-background: #EEEEEE;");
     }
 
+    /**deleteFromList(int)
+     * Removes from and reconstructs list using the reconstructVBox() method
+     * @param index
+     * @author Colton LaChance
+     */
     public void deleteFromList(int index) {
         arrList.remove(index);
         reconstructVBox();
     }
 
-    //Methods to add to pageBehavior
+    /**addToList(String, bool, bool)
+     * Adds a new TextField to the list (VBox) as well as a delete button (X)
+     * within a HBox
+     * @param initialString
+     * @param cellDisabled
+     * @param forceAdd
+     * @author Colton LaChance
+     */
     public void addToList(String initialString, boolean cellDisabled, boolean forceAdd) {
         if (!forceAdd) {
             addButton.setOnMouseClicked(e -> {
@@ -107,7 +131,11 @@ public class TournamentList extends ScrollPane {
         return arrList;
     }
 
-
+    /**DeleteButton extends Button
+     * A custom button, needed as an index is needed to delete proper row from
+     * TournamentList
+     * @author Colton LaChance
+     */
     private class DeleteButton extends Button {
         public int index = 0;
         public Button button = this;

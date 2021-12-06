@@ -25,11 +25,10 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/** PAGE CLASS
- * Constructor contains all layout information, add methods and properties as needed for functionality
+/**Home extends Page
+ *A homepage for the app, used for login
+ * @author Colton LaChance
  */
-
-
 public class Home extends Page {
 
     Main mainClass;
@@ -44,6 +43,13 @@ public class Home extends Page {
     //Create a Login so we can use its functionality on the home page.
     Login login = new Login();
 
+    /**Home Constructor
+     * Sets layout and functionality for nav
+     * Allows user to log in, accessing personal database and
+     * retrieving ongoing tournaments
+     * @param mainClass
+     * @author Colton LaChance
+     */
     public Home(Main mainClass) {
         this.mainClass = mainClass;
 
@@ -127,7 +133,14 @@ public class Home extends Page {
     //Local methods
 
 
-    //Called whenever the user presses the login button. If successful it should take you to the next screen.
+    /**onLogin(String,String)
+     * Method used to retrieve ongoing tabs on login,
+     * reads from the database using Database class
+     * and retrieves data
+     * @param username
+     * @param password
+     * @author Noah Burrows
+     */
     private void onLogin(String username, String password) {
         //System.out.println("Loggin in as " + username + " with password " +password);
         if(login.getUsers().contains(username)){

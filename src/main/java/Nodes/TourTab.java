@@ -10,6 +10,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.skin.TabPaneSkin;
 import javafx.scene.layout.BorderPane;
 
+/**TourTab extends Tab
+ * A custom Tab for the TabLayout
+ * Used to show tournament status in a visual form
+ * Players, Teams, wins and losses,
+ * Places data in TableView
+ * @author Colton LaChance
+ */
 public class TourTab extends Tab {
     private static TourTab tab;
     private Main mainClass;
@@ -33,6 +40,11 @@ public class TourTab extends Tab {
         VIEW
     }
 
+    /**TourTab Constructor
+     * Sets layout and initializes nav functionality for menubar
+     * @param mainClass
+     * @param premade
+     */
     public TourTab(Main mainClass,boolean premade) {
         this.mainClass = mainClass;
         if (!premade) {
@@ -117,6 +129,11 @@ public class TourTab extends Tab {
         });
     }
 
+    /**setLockTab(bool)
+     * When set, removes the X on the tab, making it unable to close without the forceClose() method
+     * @param lock
+     * @author Colton LaChance
+     */
     public void setLockTab(boolean lock) {
         this.lockTab = lock;
         if (this.lockTab == true) {
@@ -151,6 +168,10 @@ public class TourTab extends Tab {
         this.setContent(pageLayout);
     }
 
+    /**setFocusedTab()
+     * Sets the navigation functionality of the menu bar to be focused on this tab
+     * @author Colton LaChance
+     */
     public void setFocusedTab() {
         this.setOnClosed(e -> {
             mainClass.reconstructRootVBox();
@@ -224,6 +245,10 @@ public class TourTab extends Tab {
         });
     }
 
+    /**forceClose()
+     * Force closes this tab, then reconstructs the parent VBox
+     * @author Colton LaChance
+     */
     public void forceClose() {
         getTabPane().getTabs().remove(this);
         mainClass.reconstructRootVBox();

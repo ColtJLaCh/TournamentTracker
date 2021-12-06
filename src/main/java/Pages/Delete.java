@@ -13,8 +13,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import java.sql.*;
 
-/** PAGE CLASS
- * Constructor contains all layout information, add methods and properties as needed for functionality
+/**Delete extends Page
+ * A delete tournament page used for deleting premade, ongoing tournaments
+ * @author Colton LaChance
  */
 public class Delete extends Page {
 
@@ -31,6 +32,12 @@ public class Delete extends Page {
 
     Button deleteButton = new Button("END TOURNAMENT");
 
+    /**Delete constructor
+     * Sets layout and nav functionality,
+     * parentTab needed to know what tab to delete
+     * @param parentTab
+     * @Colton LaChance
+     */
     public Delete(TourTab parentTab) {
         this.parentTab = parentTab;
 
